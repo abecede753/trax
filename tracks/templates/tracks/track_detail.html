@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load embed_video_tags %}{% load i18n %}
+
+{% block title %}Trax{% endblock %}
+{% block content %}
+
+  <div class="row">
+      <h1>{{ obj.title }} <small>by {{ obj.author }}</small>
+      <small class="pull-right">[{{ obj.get_platform_display }}]</small></h1>
+  </div>
+  <div class="row">
+    <div class="col-md-4">{% include "tracks/add_laptime_form.html" %}</div>
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-6">
+
+          <h3 class="pricedown" style="padding-top:0;margin-top:0">Surface
+            <small>(move mouse over the colors to see the terrain type and percentage)</small></h3>
+          <div class="progress">
+            {% for terrain in obj.terrains %}
+              <div
+                  title="{{ terrain.perc }}% {{ terrain.type }}"
+                  class="progress-bar terrain_{{ terrain.class }}"
+                  style="width: {{ terrain.perc }}%">
+              </div>
+            {% endfor %}
+          </div>
+
+          <dl class="dl-horizontal">
+            <dt>{% trans "game mode" %}</dt><dd>{{ obj.get_game_mode_display }}</dd>
+            <dt>{% trans "route type" %}</dt><dd>{{ obj.get_route_type_display }}</dd>
+            <dt>{% trans "route length" %}</dt><dd>{{ obj.route_length_km }} km</dd>
+            <dt>{% trans "num players" %}</dt><dd>{{ obj.num_players }}</dd>
+            <dt>{% trans "typical lap time" %}</dt><dd>{{ obj.duration }}</dd>
+            <dt>{% trans "pit lane" %}</dt><dd>{{ obj.pit_lane }}</dd>
+            <dt>{% trans "RSC link" %}</dt><dd><a href="{{ obj.link }}" target="_blank">{{ obj.link }}</a></dd>
+          </dl>
+        </div>
+        <div class="col-md-5 col-md-offset-1">
+          <h3 class="pricedown" style="padding-top:0;margin-top:0">Description</h3>
+          {% if obj.description %}
+            <p>{{ obj.description }}</p>
+            {% else %}
+            <p>This track has no description. Maybe you'd like to add one?</p>
+          {% endif %}
+          <h3 class="pricedown">Video</h3>
+          {% if obj.video %}
+            <div class="text-right">{% video obj.video '320x200' %}</div>
+          {% else %}
+            <p>This track has no video. Maybe you'd like to add one?</p>
+          {% endif %}
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+  {% include "tracks/laptime_table.html" %}
+{% endblock %}
+{% block trax_extra_script %}
+  <script>
+    jQuery(document).ready(function(){
+      jQuery('#myTable').DataTable();
+    });
+  </script>
+{% endblock %}

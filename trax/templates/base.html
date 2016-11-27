@@ -1,0 +1,103 @@
+{% extends 'bootstrap3/bootstrap3.html' %}
+{% load static %}
+{% load bootstrap3 %}
+{% load i18n %}
+
+{% block bootstrap3_title %}{% block title %}{% endblock %}{% endblock %}
+{% block bootstrap3_extra_head %}
+  <link rel="stylesheet" type="text/css"
+        href="{% static "global.css" %}" />
+  <link rel="stylesheet" type="text/css"
+        href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+
+  <link rel="apple-touch-icon" sizes="57x57" href="{% static "/fav/apple-icon-57x57.png" %}">
+  <link rel="apple-touch-icon" sizes="60x60" href="{% static "/fav/apple-icon-60x60.png" %}">
+  <link rel="apple-touch-icon" sizes="72x72" href="{% static "/fav/apple-icon-72x72.png" %}">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static "/fav/apple-icon-76x76.png" %}">
+  <link rel="apple-touch-icon" sizes="114x114" href="{% static "/fav/apple-icon-114x114.png" %}">
+  <link rel="apple-touch-icon" sizes="120x120" href="{% static "/fav/apple-icon-120x120.png" %}">
+  <link rel="apple-touch-icon" sizes="144x144" href="{% static "/fav/apple-icon-144x144.png" %}">
+  <link rel="apple-touch-icon" sizes="152x152" href="{% static "/fav/apple-icon-152x152.png" %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static "/fav/apple-icon-180x180.png" %}">
+  <link rel="icon" type="image/png" sizes="92x192"  href="{% static "/fav/android-icon-192x192.png" %}">
+  <link rel="icon" type="image/png" sizes="2x32" href="{% static "/fav/favicon-32x32.png" %}">
+  <link rel="icon" type="image/png" sizes="6x96" href="{% static "/fav/favicon-96x96.png" %}">
+  <link rel="icon" type="image/png" sizes="6x16" href="{% static "/fav/favicon-16x16.png" %}">
+  <link rel="manifest" href="{% static "/fav/manifest.json" %}">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="{% static "/fav/ms-icon-144x144.png" %}">
+  <meta name="theme-color" content="#ffffff">
+
+{% endblock %}
+
+{% block bootstrap3_content %}
+
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" style="padding-top:8px" href="#"><img alt="GTA Trax" src="{% static "logo.png" %}"></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="{% url "homepage" %}">Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Randomizer</a></li>
+      </ul>
+      <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          {% if request.user.is_authenticated %}
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url "logout" %}">Log out</a></li>
+            </ul>
+          {% else %}
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="loginreg"> Login/Register </span><span class="caret"></span></a>
+            <ul class="dropdown-menu">
+            <li><h4 class="navbar-form">Returning user?<br>Login here:</h4></li>
+              <li>
+                <form class="navbar-form" action="{% url "login" %}" method="post">
+                  {% csrf_token %}<input type="hidden" name="next" value="/">
+                  Username: <input class="form-control" type="text" name="username"><br>
+                  Password: <input class="form-control" type="password" name="password"><br>
+                  <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li><h4 class="navbar-form">New on this site?</h4>
+              </li>
+              <li>
+                <a class="btn btn-default" href="{% url "register" %}">Register now!</a>
+              </li>
+            </ul>
+          {% endif %}
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
+  <div class="container">{% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+    {% block content %}nothing here.{% endblock %}</div>
+{% endblock %}
+
+{% block bootstrap3_extra_script %}
+
+  <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
+  <script src="{% static "global.js" %}"></script>
+  {% block trax_extra_script %}{% endblock %}
+{% endblock %}

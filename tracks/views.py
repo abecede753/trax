@@ -1,0 +1,61 @@
+import datetime
+
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
+from django.views.generic.edit import CreateView, UpdateView
+
+from players.models import Player
+from .models import Track, Laptime
+from vehicles.models import Vehicle
+from .forms import TrackForm
+
+
+def track_detail(request, pk):
+    t = Track.objects.get(pk=pk)
+    vehicles = list(Vehicle.objects.all())
+    return render(
+        request, 'tracks/track_detail.html',
+        context={'obj': t,
+                 'vehicles': vehicles})
+
+def laptime_add(request, lap_pk):
+    if request.method == 'POST':
+        try:
+            t = Track.objects.get(pk=lap_pk)
+            l = Laptime()
+            l.track = t
+            l.player = Player.objects.all()[0]
+            l.vehicle = Vehicle.objects.get(pk=request.POST.get('vehicle'))
+            parts = request.POST.get('seconds')
+            m, rest = parts.split(':')
+            seconds = int(m)*60 + float(rest)
+            l.seconds = seconds
+            l.seconds_per_km = seconds / t.route_length_km
+            l.comment = request.POST.get('comment', '')
+            l.created = datetime.datetime.now()
+            l.save()
+        except:  # TODO
+            messages.add_message(
+                request, messages.ERROR,
+                'There was an error, and the programmer was too lazy to check which exactly it was. Try again with some valid input.')
+    return HttpResponseRedirect(reverse('track_detail', args=(t.pk,)))
+
+
+
+class TrackCreate(CreateView):
+    model = Track
+    form_class = TrackForm
+    success_url = '/'
+
+#    def form_valid(self, form):
+#        # This method is called when valid form data has been POSTed.
+#        # It should return an HttpResponse.
+#        # form.send_email()
+#        return super(TrackView, self).form_valid(form)
+
+class TrackEdit(UpdateView):
+    model = Track
+    form_class = TrackForm
+    success_url = '/'
