@@ -1,12 +1,12 @@
 import datetime
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic.edit import CreateView, UpdateView
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import CreateView, UpdateView
 
 from players.models import Player
 from .models import Track, Laptime
