@@ -8,17 +8,14 @@
       <div class="panel-body">
         {% csrf_token %}
         <div>
-          <label for="vehicle">
-            {% trans "vehicle" %}
-          </label>
-          <select class="form-control input-xxlarge" name="vehicle" id="vehicle" >
-            <option value="">{% trans "select a vehicle" %}</option>
-            {% for vehicle in vehicles %}<option value="{{ vehicle.pk }}">{{ vehicle.full_name }}</option>{% endfor %}
-          </select>
+            <select class="form-control input-xxlarge" name="vehicle" id="vehicle" >
+              <option value="">{% trans "select a vehicle" %}</option>
+              {% for vehicle in vehicles %}<option value="{{ vehicle.pk }}">{{ vehicle.full_name }}</option>{% endfor %}
+            </select>
         </div>
         <div>
           <label for="seconds">
-            {% trans "seconds" %}
+            {% trans "lap time" %}
           </label>
           <input name="seconds"
                  required
@@ -27,6 +24,17 @@
                  title="e.g. '1:03.123'"
                  alt="alttext"
                  type="text">(MM:SS.milli)
+        </div>
+        <div>
+          <label for="recorded">
+            {% trans "recorded" %}
+          </label>
+          <input name="recorded"
+                 required
+                 pattern="^\d{4}-\d{1,2}-\d{1,2}$"
+                 id="recorded"
+                 title="e.g. '2016-12-24'"
+                 type="text">(YYYY-MM-DD)
         </div>
         <div>
           <label for="comment">
@@ -46,7 +54,7 @@
       You need to log in first. Click "Login/Register" on top of this page.
     </div>
     <div class="panel-footer">
-    &nbsp;
+      &nbsp;
     </div>
 
   {% endif %}

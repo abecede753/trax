@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.edit import CreateView, UpdateView
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from players.models import Player
 from .models import Track, Laptime
@@ -34,6 +36,8 @@ def laptime_add(request, lap_pk):
             l.seconds = seconds
             l.seconds_per_km = seconds / t.route_length_km
             l.comment = request.POST.get('comment', '')
+            yy,mm,dd = request.POST.get('recorded').split('-')
+            l.recorded = datetime.date(int(yy), int(mm), int(dd))
             l.created = datetime.datetime.now()
             l.save()
         except:  # TODO
@@ -43,7 +47,7 @@ def laptime_add(request, lap_pk):
     return HttpResponseRedirect(reverse('track_detail', args=(t.pk,)))
 
 
-
+@method_decorator(login_required, name='dispatch')
 class TrackCreate(CreateView):
     model = Track
     form_class = TrackForm
@@ -55,6 +59,8 @@ class TrackCreate(CreateView):
 #        # form.send_email()
 #        return super(TrackView, self).form_valid(form)
 
+
+@method_decorator(login_required, name='dispatch')
 class TrackEdit(UpdateView):
     model = Track
     form_class = TrackForm

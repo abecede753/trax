@@ -10,7 +10,8 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
-from players.models import Player
+from django.contrib.auth.hashers import make_password
+from players.models import Player, TSUId
 
 
 from tracks.models import Track
@@ -75,6 +76,11 @@ class Registration(TemplateView):
         user = Player(username=form.cleaned_data['username'])
         user.set_password(form.cleaned_data['password1'])
         user.save()
+        ts_uid = form.cleaned_data.get('ts_uid', None)
+        if ts_uid:
+            ts_hash = make_password(ts_uid, salt=ts_uid[:5])
+            ts = TSUId(player=user, ts_uid=ts_hash)
+            ts.save()
         return HttpResponseRedirect('/')
 
 
