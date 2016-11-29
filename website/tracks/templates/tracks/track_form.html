@@ -3,7 +3,13 @@
 
 {% block title %}Trax{% endblock %}
 {% block content %}
-  <div class="row"><h1>Add Track</h1></div>
+  <div class="row"><h1>
+    {% if form.instance.pk %}
+      Edit track "{{ form.instance.title }}"
+    {% else %}
+      Add a new track
+    {% endif %}
+    </h1></div>
 
   <div class="row">
   <form action="." method="post">
@@ -12,7 +18,7 @@
       {{ form.as_table }}
 
     </table>
-  <input type="submit">
+    <button type="submit" class="btn btn-primary">Save</button>
   </form>
   </div>
 {% endblock %}

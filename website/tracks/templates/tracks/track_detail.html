@@ -6,7 +6,12 @@
 
   <div class="row">
       <h1>{{ obj.title }} <small>by {{ obj.author }}</small>
-      <small class="pull-right">[{{ obj.get_platform_display }}]</small></h1>
+      <small class="pull-right">[{{ obj.get_platform_display }}]
+        <a href="{% url "track_edit" obj.pk %}" class="btn btn-default">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+          Edit</a>
+        </small>
+      </h1>
   </div>
   <div class="row">
     <div class="col-md-4">{% include "tracks/add_laptime_form.html" %}</div>
