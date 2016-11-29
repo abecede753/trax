@@ -50,7 +50,7 @@
           {% endif %}
           <h3 class="pricedown">Video</h3>
           {% if obj.video %}
-            <div class="text-right">{% video obj.video '320x200' %}</div>
+            <div class="text-right">{% video obj.video '320x200' is_secure=True %}</div>
           {% else %}
             <p>This track has no video. Maybe you'd like to add one?</p>
           {% endif %}
