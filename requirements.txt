@@ -47,3 +47,4 @@ traitlets==4.2.2
 ts3==1.0.4
 wcwidth==0.1.7
 widgetsnbextension==1.2.6
+uwsgi

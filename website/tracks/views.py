@@ -22,6 +22,7 @@ def track_detail(request, pk):
         context={'obj': t,
                  'vehicles': vehicles})
 
+
 def laptime_add(request, lap_pk):
     if request.method == 'POST':
         try:

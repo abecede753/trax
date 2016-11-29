@@ -1,7 +1,7 @@
-from django.db import models
 from django.forms import ModelForm
 
-from .models import Track
+from .models import Track, Laptime
+
 
 class TrackForm(ModelForm):
     class Meta:
@@ -13,3 +13,9 @@ class TrackForm(ModelForm):
             'surface_dirt', 'surface_flat', 'surface_stunt', 'surface_offroad',
             'elevation_changes', 'car_classes', 'platform'
         ]
+
+class LaptimeAddForm(ModelForm):
+    model = Laptime
+    fields = [
+        'vehicle', 'untuned', 'recorded', 'seconds', 'pc_60fps',
+    ]
