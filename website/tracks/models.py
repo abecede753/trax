@@ -47,14 +47,11 @@ class Track(models.Model):
         help_text=_('Typical streets in Los Santos'), default=0)
     surface_road = models.SmallIntegerField(
         help_text=_('Tarmac roads e.g. Blaine County'), default=0)
-    surface_highway = models.SmallIntegerField(
-        help_text=_('Highways in Los Santos and around San Andreas'),
-        default=0)
     surface_dirt = models.SmallIntegerField(
         help_text=_('Non-tarmac dirt roads e.g. in Sandy Shores'), default=0)
     surface_flat = models.SmallIntegerField(
         help_text=_('Tarmac and concrete surface at LS airport, Fort '
-                    'Zancudo and similar areas'), default=0)
+                    'Zancudo and similar areas. Highways as well.'), default=0)
     surface_stunt = models.SmallIntegerField(
         help_text=_('Surfaces made with stunt props.'), default=0)
     surface_offroad = models.SmallIntegerField(
@@ -72,7 +69,6 @@ class Track(models.Model):
         return [
             {'type': _('Street'), 'perc': self.surface_street, 'class':'st'},
             {'type': _('Road'), 'perc': self.surface_road, 'class': 'ro'},
-            {'type': _('Highway'), 'perc': self.surface_highway, 'class': 'hi'},
             {'type': _('Dirt'), 'perc': self.surface_dirt, 'class': 'di'},
             {'type': _('Flat'), 'perc': self.surface_flat, 'class': 'fl'},
             {'type': _('Stunt'), 'perc': self.surface_stunt, 'class': 's'},
