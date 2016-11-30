@@ -5,8 +5,8 @@ from random import shuffle
 _DATADIR = os.path.dirname(__file__)
 
 def create_grid(num_races, playerlist):
-    if num_races < 2 or num_races > 30:
-        raise NotImplementedError('racelist only from 2 to 30 races possible.')
+    if num_races < 2 or num_races > 35:
+        raise NotImplementedError('racelist only from 2 to 34 races possible.')
 
     try:
         with open(os.path.join(_DATADIR,
