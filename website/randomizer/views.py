@@ -17,7 +17,7 @@ class RacelistForm(forms.Form):
             content = line.strip()
             if content:
                 self.player_list.append(content)
-        if not self.player_list:
+        if not self.player_list or len(self.player_list) < 2:
             raise forms.ValidationError(
                 _("Please enter at least two names.")
             )
