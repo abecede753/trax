@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'embed_video',
+    'randomizer',
     'captcha',
     'players',
     'widget_tweaks',

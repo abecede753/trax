@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Race list{% endblock %}
+{% block content %}
+
+  <h1>Create a randomized race list</h1>
+
+  <form action="." method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Create race list</button>
+  </form>
+
+  {% if grids %}
+    <div class="row">
+      {% for grid in grids %}
+        <div class="col-md-4">
+          <h2>Race {{ forloop.counter }}:</h2>
+          {% for player in grid %}{{ player }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+{% endblock %}
+

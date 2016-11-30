@@ -9,6 +9,7 @@ from . import views
 urlpatterns = [
 #    url(r'^admin/', admin.site.urls),
     url(r'^t/', include('tracks.urls')),
+    url(r'^r/', include('randomizer.urls')),
     url(r'^$', views.Homepage.as_view(), name="homepage"),
     url(r'^accounts/login/$', views.login_view, name="login"),
     url(r'^accounts/logout/$', views.logout_view, name="logout"),
