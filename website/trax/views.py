@@ -1,6 +1,7 @@
 from captcha.fields import ReCaptchaField
 
 from django.contrib.auth import get_user_model, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.forms import Form, ModelForm
 from django import forms
@@ -47,7 +48,7 @@ class RegistrationForm(ModelForm):
     captcha = ReCaptchaField()
 
     def clean_username(self):
-        username = self.cleaned_data['username']
+        username = self.cleaned_data['username'].lower()
         if Player.objects.filter(username=username).count() != 0:
             raise forms.ValidationError(_('This username already exists here. You can send a Social Club message to "Abe.Cede" to solve the issue.'))
         return username
@@ -90,8 +91,16 @@ def logout_view(request):
     resp.set_cookie('username', '-')
     return resp
 
+
+class TraxAuthenticationForm(AuthenticationForm):
+    def clean_username(self):
+        username = self.cleaned_data['username'].lower()
+        return username
+
+
+
 def login_view(request):
-    resp = auth_views.login(request)
+    resp = auth_views.login(request, authentication_form=TraxAuthenticationForm)
     if request.user.is_authenticated():
         resp.set_cookie('username', request.user.username)
     return resp
