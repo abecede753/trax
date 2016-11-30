@@ -15,9 +15,15 @@
   {% if grids %}
     <div class="row">
       {% for grid in grids %}
-        <div class="col-md-4">
-          <h2>Race {{ forloop.counter }}:</h2>
-          {% for player in grid %}{{ player }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+        <div class="col-md-3">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h2 class="no-vert-space">Race {{ forloop.counter }}:</h2>
+            </div>
+            <div class="panel-body">
+              {% for player in grid %}{{ player }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+            </div>
+          </div>
         </div>
       {% endfor %}
     </div>
