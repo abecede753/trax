@@ -6,7 +6,7 @@ from .raceplayermatrix import create_grid
 
 
 class RacelistForm(forms.Form):
-    MAX_RACES = 30  # TODO - make dynamic according to randomizer/data/*json
+    MAX_RACES = 34  # TODO - make dynamic according to randomizer/data/*json
     players = forms.CharField(widget=forms.Textarea())
     num_races = forms.IntegerField()
     player_list = None
