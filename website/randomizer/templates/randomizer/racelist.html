@@ -6,6 +6,8 @@
 
   <h1>Create a randomized race list</h1>
 
+  <p class="small">Lots of thanks to FriendlyBarons Random Grid Generator on which this thing is based on.
+  See <a href="https://github.com/FriendlyBaron/GridCreator" target="_blank">his GitHub repository</a> for more info.</p>
   <form action="." method="post">
     {% csrf_token %}
     {{ form.as_p }}
