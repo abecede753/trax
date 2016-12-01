@@ -1,6 +1,6 @@
 from captcha.fields import ReCaptchaField
 
-from django.contrib.auth import get_user_model, logout
+from django.contrib.auth import get_user_model, logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.forms import Form, ModelForm
@@ -82,6 +82,7 @@ class Registration(TemplateView):
             ts_hash = make_password(ts_uid, salt=ts_uid[:5])
             ts = TSUId(player=user, ts_uid=ts_hash)
             ts.save()
+        login(request, user)
         return HttpResponseRedirect('/')
 
 
