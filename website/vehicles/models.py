@@ -12,8 +12,10 @@ class Vehicle(models.Model):
     name = models.CharField(max_length=256)
     classes = models.ManyToManyField("vehicles.VehicleClass")
 
+    class Meta:
+        ordering=['classes__name', 'name']
     def __str__(self):
-        return self.name
+        return self.full_name()
 
     def full_name(self):
         return '{0} ({1})'.format(
