@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -22,6 +23,10 @@ def track_detail(request, pk):
         context={'obj': t,
                  'vehicles': vehicles})
 
+class LaptimeAddForm(ModelForm):
+    class Meta:
+        model = Laptime
+        fields = ['vehicle', 'untuned', 'comment', 'recorded']
 
 def laptime_add(request, lap_pk):
     if request.method == 'POST':
