@@ -1,18 +1,47 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block title %}Race list{% endblock %}
 {% block content %}
 
   <h1>Create a randomized race list</h1>
+  {% if not grids %}
+  {% endif %}
+  {% if grids %}
+    <button class="btn btn-default" data-toggle="collapse" data-target="#showform">Show/hide the form</button>
+  {% endif %}
 
-  <p class="small">Lots of thanks to FriendlyBarons Random Grid Generator on which this thing is based on.
-  See <a href="https://github.com/FriendlyBaron/GridCreator" target="_blank">his GitHub repository</a> for more info.</p>
-  <form action="." method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Create race list</button>
-  </form>
+  <div class="row{% if grids %} collapse{% endif %}" id="showform" >
+  <div class="panel">
+    <form action="." method="post">
+      {{ form.errors }}
+      {% csrf_token %}
+      <div class="panel-body">
+        <div class="col-md-5 col-md-push-1">
+          <p>You are hosting a racing event and want everyone to have a fair chance to be in a good position on the starting grid?</p>
+          <p>This form ensures that no driver feels left behind. FriendlyBaron created the algorithm, and this is just a new,
+            quicker front end for his nice script. Lots of thanks to him for his Random Grid Generator!
+            See <a href="https://github.com/FriendlyBaron/GridCreator" target="_blank">his GitHub repository</a> for more info.</p>
+          <h3>How many races? (from 2 to 30)</h3>
+          {% render_field form.num_races class="form-control" %}
+          <p>
+          Enter the player names on the right. One player per line. Use two to 30 names. (You can write empty lines, leading spaces etc, I'll take care of this)
+          </p>
+        </div>
+        <div class="col-md-5 col-md-push-1">
+          <h3 class="no-top-margin">Player names</h3>
+          <p>
+          {% render_field form.players class="form-control" %}
+          </p>
+          <p class="text-right">
+          <button type="submit" class="btn btn-primary input-lg">Create race list</button>
+          </p>
+        </div>
+      </div>
+    </form>
+  </div>
+  </div>
 
   {% if grids %}
     <div class="row">
