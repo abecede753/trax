@@ -3,8 +3,8 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django import forms
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
@@ -80,3 +80,16 @@ class TrackEdit(UpdateView):
     model = Track
     form_class = TrackForm
     success_url = '/'
+
+def laptime_json(request, track_pk):
+    data = []
+    for laptime in Laptime.objects.filter(track__pk=track_pk).select_related('vehicle', 'player'):
+        data.append({
+            'vehicle': str(laptime.vehicle),
+            'duration': {'display': laptime.duration,
+                         'seconds': float(laptime.seconds) },
+            'name': str(laptime.player),
+            'date': {'display': laptime.recorded.strftime('%d %m %Y'),
+                     'timestamp':laptime.recorded.strftime('%Y-%m-%d')}
+        })
+    return JsonResponse({'data': data})

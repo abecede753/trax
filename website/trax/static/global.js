@@ -18,6 +18,25 @@ $(document).ready(function() {
     });
 
 
+    /* tracks table */
+    $('#laptimetable').DataTable( {
+        ajax: "laptimes.json",
+        columns: [
+            { data: "vehicle" },
+            { data: {
+                _: "duration.display",
+                sort: "duration.seconds"
+            } },
+            { data: "name" },
+            { data: {
+                _:    "date.display",
+                sort: "date.timestamp"
+            } }
+        ],
+        "deferRender": true
+    } );
+
+
     /* animate login/register */
 
     $('#loginreg').on('fadeout', function () {
