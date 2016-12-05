@@ -92,4 +92,5 @@ def laptime_json(request, track_pk):
             'date': {'display': laptime.recorded.strftime('%d %m %Y'),
                      'timestamp':laptime.recorded.strftime('%Y-%m-%d')}
         })
-    return JsonResponse({'data': data})
+    return JsonResponse({'data': data},
+                        json_dumps_params={'separators':(',', ':')})
