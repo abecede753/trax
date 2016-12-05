@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n %}{% load widget_tweaks %}
 <div class="panel panel-default">
   <div class="panel-heading"><h3 class="pricedown" style="margin-top:0px;margin-bottom:0px;">Add your own lap time here</h3></div>
 
@@ -7,11 +7,14 @@
     <form action="{% url "laptime_add" obj.pk %}" method="POST">
       <div class="panel-body">
         {% csrf_token %}
-        <div>
-            <select class="form-control input-xxlarge" name="vehicle" id="vehicle" >
-              <option value="">{% trans "select a vehicle" %}</option>
-              {% for vehicle in vehicles %}<option value="{{ vehicle.pk }}">{{ vehicle.full_name }}</option>{% endfor %}
-            </select>
+        <div class="row">
+          <div class="col-sm-9">
+          {% render_field form.vehicle class="form-control" %}
+            </div>
+          <div class="col-sm-3">
+          <label class="checkbox-inline">{% render_field form.untuned %}
+          stock?</label>
+          </div>
         </div>
         <div>
           <label for="seconds">

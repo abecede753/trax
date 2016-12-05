@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://gtaweather.herokuapp.com/staggeredstart -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Staggered Start</title>
+<link rel="shortcut icon" type="image/x-icon" href="http://www.iconj.com/ico/2/j/2jruo883sj.ico">
+<meta name="description" content="Determine staggered starting times for GTA races!">
+<meta name="author" content="pardonias">
+
+    <link rel="stylesheet" href="./StaggeredStart_files/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+
+    <style>
+      body {
+        padding-top: 2rem;
+        padding-bottom: 5rem;
+      }
+      h2, h3 {
+        margin: 1.5rem 1rem;
+      }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Staggered Start</h2>
+  <p>Fill in the form to calculate staggered starting times for GTA races (based on testing done by <a href="https://docs.google.com/spreadsheets/d/1nQND3ikiLzS3Ij9kuV-rVkRtoYetb79c52JWyafb4m4/edit#gid=999161401">Broughy1322</a>).</p>
+  <hr>
+  <form>
+    <div class="form-group">
+      <label for="tracklength">Track length:</label>
+      <output name="tracklengthout" for="tracklength">1.61 mi (2.59 km)</output>
+      <input type="range" class="form-control" id="tracklength" min="0.62" max="10" step="0.01" value="1.61" oninput="tracklengthout.value=Number(tracklength.value).toFixed(2) + &#39; mi (&#39; + Number(tracklength.value * 1.6093).toFixed(2) + &#39; km)&#39;">
+    </div>
+
+    <div class="form-group">
+      <label for="numlaps">Number of laps:</label>
+      <output name="numlapsout" for="numlaps">3</output>
+      <input type="range" class="form-control" id="numlaps" min="1" max="20" value="3" oninput="numlapsout.value=parseInt(numlaps.value)">
+    </div>
+
+    <hr>
+    <div class="form-group form-inline">
+      <label for="vclass">Select vehicles:</label>
+      <select class="form-control" id="vclass">
+        <option>Boats</option>
+        <option>Compacts</option>
+        <option>Coupes</option>
+        <option>Cycles</option>
+        <option>Helicopters</option>
+        <option>Motorcycles</option>
+        <option>Muscle</option>
+        <option>Off-Road</option>
+        <option>Planes</option>
+        <option>Sedans</option>
+        <option selected="">Sports</option>
+        <option>Sports Classics</option>
+        <option>Supers</option>
+        <option>SUVs</option>
+        <option>Utility</option>
+        <option>Vans</option>
+      </select>
+      <button type="button" class="btn btn-primary" id="vclass-update-btn">Update</button>
+      <table class="table-sm table-hover" id="vehicles" hidden="">
+        <thead>
+          <tr><th></th><th>Vehicle</th><th>CC GP lap time</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr id="addVehicle"><td></td>
+            <td><input type="text" class="form-control" id="addVehicleName" placeholder="Custom entry"></td>
+            <td><input type="text" class="form-control" id="addVehicleTime" placeholder="1:05.000" pattern="[0-9]{3}"></td>
+            <td><button type="button" class="btn btn-success" id="addVehicleBtn">Add</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr>
+
+    <div class="form-group">
+      <label for="overtakedeficit">Per overtake time deficit:</label>
+      <output name="overtakedeficitout" for="overtakedeficit">0.6 s</output>
+      <input type="range" class="form-control" id="overtakedeficit" min="0" max="4" step="0.1" value="0.6" oninput="overtakedeficitout.value=Number(overtakedeficit.value).toFixed(1) + &#39; s&#39;">
+    </div>
+
+    <div class="form-group">
+      <label for="startoffset">Race start time:</label>
+      <output name="startoffsetout" for="startoffset">1:00</output>
+      <input type="range" class="form-control" id="startoffset" min="0" max="600" value="60" step="5" oninput="startoffsetout.value=Math.floor(parseInt(startoffset.value)/60) + &#39;:&#39; + (&#39;0&#39; + parseInt(startoffset.value)%60).substr(-2)">
+    </div>
+
+    <button type="button" class="btn btn-primary" id="submit" disabled="">Submit</button>
+  </form>
+  <div id="results" hidden="">
+    <hr>
+    <h3>Starting times</h3>
+    <table class="table-sm table-hover" id="starttimes">
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="./StaggeredStart_files/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+
+
+  <script type="text/javascript" src="./StaggeredStart_files/staggeredstart.js"></script>
+
+
+<script src="./StaggeredStart_files/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+<script src="./StaggeredStart_files/bootstrap.min.js" integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
+
+
+
+</body></html>

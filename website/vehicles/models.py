@@ -11,6 +11,8 @@ class VehicleClass(models.Model):
 class Vehicle(models.Model):
     name = models.CharField(max_length=256)
     classes = models.ManyToManyField("vehicles.VehicleClass")
+    lsgp_seconds_per_km = models.FloatField(null=True)
+    lsgp_seconds_per_km_stock = models.FloatField(null=True)
 
     class Meta:
         ordering=['classes__name', 'name']

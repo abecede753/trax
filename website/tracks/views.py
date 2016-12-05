@@ -2,7 +2,7 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.forms import ModelForm
+from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -17,16 +17,23 @@ from .forms import TrackForm
 
 def track_detail(request, pk):
     t = Track.objects.get(pk=pk)
-    vehicles = list(Vehicle.objects.all())
+    todaystring = datetime.date.today().strftime('%Y-%m-%d')
     return render(
         request, 'tracks/track_detail.html',
-        context={'obj': t,
-                 'vehicles': vehicles})
+        context={
+            'obj': t, 'form': LaptimeAddForm(
+                initial={'recorded': todaystring})})
 
-class LaptimeAddForm(ModelForm):
+
+class LaptimeAddForm(forms.ModelForm):
+    anylink = forms.URLField(required=False)
+    humantime = forms.CharField()
+
     class Meta:
         model = Laptime
-        fields = ['vehicle', 'untuned', 'comment', 'recorded']
+        fields = ['vehicle', 'untuned',
+                  'comment', 'recorded']
+
 
 def laptime_add(request, lap_pk):
     if request.method == 'POST':
@@ -34,7 +41,7 @@ def laptime_add(request, lap_pk):
             t = Track.objects.get(pk=lap_pk)
             l = Laptime()
             l.track = t
-            l.player = Player.objects.all()[0]
+            l.player = request.user
             l.vehicle = Vehicle.objects.get(pk=request.POST.get('vehicle'))
             parts = request.POST.get('seconds')
             m, rest = parts.split(':')
@@ -46,6 +53,8 @@ def laptime_add(request, lap_pk):
             l.recorded = datetime.date(int(yy), int(mm), int(dd))
             l.created = datetime.datetime.now()
             l.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 "Okay, your laptime was saved.")
         except:  # TODO
             messages.add_message(
                 request, messages.ERROR,
