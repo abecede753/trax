@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'vehicles',
     'tracks',
     'trax',
+    'races',
 ]
 
 MIDDLEWARE = [
