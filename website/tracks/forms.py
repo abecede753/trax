@@ -16,7 +16,8 @@ class TrackForm(ModelForm):
 
 
 class LaptimeAddForm(ModelForm):
-    model = Laptime
-    fields = [
-        'vehicle', 'untuned', 'recorded', 'seconds', 'pc_60fps',
-    ]
+    class Meta:
+        model = Laptime
+        fields = [
+            'vehicle', 'untuned', 'recorded', 'seconds', 'pc_60fps',
+        ]

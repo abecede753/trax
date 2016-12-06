@@ -15,7 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-from .local_settings import *
+from .local_settings import *  # noqa
 
 #TEMPLATE_CONTEXT_PROCESSORS =
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'tracks',
     'trax',
     'races',
+#    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +117,16 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
 MEDIA_URL = '/media/'
 
-
 NOCAPTCHA = True
+
+#COMPRESS_ENABLED = True
+#COMPRESS_OFFLINE = True
+#COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSCompressorFilter',]
+#COMPRESS_OUTPUT_DIR = 'C'
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'compressor.finders.CompressorFinder',
+]
 
