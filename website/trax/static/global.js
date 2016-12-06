@@ -46,4 +46,6 @@ $(document).ready(function() {
         $(this).fadeTo( "slow", 1, function(){ $(this).delay(500).trigger('fadeout'); });
     });
     $('#loginreg').trigger('fadeout');
+    $('.combobox').combobox({bsVersion: '3'});
+
 });
