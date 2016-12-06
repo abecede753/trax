@@ -33,6 +33,9 @@ class LaptimeAddForm(forms.ModelForm):
         model = Laptime
         fields = ['vehicle', 'untuned',
                   'comment', 'recorded']
+    def __init__(self, *a, **k):
+        super(LaptimeAddForm, self).__init__(*a, **k)
+        self.fields['vehicle'].empty_label = ''
 
 
 def laptime_add(request, lap_pk):
