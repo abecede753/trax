@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 RACE_STATES = (
@@ -8,11 +9,12 @@ RACE_STATES = (
     ('f', _('finished')),
 )
 
-class Race(models.Model):
+class StaggeredStartRace(models.Model):
     track = models.ForeignKey('tracks.Track')
+    vehicle_class = models.ForeignKey('vehicles.VehicleClass', null=True)
     laps = models.PositiveSmallIntegerField(default=1)
     host = models.ForeignKey('players.Player')
-    created = models.DateTimeField(auto_created=True)
+    created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=RACE_STATES,
                               default=RACE_STATES[0][0])
     hosting_date = models.DateTimeField(null=True)
@@ -26,10 +28,13 @@ class Race(models.Model):
             self.track.title, self.host.username,
             self.hosting_date.strftime('%Y-%m-%d'))
 
+    def get_absolute_url(self):
+        return reverse_lazy('staggeredstartrace_detail',
+                            kwargs={'pk': self.pk})
 
 # TBD
 # class Playlist(models.Model):
 #     title = models.CharField(max_length=256)
 #     creator = models.ForeignKey('players.Player')
-#     created = models.DateTimeField(auto_created=True)
+#     created = models.DateTimeField(auto_now_add=True)
 #     tracks = models.ManyToManyField('tracks.Track')

@@ -12,8 +12,8 @@
           {% render_field form.vehicle class="combobox form-control" %}
             </div>
           <div class="col-sm-3">
-          <label class="checkbox-inline">{% render_field form.untuned %}
-          stock?</label>
+          <div class="checkbox"><label>{% render_field form.untuned %}
+          stock?</label></div>
           </div>
         </div>
         <div>
@@ -33,6 +33,7 @@
             {% trans "recorded" %}
           </label>
           <input name="recorded"
+                 value="{{ form.recorded.value }}"
                  required
                  pattern="^\d{4}-\d{1,2}-\d{1,2}$"
                  id="recorded"
@@ -40,9 +41,14 @@
                  type="text">(YYYY-MM-DD)
         </div>
         <div>
-          <label for="comment">
+          <label for="id_comment">
             {% trans "comment" %}
-          </label><textarea class="form-control" id="comment" name="comment"></textarea>
+          </label>{% render_field form.comment rows="2" class="form-control"%}
+        </div>
+        <div>
+          <label for="id_anylink">
+            {% trans "link" %}<small> (optional) to prove your great laptime</small>
+          </label>{% render_field form.anylink class="form-control"%}
         </div>
       </div>
       <div class="panel-footer">

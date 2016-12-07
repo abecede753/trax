@@ -69,7 +69,7 @@ def laptime_add(request, lap_pk):
 class TrackCreate(CreateView):
     model = Track
     form_class = TrackForm
-    success_url = '/'
+
 
 #    def form_valid(self, form):
 #        # This method is called when valid form data has been POSTed.
@@ -82,7 +82,7 @@ class TrackCreate(CreateView):
 class TrackEdit(UpdateView):
     model = Track
     form_class = TrackForm
-    success_url = '/'
+
 
 def laptime_json(request, track_pk):
     data = []

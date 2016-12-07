@@ -99,7 +99,7 @@ def get_track_by_string(s):
 class Laptime(models.Model):
     track = models.ForeignKey("tracks.Track")
     player = models.ForeignKey("players.Player")
-    created = models.DateField(auto_created=True)
+    created = models.DateField(auto_now_add=True)
     recorded = models.DateField()
     vehicle = models.ForeignKey("vehicles.Vehicle")
     untuned = models.BooleanField(default=False,

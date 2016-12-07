@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block title %}Race creator{% endblock %}
+{% block content %}
+
+  <h1>Create a race list</h1>
+
+  <div class="row" id="showform" >
+  <div class="panel">
+    <form action="." method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+    </form>
+  </div>
+  </div>
+
+  {% if grids %}
+    <div class="row">
+      {% for grid in grids %}
+        <div class="col-md-3">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h2 class="no-vert-space">Race {{ forloop.counter }}:</h2>
+            </div>
+            <div class="panel-body">
+              {% for player in grid %}{{ player }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+{% endblock %}
+

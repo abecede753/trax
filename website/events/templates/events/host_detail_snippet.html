@@ -1,0 +1,17 @@
+<p>Use this link to invite some players:
+  <input
+      class="form-control"
+      type="text"
+      value="{{ invite_url }}"
+      onClick="this.select();">
+</p>
+<p>
+  {{ object.comment }}
+</p>
+<h3>What to do next?</h3>
+<p>As soon as every player is in the table, you can tell me when to start the race.</p>
+<p>Then, everyone will get a visual and audible signal to start racing.</p>
+<hr>
+<p>Interested how it will sound and look? Find out here:
+  {% include "events/gogogotestbutton.html" %}
+</p>

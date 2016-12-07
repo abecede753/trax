@@ -5,6 +5,7 @@
 {% block content %}
 
   <div class="row">
+  <div class="col-md-12">
     <h1>{{ obj.title }} <small>by {{ obj.author }}</small>
       <small class="pull-right">[{{ obj.get_platform_display }}]
         <a href="{% url "track_edit" obj.pk %}" class="btn btn-default">
@@ -13,8 +14,22 @@
       </small>
     </h1>
   </div>
+  </div>
   <div class="row">
-    <div class="col-md-4">{% include "tracks/add_laptime_form.html" %}</div>
+    <div class="col-md-4 ">
+      <h3 class="pricedown" style="padding-top:0;margin-top:0">Description</h3>
+      {% if obj.description %}
+        <p>{{ obj.description }}</p>
+      {% else %}
+        <p>This track has no description. Maybe you'd like to add one?</p>
+      {% endif %}
+      <h3 class="pricedown">Video</h3>
+      {% if obj.video %}
+        <div class="text-right">{% video obj.video '320x200' is_secure=True %}</div>
+      {% else %}
+        <p>This track has no video. Maybe you'd like to add one?</p>
+      {% endif %}
+    </div>
     <div class="col-md-4">
       <h3 class="pricedown" style="padding-top:0;margin-top:0">Surface
         <small>(move mouse over the colors to see the terrain type and percentage)</small></h3>
@@ -33,24 +48,16 @@
         <dt>{% trans "route length" %}</dt><dd>{{ obj.route_length_km }} km</dd>
         <dt>{% trans "num players" %}</dt><dd>{{ obj.num_players }}</dd>
         <dt>{% trans "typical lap time" %}</dt><dd>{{ obj.duration }}</dd>
-        <dt>{% trans "pit lane" %}</dt><dd>{{ obj.pit_lane }}</dd>
+        <dt>{% trans "pit lane" %}</dt><dd>{% if not obj.pit_lane %}NOT {% endif %}available</dd>
         <dt>{% trans "RSC link" %}</dt><dd><a href="{{ obj.link }}" target="_blank">{{ obj.link }}</a></dd>
+        <dt>{% trans "classes" %}</dt>
+        <dd>{% for foo in obj.car_classes.all %}{{  foo }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        </dd>
+        <dt>{% trans "elevation changes" %}</dt><dd>{{ obj.elevation_changes }}</dd>
       </dl>
     </div>
-    <div class="col-md-4 ">
-      <h3 class="pricedown" style="padding-top:0;margin-top:0">Description</h3>
-      {% if obj.description %}
-        <p>{{ obj.description }}</p>
-      {% else %}
-        <p>This track has no description. Maybe you'd like to add one?</p>
-      {% endif %}
-      <h3 class="pricedown">Video</h3>
-      {% if obj.video %}
-        <div class="text-right">{% video obj.video '320x200' is_secure=True %}</div>
-      {% else %}
-        <p>This track has no video. Maybe you'd like to add one?</p>
-      {% endif %}
-    </div>
+    <div class="col-md-4">{% include "tracks/add_laptime_form.html" %}</div>
   </div>
   {% include "tracks/laptime_table.html" %}
 {% endblock %}

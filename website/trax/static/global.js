@@ -1,5 +1,6 @@
+var laptimetable;
 $(document).ready(function() {
-    var dt_table = $('.trackstable').dataTable({
+    var dt_table = $('.laptimetable').dataTable({
         language: 'en',
         order: [[ 0, "desc" ]],
         lengthMenu: [[25, 50, 100, 200], [25, 50, 100, 200]],
@@ -19,7 +20,7 @@ $(document).ready(function() {
 
 
     /* tracks table */
-    $('#laptimetable').DataTable( {
+    laptimetable = $('#laptimetable').DataTable( {
         ajax: "laptimes.json",
         columns: [
             { data: "vehicle" },
@@ -37,6 +38,7 @@ $(document).ready(function() {
     } );
 
 
+
     /* animate login/register */
 
     $('#loginreg').on('fadeout', function () {
@@ -46,6 +48,11 @@ $(document).ready(function() {
         $(this).fadeTo( "slow", 1, function(){ $(this).delay(500).trigger('fadeout'); });
     });
     $('#loginreg').trigger('fadeout');
+
+    /* various settings */
     $('.combobox').combobox({bsVersion: '3'});
 
+
 });
+
+

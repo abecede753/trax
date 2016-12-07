@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'vehicles',
     'tracks',
     'trax',
-    'races',
+    'events',
 #    'compressor',
 ]
 
