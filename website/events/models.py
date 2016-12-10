@@ -18,15 +18,17 @@ class StaggeredStartRace(models.Model):
     status = models.CharField(max_length=1, choices=RACE_STATES,
                               default=RACE_STATES[0][0])
     hosting_date = models.DateTimeField(null=True)
-    laptimes = models.ManyToManyField('tracks.Laptime')
     link = models.URLField(
         null=True, help_text=_("could be a screenshot URL of the results"))
     comment = models.TextField(default="")
 
     def __str__(self):
+        hosting_date = self.hosting_date and \
+                       self.hosting_date.strftime('%Y-%m-%d') or \
+                       'not defined'
         return '{0} by {1} ({2})'.format(
             self.track.title, self.host.username,
-            self.hosting_date.strftime('%Y-%m-%d'))
+            hosting_date)
 
     def get_absolute_url(self):
         return reverse_lazy('staggeredstartrace_detail',

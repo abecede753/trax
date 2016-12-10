@@ -1,11 +1,16 @@
 from django import forms
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.views.generic import CreateView, DetailView
 
 from tracks.models import Laptime
+from vehicles.models import Vehicle
 from .models import StaggeredStartRace, RACE_STATES
+from .utils import get_car_list, get_eventcar_by_slug
+
 
 # Create your views here.
 
@@ -28,6 +33,7 @@ class StaggeredStartRaceInvite(DetailView):
     model = StaggeredStartRace
 
 
+@method_decorator(login_required, name='dispatch')
 class StaggeredStartRaceDetail(DetailView):
     model = StaggeredStartRace
 
@@ -39,20 +45,23 @@ class StaggeredStartRaceDetail(DetailView):
             proto = 'http'
         url = proto + '://' + self.request.META['HTTP_HOST']
         url += reverse('staggeredstartrace_invite',
-                       args=(5,))
+                       args=(self.object.pk,))
         context['invite_url'] = url
+        context['vehicle_list'] = get_car_list(user=self.request.user,
+                                           vehicle_class=self.object.vehicle_class,)
+
         return context
 
 
 def participants_list(request, pk=None):
     ssr = get_object_or_404(StaggeredStartRace, pk=pk)
     result = []
-    for lt in ssr.laptimes.all():
+    for lt in Laptime.objects.filter(staggeredstartevent=ssr):
         if lt.untuned:
-            vehicle = '%s (stock)'.format(lt.vehicle)
+            vehicle = '{0} (stock)'.format(lt.vehicle.name)
         else:
-            vehicle = lt.vehicle
-        result.append([lt.player, vehicle])
+            vehicle = str(lt.vehicle)
+        result.append([lt.player.username, vehicle])
     return JsonResponse({'data': result})
 
 
@@ -69,3 +78,20 @@ class SSRParticipation(CreateView):
     def form_valid(self, form):  # TODO
         form.instance.host = self.request.user
         return super(StaggeredStartCreator, self).form_valid(form)
+
+@login_required
+def enlist(request, pk):
+    ssr = get_object_or_404(StaggeredStartRace, pk=pk)
+
+    eventcar = get_eventcar_by_slug(request.user, request.GET.get('slug'))
+
+    defaults = {'vehicle': Vehicle.objects.get(pk=eventcar.vehicle_pk),
+                'untuned': eventcar.stock}
+    l, created = Laptime.objects.get_or_create(
+        track=ssr.track, player=request.user,
+        staggeredstartevent=ssr, defaults=defaults)
+    if not created:
+        l.vehicle = Vehicle.objects.get(pk=eventcar.vehicle_pk)
+        l.untuned = eventcar.stock
+        l.save()
+    return JsonResponse({'result': 'OK'})

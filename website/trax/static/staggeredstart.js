@@ -23,7 +23,7 @@ $(document).ready(function() {
 
     setInterval( function () {
         participantstable.ajax.reload();
-    }, 4000 );
+    }, 2000 );
 });
 
 function start_now() {
@@ -32,4 +32,20 @@ function start_now() {
         .stop()
         .css("background-color", "#00FF00")
         .animate({ backgroundColor: "#FFFFFF"}, 5000);
+}
+
+var DBG;
+function enlist_car(btn) {
+    var url = $('#enlist_url').text() + '?slug='
+    url += btn.value;
+    $.ajax({url: url})
+        .done(function (data) {
+            if (data.result !== "OK") {
+                window.alert("Error: " + data.result);
+            } else {
+                $('.enlist_btn').removeClass('btn-primary');
+                $(btn).addClass('btn-primary');
+
+            }
+        });
 }

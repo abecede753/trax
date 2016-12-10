@@ -100,7 +100,7 @@ class Laptime(models.Model):
     track = models.ForeignKey("tracks.Track")
     player = models.ForeignKey("players.Player")
     created = models.DateField(auto_now_add=True)
-    recorded = models.DateField()
+    recorded = models.DateField(null=True)
     vehicle = models.ForeignKey("vehicles.Vehicle")
     untuned = models.BooleanField(default=False,
                                   help_text="is this in an untuned car?")
@@ -110,6 +110,7 @@ class Laptime(models.Model):
     video = EmbedVideoField(null=True)
     link = models.URLField(null=True)
     pc_60fps = models.BooleanField(default=False)
+    staggeredstartevent = models.ForeignKey('events.StaggeredStartRace', null=True)
 
     def __str__(self):
         return self.player.nickname
