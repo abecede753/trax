@@ -48,9 +48,9 @@ def laptime_add(request, lap_pk):
             l.vehicle = Vehicle.objects.get(pk=request.POST.get('vehicle'))
             parts = request.POST.get('seconds')
             m, rest = parts.split(':')
-            seconds = int(m)*60 + float(rest)
-            l.seconds = seconds
-            l.seconds_per_km = seconds / t.route_length_km
+            millis = 1000 * (int(m)*60 + float(rest))
+            l.millis = millis
+            l.millis_per_km = millis / t.route_length_km
             l.comment = request.POST.get('comment', '')
             yy,mm,dd = request.POST.get('recorded').split('-')
             l.recorded = datetime.date(int(yy), int(mm), int(dd))
@@ -86,11 +86,13 @@ class TrackEdit(UpdateView):
 
 def laptime_json(request, track_pk):
     data = []
-    for laptime in Laptime.objects.filter(track__pk=track_pk).select_related('vehicle', 'player'):
+    for laptime in Laptime.objects.filter(
+            track__pk=track_pk,
+            recorded__isnull=False).select_related('vehicle', 'player'):
         data.append({
             'vehicle': str(laptime.vehicle),
             'duration': {'display': laptime.duration,
-                         'seconds': float(laptime.seconds) },
+                         'millis': laptime.millis},
             'name': str(laptime.player),
             'date': {'display': laptime.recorded.strftime('%d %m %Y'),
                      'timestamp':laptime.recorded.strftime('%Y-%m-%d')}

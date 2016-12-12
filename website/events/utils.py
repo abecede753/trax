@@ -6,15 +6,16 @@ class EventCar:
     user = None
     vehicle_pk = None
     stock = None
-    seconds_per_km = None
+    millis_per_km = None
     user_entry = None  # is this a user created entry? (or broughy?)
 
     def __init__(self, user=None, vehicle_pk=None, stock=None,
-                 seconds_per_km=None, user_entry = None, name=None):
+                 millis_per_km=None, user_entry = None, name=None,
+                 race_km=None):
         self.user = user
         self.vehicle_pk = vehicle_pk
         self.stock = stock
-        self.seconds_per_km = seconds_per_km
+        self.millis_per_km = millis_per_km
         self.user_entry = user_entry
         if not name:
             self.name = Vehicle.objects.get(pk=vehicle_pk).name
@@ -23,26 +24,31 @@ class EventCar:
         self.slug = '{0}.{1}.{2}'.format(self.vehicle_pk,
                                          self.user_entry and 1 or 0,
                                          self.stock and 1 or 0)
+        if race_km:
+            self.total_millis = self.millis_per_km * race_km
+        else:
+            self.total_millis = 0
 
     @property
     def display_name(self):
         result = self.name
         if self.stock:
             result += ' (stock)'
-        result += ' - {:.2f} sec/km'.format(self.seconds_per_km)
+        result += ' - {:.2f} sec/km'.format(self.millis_per_km/1000.0)
 
         return result
 
 
-def get_eventcar(user=None, vehicle_pk=None, user_entry=None, stock=None):
+def get_eventcar(user=None, vehicle_pk=None, user_entry=None, stock=None,
+                 race_km=None):
     """returns an EventCar object based on the input given."""
     if user_entry == True:
         raise NotImplementedError
     v = Vehicle.objects.get(pk=vehicle_pk)
-    seconds_per_km = stock and v.lsgp_seconds_per_km_stock or v.lsgp_seconds_per_km
+    millis_per_km = stock and v.lsgp_millis_per_km_stock or v.lsgp_millis_per_km
     return EventCar(user=user, vehicle_pk=v.pk,
-                    stock=stock, seconds_per_km=seconds_per_km,
-                    user_entry=user_entry, name=v.name)
+                    stock=stock, millis_per_km=millis_per_km,
+                    user_entry=user_entry, name=v.name, race_km=race_km)
 
 
 def get_eventcar_by_slug(user, slug):
@@ -56,18 +62,18 @@ def get_car_list(user, vehicle_class):
 
     for lsgpstockvehicle in Vehicle.objects.filter(
             classes__in=[vehicle_class,],
-            lsgp_seconds_per_km_stock__isnull=False,
+            lsgp_millis_per_km_stock__isnull=False,
     ):
         result.append(EventCar(
             user=user, vehicle_pk=lsgpstockvehicle.pk, stock=True,
-            seconds_per_km=lsgpstockvehicle.lsgp_seconds_per_km_stock
+            millis_per_km=lsgpstockvehicle.lsgp_millis_per_km_stock
         ))
     for lsgpvehicle in Vehicle.objects.filter(
         classes__in=[vehicle_class,],
-            lsgp_seconds_per_km__isnull=False):
+            lsgp_millis_per_km__isnull=False):
         result.append(EventCar(
             user=user, vehicle_pk=lsgpvehicle.pk, stock=False,
-            seconds_per_km=lsgpvehicle.lsgp_seconds_per_km
+            millis_per_km=lsgpvehicle.lsgp_millis_per_km
         ))
 
 

@@ -1,3 +1,6 @@
+import random
+import datetime
+
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -9,7 +12,7 @@ from django.views.generic import CreateView, DetailView
 from tracks.models import Laptime
 from vehicles.models import Vehicle
 from .models import StaggeredStartRace, RACE_STATES
-from .utils import get_car_list, get_eventcar_by_slug
+from .utils import get_car_list, get_eventcar_by_slug, get_eventcar
 
 
 # Create your views here.
@@ -52,6 +55,33 @@ class StaggeredStartRaceDetail(DetailView):
 
         return context
 
+    def post(self, *a, **k):
+        if self.request.POST.get('start_in_secs'):
+            nowplus = random.randrange(0,6)
+            nowplus += int(self.request.POST.get('start_in_secs'))
+            start_dt = datetime.datetime.now() + \
+                       datetime.timedelta(milliseconds=nowplus*1000)
+            self.object = self.get_object()
+            self.object.start_dt = start_dt
+            self.object.status = 'r'  # TODO make cleaner
+            self.object.save()
+
+            self.race_km = self.object.track.route_length_km * self.object.laps
+            self.calculate_players_start_dts()
+
+        return super(StaggeredStartRaceDetail, self).get(*a, **k)
+
+    def calculate_players_start_dts(self):
+        laptimes = list(self.object.laptime_set.all())
+        for lt in laptimes:
+            lt.eventcar = get_eventcar(
+                user=lt.player, vehicle_pk=lt.vehicle.pk,
+                stock=lt.untuned, race_km=self.race_km)
+        result = sorted(laptimes, key=lambda x: x.eventcar.total_millis)
+        return result
+
+
+## def get_eventcar(user=None, vehicle_pk=None, user_entry=None, stock=None):
 
 def participants_list(request, pk=None):
     ssr = get_object_or_404(StaggeredStartRace, pk=pk)

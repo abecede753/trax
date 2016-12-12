@@ -10,6 +10,18 @@
 </p>
 <h3>What to do next?</h3>
 <p>As soon as every player is in the table, you can tell me when to start the race.</p>
+
+<form action="." method="post">
+  {% csrf_token %}
+  <div class="form-inline">
+    Start in about
+ <input value="15" style="width:3em;" type="text"
+        class="form-control" name="start_in_secs"> seconds
+  <button class="btn btn-default" id="basic-addon2">OK</button>
+</div>
+
+</form>
+
 <p>Then, everyone will get a visual and audible signal to start racing.</p>
 <hr>
 <p>Interested how it will sound and look? Find out here:

@@ -83,12 +83,8 @@ class Track(models.Model):
 
     @property
     def duration(self):
-        millis = int(1000 * (
-            self.typical_laptime - int(self.typical_laptime)))
-        minutes, seconds = divmod(self.typical_laptime, 60)
-        return "{0}:{1:02}.{2:03}".format(int(minutes),
-                                          int(seconds),
-                                          int(millis))
+        minu, seco = divmod(self.typical_laptime, 60)
+        return "{0}:{1:02}".format(int(minu), int(seco))
 
 
 def get_track_by_string(s):
@@ -104,22 +100,22 @@ class Laptime(models.Model):
     vehicle = models.ForeignKey("vehicles.Vehicle")
     untuned = models.BooleanField(default=False,
                                   help_text="is this in an untuned car?")
-    seconds = models.DecimalField(decimal_places=3, max_digits=12, default=0.0)
-    seconds_per_km = models.FloatField(default=0.0)
+    millis = models.IntegerField(default=0)
+    millis_per_km = models.IntegerField(default=0)
     comment = models.TextField(default='')
     video = EmbedVideoField(null=True)
     link = models.URLField(null=True)
     pc_60fps = models.BooleanField(default=False)
-    staggeredstartevent = models.ForeignKey('events.StaggeredStartRace', null=True)
 
     def __str__(self):
-        return self.player.nickname
+        return '{0} {1} {2.3f}'.format(self.player.username,
+                                    self.vehicle.name,
+                                    self.millis_per_km/1000.0)
+
 
     @property
     def duration(self):
-        millis = int(1000 * (self.seconds - int(self.seconds)))
-        minutes, seconds = divmod(self.seconds, 60)
-        return "{0}:{1:02}.{2:03}".format(int(minutes),
-                                          int(seconds),
-                                          int(millis))
+        seco, mill = divmod(self.millis, 1000)
+        minu, seco = divmod(seco, 60)
+        return "{0}:{1:02}.{2:03}".format(int(minu), int(seco), int(mill))
 

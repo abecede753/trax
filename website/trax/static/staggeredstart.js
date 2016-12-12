@@ -23,7 +23,7 @@ $(document).ready(function() {
 
     setInterval( function () {
         participantstable.ajax.reload();
-    }, 2000 );
+    }, 200000 );
 });
 
 function start_now() {

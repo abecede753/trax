@@ -26,7 +26,7 @@ $(document).ready(function() {
             { data: "vehicle" },
             { data: {
                 _: "duration.display",
-                sort: "duration.seconds"
+                sort: "duration.millis"
             } },
             { data: "name" },
             { data: {

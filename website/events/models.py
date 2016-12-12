@@ -9,6 +9,14 @@ RACE_STATES = (
     ('f', _('finished')),
 )
 
+
+# TBD
+# class StaggeredPlaylist(models.Model):
+#     title = models.CharField(max_length=256)
+#     creator = models.ForeignKey('players.Player')
+#     created = models.DateTimeField(auto_now_add=True)
+
+
 class StaggeredStartRace(models.Model):
     track = models.ForeignKey('tracks.Track')
     vehicle_class = models.ForeignKey('vehicles.VehicleClass', null=True)
@@ -21,6 +29,9 @@ class StaggeredStartRace(models.Model):
     link = models.URLField(
         null=True, help_text=_("could be a screenshot URL of the results"))
     comment = models.TextField(default="")
+    start_dt = models.DateTimeField(null=True, default=None)
+    # TBD
+    # staggeredplaylist = models.ForeignKey('StaggeredPlaylist', null=True)
 
     def __str__(self):
         hosting_date = self.hosting_date and \
@@ -34,9 +45,15 @@ class StaggeredStartRace(models.Model):
         return reverse_lazy('staggeredstartrace_detail',
                             kwargs={'pk': self.pk})
 
-# TBD
-# class Playlist(models.Model):
-#     title = models.CharField(max_length=256)
-#     creator = models.ForeignKey('players.Player')
-#     created = models.DateTimeField(auto_now_add=True)
-#     tracks = models.ManyToManyField('tracks.Track')
+
+class SSRParticipation(models.Model):
+    player = models.ForeignKey("players.Player")
+    vehicle = models.ForeignKey("vehicles.Vehicle")
+    untuned = models.BooleanField(default=False,
+                                  help_text="is this in an untuned car?")
+    staggeredstartrace = models.ForeignKey('StaggeredStartRace')
+    estimated_net_millis = models.IntegerField(
+        null=True, help_text='according to calculations the estimated '
+                             'total racing net time for the whole race.')
+    laptime = models.ForeignKey("tracks.Laptime", null=True)
+

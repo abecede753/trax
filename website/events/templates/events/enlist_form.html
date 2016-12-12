@@ -4,7 +4,7 @@
     <div class="row">
       <span class="hidden" id="enlist_url">{% url 'staggeredstartrace_enlist' pk=object.pk %}</span>
       {% for listpart in vehicle_list %}
-        <div class="col-sm-6">
+        <div class="col-xs-6">
           {% for entry in listpart %}
             <button class="enlist_btn btn btn-sm form-control btn-default"
                     onclick="enlist_car(this);"

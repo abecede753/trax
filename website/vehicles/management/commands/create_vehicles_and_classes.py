@@ -31,13 +31,13 @@ class Command(BaseCommand):
                 car['name'] = car['name'][:-8]
             v, c = Vehicle.objects.get_or_create(name=car['name'])
             if car.get('stock'):
-                v.lsgp_seconds_per_km_stock = convert_millis_lap(car['time'])
+                v.lsgp_millis_per_km_stock = convert_millis_lap(car['time'])
             else:
-                v.lsgp_seconds_per_km = convert_millis_lap(car['time'])
+                v.lsgp_millis_per_km = convert_millis_lap(car['time'])
             v.save()
             v.classes.add(vc)
 
 def convert_millis_lap(n):
     n = n / 2.59
-    n = n / 1000.0
+    # n = n / 1000.0
     return n
