@@ -48,7 +48,7 @@
       {% for p in object.ssrparticipation_set.all %}
         <tr>
           <td id="line{{ p.pk }}">&nbsp;</td>
-          <td>{{ p.player }} {{ p.start_in_millis }}</td>
+          <td>{{ p.player }}</td>
           <td>{{ p.vehicle }}</td>
         </tr>
       {% endfor %}
