@@ -29,7 +29,8 @@ class StaggeredStartRace(models.Model):
     link = models.URLField(
         null=True, help_text=_("could be a screenshot URL of the results"))
     comment = models.TextField(default="")
-    start_dt = models.DateTimeField(null=True, default=None)
+    start_timestamp = models.DateTimeField(null=True, default=None)
+    per_overtake_deficit_millis = models.IntegerField(null=True, default=600)
     # TBD
     # staggeredplaylist = models.ForeignKey('StaggeredPlaylist', null=True)
 
@@ -56,4 +57,7 @@ class SSRParticipation(models.Model):
         null=True, help_text='according to calculations the estimated '
                              'total racing net time for the whole race.')
     laptime = models.ForeignKey("tracks.Laptime", null=True)
+    start_timestamp = models.DateTimeField(null=True)
 
+    class Meta:
+        ordering = ('player__username',)

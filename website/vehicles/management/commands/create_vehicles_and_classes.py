@@ -1,19 +1,17 @@
-import os
 import json
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from vehicles.models import VehicleClass, Vehicle
 
 TRANS = {'Compacts': 'Compact', 'Coupes': 'Coupe',
          'Motorcycles': 'Motorcycle', 'Muscle': 'Muscle',
          'Off-Road': 'Offroad', 'Sedans': 'Sedan',
          'Sports': 'Sport', 'Sports Classics': 'Sports_Classic',
-         'Supers': 'Super', 'SUVs': 'SUV', 'Vans': 'Van' }
+         'Supers': 'Super', 'SUVs': 'SUV', 'Vans': 'Van'}
 
 
 class Command(BaseCommand):
     help = 'Imports the vehicle txt files.'
-
 
     def handle(self, *args, **options):
 
@@ -36,6 +34,10 @@ class Command(BaseCommand):
                 v.lsgp_millis_per_km = convert_millis_lap(car['time'])
             v.save()
             v.classes.add(vc)
+
+        # delete cirrus stuff
+        Vehicle.objects.filter(name='Picador (Cirrus5005)').delete()
+
 
 def convert_millis_lap(n):
     n = n / 2.59
