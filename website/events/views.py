@@ -47,7 +47,7 @@ class StaggeredStartRaceDetail(DetailView):
         else:
             proto = 'http'
         url = proto + '://' + self.request.META['HTTP_HOST']
-        url += reverse('staggeredstartrace_invite',
+        url += reverse('staggeredstartrace_detail',
                        args=(self.object.pk,))
         context['invite_url'] = url
         context['vehicle_list'] = get_user_car_list(
@@ -163,3 +163,11 @@ def enlist(request, pk):
         participation.estimated_net_millis = estimated_net_millis
         participation.save()
     return JsonResponse({'result': 'OK'})
+
+
+@method_decorator(login_required, name='dispatch')
+class StaggeredStartRaceStatus(DetailView):
+    model = StaggeredStartRace
+
+    def get(self, *a, **k):
+        return JsonResponse({'result': self.get_object().status})

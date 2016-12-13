@@ -1,6 +1,8 @@
+import datetime
 from django.db import models
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+
 
 RACE_STATES = (
     ('p', _('planning')),
@@ -24,7 +26,7 @@ class StaggeredStartRace(models.Model):
     host = models.ForeignKey('players.Player')
     created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=RACE_STATES,
-                              default=RACE_STATES[0][0])
+                              default=RACE_STATES[1][0])
     hosting_date = models.DateTimeField(null=True)
     link = models.URLField(
         null=True, help_text=_("could be a screenshot URL of the results"))
@@ -60,4 +62,11 @@ class SSRParticipation(models.Model):
     start_timestamp = models.DateTimeField(null=True)
 
     class Meta:
-        ordering = ('player__username',)
+        ordering = ('start_timestamp', 'player__username')
+
+    @property
+    def start_in_millis(self):
+        tdobj = self.start_timestamp - datetime.datetime.now(
+            tz=self.start_timestamp.tzinfo)
+        return int(tdobj.total_seconds() * 1000)
+

@@ -3,14 +3,15 @@ var bell_url = "/static/bell.mp3";
 var participantstable;
 
 $(document).ready(function() {
+    "use strict";
     participantstable = $("#participantstable").DataTable( {
         language: {
             "emptyTable": "Waiting for players to join..."
         },
-
         ajax: "participantstable.json",
         "deferRender": true
     } );
+
 
     function audio_loaded() {
         player.src = bell_url;
@@ -21,12 +22,18 @@ $(document).ready(function() {
     audio.addEventListener("canplaythrough", audio_loaded, false);
     audio.src = bell_url;
 
-    setInterval( function () {
-        participantstable.ajax.reload();
-    }, 2000 );
+    if ($("#event_status").text() === "i") {
+        setInterval(function () { participantstable.ajax.reload(); }, 2000);
+        setInterval(function () { $.ajax( { url: "get_status/"} ).
+            done( function(data) {
+                if (data.result !== "i") { window.location.reload(); }
+
+            }); }, 1000);
+    }
 });
 
 function start_now() {
+    "use strict";
     player.play();
     $("body")
         .stop()
@@ -36,16 +43,23 @@ function start_now() {
 
 var DBG;
 function enlist_car(btn) {
-    var url = $('#enlist_url').text() + '?slug='
+    "use strict";
+    var url = $("#enlist_url").text() + "?slug=";
     url += btn.value;
     $.ajax({url: url})
         .done(function (data) {
-            if (data.result !== "OK") {
-                window.alert("Error: " + data.result);
-            } else {
-                $('.enlist_btn').removeClass('btn-primary');
-                $(btn).addClass('btn-primary');
-
-            }
+            console.log(data);
+            $(".enlist_btn").removeClass("btn-primary");
+            $(btn).addClass("btn-primary");
         });
+}
+
+function greenlight(pk) {
+    "use strict";
+    $("#line" + pk).css("background-color", "green");
+}
+function usergreenlight(pk) {
+    "use strict";
+    start_now();
+    $("#line" + pk).css("background-color", "green");
 }
