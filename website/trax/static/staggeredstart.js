@@ -63,3 +63,5 @@ function usergreenlight(pk) {
     start_now();
     $("#img" + pk).attr("src", "/static/green_light.png");
 }
+
+$("<img/>")[0].src = "/static/green_light.png";

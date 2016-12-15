@@ -82,11 +82,11 @@
             {% for p in object.ssrparticipation_set.all %}
                 {% if p.player.pk == request.user.pk %}
                     $("#userpos").text('You are in position n° ' + {{ forloop.counter }} + '.');
-                    setTimeout( function() {usergreenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
                     meSpeak.speak('You are in pohsition, number ' + {{ forloop.counter }} + '.',
                         {variant:"f5", wordgap:5});
+                    setTimeout( function() {usergreenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
                     setTimeout( function() {meSpeak.speak("Get ready!", {variant:"f5", wordgap:5}); },
-                        {{ p.start_in_millis }} - 5000 );
+                                      {{ p.start_in_millis }} - 5000 );
                 {% else %}
                     setTimeout( function() { greenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
                 {% endif %}
