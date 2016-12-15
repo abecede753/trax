@@ -98,7 +98,7 @@ class StaggeredStartRaceDetail(DetailView):
 
             self.object.save()
 
-            self.race_km = self.object.track.route_length_km * self.object.laps
+#            self.race_km = self.object.track.route_length_km * self.object.laps
             self.calculate_players_start_timestamps()
 
         return super(StaggeredStartRaceDetail, self).get(*a, **k)
@@ -172,10 +172,10 @@ def enlist(request, pk):
     untuned = bool(int(untuned))
     if untuned:
         estimated_net_millis = vehicle.lsgp_millis_per_km_stock * \
-                               ssr.track.route_length_km
+                               ssr.track.route_length_km * ssr.laps
     else:
         estimated_net_millis = vehicle.lsgp_millis_per_km * \
-                               ssr.track.route_length_km
+                               ssr.track.route_length_km * ssr.laps
 
     defaults = {'vehicle': vehicle,
                 'untuned': untuned,
