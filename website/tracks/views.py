@@ -94,7 +94,7 @@ def laptime_json(request, track_pk):
             'duration': {'display': laptime.duration,
                          'millis': laptime.millis},
             'name': str(laptime.player),
-            'date': {'display': laptime.recorded.strftime('%d %m %Y'),
+            'date': {'display': laptime.recorded.strftime('%Y-%m-%d'),
                      'timestamp':laptime.recorded.strftime('%Y-%m-%d')}
         })
     return JsonResponse({'data': data},
