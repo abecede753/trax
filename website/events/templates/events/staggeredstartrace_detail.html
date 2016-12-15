@@ -45,6 +45,7 @@
   {% if object.status == 'r' %}
     <h1 id="userpos"></h1>
     <form action="." method="post">
+    {% csrf_token %}
     After the race please tell me your best lap time: <input type="text" name="personal_laptime">
       (MM:SS.milli)
     <button type="submit" class="btn btn-primary">Save</button>
@@ -82,11 +83,17 @@
             {% for p in object.ssrparticipation_set.all %}
                 {% if p.player.pk == request.user.pk %}
                     $("#userpos").text('You are in position n° ' + {{ forloop.counter }} + '.');
-                    meSpeak.speak('You are in pohsition, number ' + {{ forloop.counter }} + '.',
-                        {variant:"f5", wordgap:5});
-                    setTimeout( function() {usergreenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
-                    setTimeout( function() {meSpeak.speak("Get ready!", {variant:"f5", wordgap:5}); },
-                                      {{ p.start_in_millis }} - 5000 );
+                    {% if p.start_in_millis > 2000 %}
+                        {% if p.start_in_millis > 9000 %}
+                        meSpeak.speak('You are in pohsition, number ' + {{ forloop.counter }} + '.',
+                            {variant:"f5", wordgap:5});
+                        {% endif %}
+                        setTimeout( function() {usergreenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
+                        setTimeout( function() {meSpeak.speak("Get ready!", {variant:"f5", wordgap:5}); },
+                            {{ p.start_in_millis }} - 5000 );
+                    {% else %}
+                        setTimeout( function() { greenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
+                    {% endif %}
                 {% else %}
                     setTimeout( function() { greenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
                 {% endif %}
