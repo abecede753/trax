@@ -3,16 +3,21 @@
 {% load bootstrap3 %}
 {% load widget_tweaks %}
 
-{% block title %}{{ object.track }} ({{ object.laps }} laps) by {{ object.host }}{% endblock %}
+{% block title %}{{ object.track }} {% endblock %}
 {% block content %}
 
-  <h1>{{ object.track }} ({{ object.laps }} laps) by {{ object.host }}
-    (class: {{ object.vehicle_class }})</h1>
   <div class="hidden" id="event_status">{{ object.status }}</div>
 
   {% if object.status == 'i' %}
+    <h1>{{ object.track }}</h1>
     <div class="row" id="showform" >
       <div class="col-md-4">
+      <dl class="dl-horizontal">
+        <dt>Host:</dt><dd>{{ object.host }}</dd>
+        <dt>Vehicle class:</dt><dd>{{ object.vehicle_class }}</dd>
+        <dt>Number of laps:</dt><dd>{{ object.laps }}</dd>
+
+      </dl>
         {% if request.user.username == object.host.username %}
           {% include "events/host_detail_snippet.html" %}
         {% else %}
@@ -38,6 +43,12 @@
   {% endif %}
 
   {% if object.status == 'r' %}
+    <h1 id="userpos"></h1>
+    <form action="." method="post">
+    After the race please tell me your best lap time: <input type="text" name="personal_laptime">
+      (MM:SS.milli)
+    <button type="submit" class="btn btn-primary">Save</button>
+    </form>
     <audio id="gogogo"></audio>
     <table class="table">
       <thead>
@@ -47,7 +58,7 @@
       <tbody>
       {% for p in object.ssrparticipation_set.all %}
         <tr>
-          <td id="line{{ p.pk }}">&nbsp;</td>
+          <td id="line{{ p.pk }}"><img id="img{{ p.pk }}" src="/static/red_light.png" width="24" height="24"></td>
           <td>{{ p.player }}</td>
           <td>{{ p.vehicle }}</td>
         </tr>
@@ -56,20 +67,26 @@
       <tfoot><tr><td></td><td></td><td></td></tr></tfoot>
       </thead>
     </table>
-
-
   {% endif %}
 
 {% endblock %}
 
 {% block trax_extra_script %}
   <script src="/static/staggeredstart.js"></script>
+  <script src="/static/mespeak/mespeak.js"></script>
   {% if object.status == 'r' %}
     <script>
+        meSpeak.loadConfig("/static/mespeak/mespeak_config.json");
+        meSpeak.loadVoice('/static/mespeak/voices/en/en-us.json');
         $(document).ready(function() {
             {% for p in object.ssrparticipation_set.all %}
                 {% if p.player.pk == request.user.pk %}
+                    $("#userpos").text('You are in position n° ' + {{ forloop.counter }} + '.');
                     setTimeout( function() {usergreenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
+                    meSpeak.speak('You are in pohsition, number ' + {{ forloop.counter }} + '.',
+                        {variant:"f5", wordgap:5});
+                    setTimeout( function() {meSpeak.speak("Get ready!", {variant:"f5", wordgap:5}); },
+                        {{ p.start_in_millis }} - 5000 );
                 {% else %}
                     setTimeout( function() { greenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
                 {% endif %}

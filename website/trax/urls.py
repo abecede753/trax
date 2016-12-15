@@ -7,7 +7,7 @@ from . import views
 
 
 urlpatterns = [
-#    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
     url(r'^t/', include('tracks.urls')),
     url(r'^r/', include('randomizer.urls')),
     url(r'^e/', include('events.urls')),

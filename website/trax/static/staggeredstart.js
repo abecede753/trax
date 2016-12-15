@@ -56,10 +56,10 @@ function enlist_car(btn) {
 
 function greenlight(pk) {
     "use strict";
-    $("#line" + pk).css("background-color", "green");
+    $("#img" + pk).attr("src", "/static/green_light.png");
 }
 function usergreenlight(pk) {
     "use strict";
     start_now();
-    $("#line" + pk).css("background-color", "green");
+    $("#img" + pk).attr("src", "/static/green_light.png");
 }

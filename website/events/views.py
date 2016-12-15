@@ -23,6 +23,7 @@ class RaceCreateForm(forms.ModelForm):
         fields = ['track', 'vehicle_class', 'laps', 'comment',]
 
 
+@method_decorator(login_required, name='dispatch')
 class StaggeredStartCreator(CreateView):
     model = StaggeredStartRace
     form_class=RaceCreateForm

@@ -57,3 +57,4 @@ ts3==1.0.4
 uWSGI==2.0.14
 wcwidth==0.1.7
 widgetsnbextension==1.2.6
+pytz==2016.10

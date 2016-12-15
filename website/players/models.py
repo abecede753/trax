@@ -52,6 +52,7 @@ class Player(AbstractBaseUser):
                                     "Please use your RSC name."))
     nickname = models.CharField(max_length=512, default='')  # TS nickname
     communication = models.TextField(null=True, default='')  # current TS communication. the plugin takes care of the content.
+    is_staff = models.BooleanField(default=False)
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'username'
 

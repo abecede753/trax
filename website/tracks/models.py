@@ -63,6 +63,8 @@ class Track(models.Model):
     car_classes = models.ManyToManyField('vehicles.VehicleClass')
     platform = models.CharField(max_length=8,
                                 choices=PLATFORM_CHOICES, default='pc')
+    reference_track = models.BooleanField(
+        default=False, help_text=_("Is this a reference track for laptimes?"))
 
     @property
     def terrains(self):
