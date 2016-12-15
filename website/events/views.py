@@ -1,6 +1,7 @@
 import random
 import datetime
 
+from django.conf import settings
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -47,7 +48,7 @@ class StaggeredStartRaceDetail(DetailView):
             proto = 'https'
         else:
             proto = 'http'
-        url = proto + '://' + self.request.META['HTTP_HOST']
+        url = proto + '://' + settings.SERVER_NAME
         url += reverse('staggeredstartrace_detail',
                        args=(self.object.pk,))
         context['invite_url'] = url
