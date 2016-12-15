@@ -1,7 +1,8 @@
-# trax
-gta tracks web project
+# GTARacing
 
 This is in heavy development. Not for production.
+
+except on https://www.gtaracing.net/
 
 # Installation
 This project has been created using Django under Python 3.5.

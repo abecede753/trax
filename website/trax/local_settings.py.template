@@ -1,13 +1,16 @@
 SECRET_KEY = ...
 
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True/False
 
+ALLOWED_HOSTS = []  # may be very important in production
+
+# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 DATABASES = ...
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
 
 RECAPTCHA_PUBLIC_KEY = '...'
 RECAPTCHA_PRIVATE_KEY = '...'
+
+SERVER_NAME = 'http(s)://....'  # without trailing slash
