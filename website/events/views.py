@@ -44,11 +44,7 @@ class StaggeredStartRaceDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(StaggeredStartRaceDetail, self).get_context_data(**kwargs)
-        if self.request.is_secure():
-            proto = 'https'
-        else:
-            proto = 'http'
-        url = proto + '://' + settings.SERVER_NAME
+        url = settings.SERVER_NAME
         url += reverse('staggeredstartrace_detail',
                        args=(self.object.pk,))
         context['invite_url'] = url
