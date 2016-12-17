@@ -33,27 +33,28 @@
 {% block bootstrap3_content %}
 
   <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-      </button>
-    </div>
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+        </button>
+      </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="{% url "homepage" %}">Track list<span class="sr-only">(current)</span></a></li>
-        <li><a href="{% url "randomracelist" %}">Random grid generator</a></li>
-        {% if user.is_authenticated %}
-          <li><a href="{% url "track_add" %}">Add a track</a></li>
-        {% endif %}
-        {% comment %}
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="{% block menu_homepage_active %}{% endblock %}"><a href="{% url "homepage" %}">Start</a></li>
+          <li class="{% block menu_tracks_active %}{% endblock %}"><a href="{% url "homepage" %}">Tracks</a></li>
+          <li class="{% block menu_racelist_active %}{% endblock %}"><a href="{% url "randomracelist" %}">Random grid generator</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url "track_add" %}">Add a track</a></li>
+          {% endif %}
+          {% comment %}
         <li><a href="#">Randomizer</a></li>
         {% endcomment %}
-      </ul>
-    {% comment %}
+        </ul>
+        {% comment %}
       <form class="navbar-form navbar-left">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search">
@@ -62,38 +63,41 @@
       </form>
 
     {% endcomment %}
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          {% if request.user.is_authenticated %}
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user }} <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url "logout" %}">Log out</a></li>
-            </ul>
-          {% else %}
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="loginreg"> Login/Register </span><span class="caret"></span></a>
-            <ul class="dropdown-menu">
-            <li><h4 class="navbar-form">Returning user?<br>Login here:</h4></li>
-              <li>
-                <form class="navbar-form" action="{% url "login" %}" method="post">
-                  {% csrf_token %}<input type="hidden" name="next" value="/">
-                  Username: <input class="form-control" type="text" name="username"><br>
-                  Password: <input class="form-control" type="password" name="password"><br>
-                  <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-              </li>
-              <li role="separator" class="divider"></li>
-              <li><h4 class="navbar-form">New on this site?</h4>
-              </li>
-              <li>
-                <a class="btn btn-default" href="{% url "register" %}">Register now!</a>
-              </li>
-            </ul>
-          {% endif %}
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{% url "imprint" %}">
+            <span class="glyphicon glyphicon-info-sign"></span>
+ </a></li>
+          <li class="dropdown">
+            {% if request.user.is_authenticated %}
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user }} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url "logout" %}">Log out</a></li>
+              </ul>
+            {% else %}
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="loginreg"> Login/Register </span><span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><h4 class="navbar-form">Returning user?<br>Login here:</h4></li>
+                <li>
+                  <form class="navbar-form" action="{% url "login" %}" method="post">
+                    {% csrf_token %}<input type="hidden" name="next" value="/">
+                    Username: <input class="form-control" type="text" name="username"><br>
+                    Password: <input class="form-control" type="password" name="password"><br>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                  </form>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li><h4 class="navbar-form">New on this site?</h4>
+                </li>
+                <li>
+                  <a href="{% url "register" %}">Register now!</a>
+                </li>
+              </ul>
+            {% endif %}
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 
 
 

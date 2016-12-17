@@ -7,6 +7,9 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.gzip import gzip_page
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 
 from players.models import Player
@@ -99,3 +102,30 @@ def laptime_json(request, track_pk):
         })
     return JsonResponse({'data': data},
                         json_dumps_params={'separators':(',', ':')})
+
+
+@cache_page(60 * 0.2)
+@gzip_page
+def tracks_json(request):
+    data = []
+    print("UNCACHED")
+    for t in Track.objects.all().extra(
+            select={'laptime_count':
+                    'SELECT COUNT(*) FROM tracks_laptime '
+                    'WHERE tracks_laptime.track_id = tracks_track.id'},):
+        data.append({
+            'pk': t.pk,
+            'title': t.title,
+            'author': t.author,
+            'platform': t.platform,
+            'laptime_count':t.laptime_count,
+            'game_mode': t.game_mode,
+            'route_type': t.route_type,
+            'typical_laptime': t.typical_laptime,
+            'num_players': t.num_players,
+            'pit_lane': t.pit_lane and 'Y' or 'N',
+            'route_length_km': t.route_length_km, })
+
+    return JsonResponse({'data': data},
+                        json_dumps_params={'separators':(',', ':')})
+
