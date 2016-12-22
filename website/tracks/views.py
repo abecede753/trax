@@ -68,6 +68,10 @@ def laptime_add(request, lap_pk):
     return HttpResponseRedirect(reverse('track_detail', args=(t.pk,)))
 
 
+class TrackList(ListView):
+    model = Track
+
+
 @method_decorator(login_required, name='dispatch')
 class TrackCreate(CreateView):
     model = Track

@@ -19,8 +19,8 @@ class StaggeredStartRace(models.Model):
     laps = models.PositiveSmallIntegerField(default=1)
     host = models.ForeignKey('players.Player')
     created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=1, choices=RACE_STATES,
-                              default=RACE_STATES[1][0])
+    status = models.CharField(max_length=1, choices=RACE_STATES.choices,
+                              default=RACE_STATES.planning)
     hosting_date = models.DateTimeField(null=True)
     link = models.URLField(
         null=True, help_text=_("could be a screenshot URL of the results"))

@@ -39,20 +39,20 @@ def get_user_car_list(user, vehicle_class):
     also split into two lists for better html display."""
     result = []
 
-    for lsgpstockvehicle in Vehicle.objects.filter(
+    for ccstockvehicle in Vehicle.objects.filter(
             classes__in=[vehicle_class,],
-            lsgp_millis_per_km_stock__isnull=False,
+            cc_millis_per_km_stock__isnull=False,
     ):
         result.append(EventCar(  # TODO XXX NOTE NOW
-            user=user, vehicle=lsgpstockvehicle, stock=True,
-            millis_per_km=lsgpstockvehicle.lsgp_millis_per_km_stock
+            user=user, vehicle=ccstockvehicle, stock=True,
+            millis_per_km=ccstockvehicle.cc_millis_per_km_stock
         ))
-    for lsgpvehicle in Vehicle.objects.filter(
+    for ccvehicle in Vehicle.objects.filter(
         classes__in=[vehicle_class,],
-            lsgp_millis_per_km__isnull=False):
+            cc_millis_per_km__isnull=False):
         result.append(EventCar(
-            user=user, vehicle=lsgpvehicle, stock=False,
-            millis_per_km=lsgpvehicle.lsgp_millis_per_km
+            user=user, vehicle=ccvehicle, stock=False,
+            millis_per_km=ccvehicle.cc_millis_per_km
         ))
     sorted_result = sorted(result, key=lambda x: x.display_name)
     rowcount = int(len(sorted_result)/2)

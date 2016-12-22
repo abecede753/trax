@@ -13,9 +13,10 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, DetailView
 
+from trax.choices import RACE_STATES
 from tracks.models import Laptime
 from vehicles.models import Vehicle
-from .models import StaggeredStartRace, RACE_STATES, SSRParticipation
+from .models import StaggeredStartRace, SSRParticipation
 from .utils import get_user_car_list
 
 
@@ -56,9 +57,10 @@ class StaggeredStartRaceDetail(DetailView):
         return context
 
     def get(self, *a, **k):
-        if self.object.status == 'p':  # in planning stage?
-            self.object.status = 'i'  # to initializing stage. TODO make cleaner
-            self.object.save()
+        obj = self.get_object()
+        if obj.status == RACE_STATES.planning:
+            obj.status = RACE_STATES.initializing
+            obj.save()
         return super(StaggeredStartRaceDetail, self).get(*a, **k)
 
     def post(self, *a, **k):
@@ -94,7 +96,7 @@ class StaggeredStartRaceDetail(DetailView):
                        datetime.timedelta(milliseconds=nowplus*1000)
             self.object = self.get_object()
             self.object.start_timestamp = start_timestamp
-            self.object.status = 'r'  # TODO make cleaner
+            self.object.status = RACE_STATES.running
 
             overtake_deficit = None
             try:
@@ -178,10 +180,10 @@ def enlist(request, pk):
     vehicle = Vehicle.objects.get(pk=vehicle_pk)
     untuned = bool(int(untuned))
     if untuned:
-        estimated_net_millis = vehicle.lsgp_millis_per_km_stock * \
+        estimated_net_millis = vehicle.cc_millis_per_km_stock * \
                                ssr.track.route_length_km * ssr.laps
     else:
-        estimated_net_millis = vehicle.lsgp_millis_per_km * \
+        estimated_net_millis = vehicle.cc_millis_per_km * \
                                ssr.track.route_length_km * ssr.laps
 
     defaults = {'vehicle': vehicle,

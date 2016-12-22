@@ -29,9 +29,9 @@ class Command(BaseCommand):
                 car['name'] = car['name'][:-8]
             v, c = Vehicle.objects.get_or_create(name=car['name'])
             if car.get('stock'):
-                v.lsgp_millis_per_km_stock = convert_millis_lap(car['time'])
+                v.cc_millis_per_km_stock = convert_millis_lap(car['time'])
             else:
-                v.lsgp_millis_per_km = convert_millis_lap(car['time'])
+                v.cc_millis_per_km = convert_millis_lap(car['time'])
             v.save()
             v.classes.add(vc)
 

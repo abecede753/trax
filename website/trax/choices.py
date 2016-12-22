@@ -18,9 +18,20 @@ PLATFORM_CHOICES = (
     ('xb3', _('XBox 360')),
 )
 
-RACE_STATES = (
-    ('p', _('planning')),
-    ('i', _('initializing')),
-    ('r', _('running')),
-    ('f', _('finished')),
-)
+
+class _Rs:
+    planning = 'p'
+    initializing = 'i'
+    running = 'r'
+    finished = 'f'
+
+    def __init__(self):
+        self.choices = (
+            (self.planning, _('planning')),
+            (self.initializing, _('initializing')),
+            (self.running, _('running')),
+            (self.finished, _('finished')),
+        )
+
+
+RACE_STATES = _Rs()

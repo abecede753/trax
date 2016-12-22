@@ -39,12 +39,15 @@
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
         </button>
+        <a class="navbar-brand" href="/">
+          <img alt="gtaracing.net" src="{% static "fav2/logo_24x24.png" %}">
+        </a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="{% block menu_homepage_active %}{% endblock %}"><a href="{% url "homepage" %}">Start</a></li>
+          <li class="{% block menu_homepage_active %}{% endblock %}"><a href="{% url "homepage" %}"><b>GTARacing.net</b></a></li>
           <li class="{% block menu_tracks_active %}{% endblock %}"><a href="{% url "homepage" %}">Tracks</a></li>
           <li class="{% block menu_racelist_active %}{% endblock %}"><a href="{% url "randomracelist" %}">Random grid generator</a></li>
           {% if user.is_authenticated %}
