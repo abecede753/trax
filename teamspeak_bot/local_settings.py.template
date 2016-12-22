@@ -1,5 +1,0 @@
-SERVER = an ip address or hostname as string
-SERVER_ID = 1
-BOT_NAME = nickname for the bot as string
-BOT_PASSWORD = password for the bot as string
-DEFAULT_CHANNEL = channel name as string

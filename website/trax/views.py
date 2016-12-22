@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
-from players.models import Player, TSUId
+from players.models import Player
 
 
 from tracks.models import Track
@@ -34,10 +34,11 @@ class RegistrationForm(ModelForm):
     class Meta:
         model = Player
         fields = ['username']
-    ts_uid = forms.CharField(
-        label=_("Teamspeak UID"),
-        help_text=_("Leave blank if you don't know what this is."),
-        max_length=512,
+    email = forms.EmailField(
+        label=_("E-Mail"),
+        help_text=_("You don't really need to enter an e-mail address. "
+                    "Although it would help you in recovering your acccount "
+                    "in case you should forget your password."),
         required=False)
     password1 = forms.CharField(label='Password',
                                 max_length=100,
@@ -45,7 +46,7 @@ class RegistrationForm(ModelForm):
     password2 = forms.CharField(label='Password (again)',
                                 max_length=100,
                                 widget=forms.PasswordInput)
-    captcha = ReCaptchaField()
+    # captcha = ReCaptchaField()
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
@@ -74,14 +75,10 @@ class Registration(TemplateView):
         form = RegistrationForm(request.POST)
         if not form.is_valid():
             return render(request, self.template_name, {'form':form})
-        user = Player(username=form.cleaned_data['username'])
+        user = Player(username=form.cleaned_data['username'],
+                      email=form.cleaned_data['email'])
         user.set_password(form.cleaned_data['password1'])
         user.save()
-        ts_uid = form.cleaned_data.get('ts_uid', None)
-        if ts_uid:
-            ts_hash = make_password(ts_uid, salt=ts_uid[:5])
-            ts = TSUId(player=user, ts_uid=ts_hash)
-            ts.save()
         login(request, user)
         return HttpResponseRedirect('/')
 
@@ -97,7 +94,6 @@ class TraxAuthenticationForm(AuthenticationForm):
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
         return username
-
 
 
 def login_view(request):
