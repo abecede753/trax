@@ -43,7 +43,8 @@ class StaggeredStartRaceDetail(DetailView):
     model = StaggeredStartRace
 
     def get_context_data(self, **kwargs):
-        context = super(StaggeredStartRaceDetail, self).get_context_data(**kwargs)
+        context = super(StaggeredStartRaceDetail,
+                        self).get_context_data(**kwargs)
         url = settings.SERVER_NAME
         url += reverse('staggeredstartrace_detail',
                        args=(self.object.pk,))
@@ -53,6 +54,12 @@ class StaggeredStartRaceDetail(DetailView):
             vehicle_class=self.object.vehicle_class, )
 
         return context
+
+    def get(self, *a, **k):
+        if self.object.status == 'p':  # in planning stage?
+            self.object.status = 'i'  # to initializing stage. TODO make cleaner
+            self.object.save()
+        return super(StaggeredStartRaceDetail, self).get(*a, **k)
 
     def post(self, *a, **k):
         if self.request.POST.get('personal_laptime'):

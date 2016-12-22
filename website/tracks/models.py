@@ -1,3 +1,4 @@
+from trax.choices import GAME_MODES, ROUTE_TYPES, PLATFORM_CHOICES
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
@@ -5,27 +6,9 @@ from embed_video.fields import EmbedVideoField
 
 from trax.utils import get_object_by_string
 
-GAME_MODES = (
-    ('stunt', _('stunt race')),
-    ('land', _('land race')),
-)
-
-ROUTE_TYPES = (
-    ('l', _('laps')),
-    ('p', _('point to point')),
-)
-
-PLATFORM_CHOICES = (
-    ('pc', _('PC')),
-    ('ps4', _('PS 4')),
-    ('xb1', _('XBox One')),
-    ('ps3', _('PS 3')),
-    ('xb3', _('XBox 360')),
-)
-
 
 class Track(models.Model):
-    title  = models.CharField(unique=True, max_length=256)
+    title = models.CharField(unique=True, max_length=256)
     description = models.TextField(blank=True, default='')
     author = models.CharField(max_length=64, default='', null=False)
     link = models.URLField(null=True)
@@ -37,8 +20,8 @@ class Track(models.Model):
     route_length_km = models.FloatField(null=True)
     num_players = models.PositiveSmallIntegerField(null=True)
     typical_laptime = models.IntegerField(
-        help_text=_('How many seconds does it typically take for a fully customized '
-                    'car to finish a lap with no major issues?'),
+        help_text=_('How many seconds does it typically take for a fully '
+                    'customized car to finish a lap with no major issues?'),
         null=True)
     pit_lane = models.BooleanField(
         help_text=_('Does the track have a pit lane with repair icons?'),
@@ -58,7 +41,8 @@ class Track(models.Model):
         help_text=_('Anything offroad e.g. forests, fields, grasslands, '
                     'desert'), default=0)
     elevation_changes = models.SmallIntegerField(
-        help_text=_('From airport-flat (0), to Tongva Hills (50) to rollercoastery ups and downs (100).'),
+        help_text=_("From airport-flat (0), to Tongva Hills (50) to "
+                    "rollercoastery ups and downs (100)."),
         default=0)
     car_classes = models.ManyToManyField('vehicles.VehicleClass')
     platform = models.CharField(max_length=8,
@@ -69,7 +53,7 @@ class Track(models.Model):
     @property
     def terrains(self):
         return [
-            {'type': _('Street'), 'perc': self.surface_street, 'class':'st'},
+            {'type': _('Street'), 'perc': self.surface_street, 'class': 'st'},
             {'type': _('Road'), 'perc': self.surface_road, 'class': 'ro'},
             {'type': _('Dirt'), 'perc': self.surface_dirt, 'class': 'di'},
             {'type': _('Flat'), 'perc': self.surface_flat, 'class': 'fl'},
@@ -111,13 +95,11 @@ class Laptime(models.Model):
 
     def __str__(self):
         return '{0} {1} {2.3f}'.format(self.player.username,
-                                    self.vehicle.name,
-                                    self.millis_per_km/1000.0)
-
+                                       self.vehicle.name,
+                                       self.millis_per_km/1000.0)
 
     @property
     def duration(self):
         seco, mill = divmod(self.millis, 1000)
         minu, seco = divmod(seco, 60)
         return "{0}:{1:02}.{2:03}".format(int(minu), int(seco), int(mill))
-

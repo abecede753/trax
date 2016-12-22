@@ -93,3 +93,5 @@ ENV/
 
 # stupid mac stuff
 .DS_Store
+
+trax_local_db.odb

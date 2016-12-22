@@ -1,22 +1,16 @@
 import datetime
+from trax.choices import PLATFORM_CHOICES, RACE_STATES
 from django.db import models
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 
-RACE_STATES = (
-    ('p', _('planning')),
-    ('i', _('initializing')),
-    ('r', _('running')),
-    ('f', _('finished')),
-)
-
-
-# TBD
-# class StaggeredPlaylist(models.Model):
-#     title = models.CharField(max_length=256)
-#     creator = models.ForeignKey('players.Player')
-#     created = models.DateTimeField(auto_now_add=True)
+class StaggeredPlaylist(models.Model):
+    title = models.CharField(max_length=256)
+    creator = models.ForeignKey('players.Player')
+    created = models.DateTimeField(auto_now_add=True)
+    platform = models.CharField(max_length=8,
+                                choices=PLATFORM_CHOICES, default='pc')
 
 
 class StaggeredStartRace(models.Model):
@@ -33,8 +27,8 @@ class StaggeredStartRace(models.Model):
     comment = models.TextField(default="")
     start_timestamp = models.DateTimeField(null=True, default=None)
     per_overtake_deficit_millis = models.IntegerField(null=True, default=600)
-    # TBD
-    # staggeredplaylist = models.ForeignKey('StaggeredPlaylist', null=True)
+    staggeredplaylist = models.ForeignKey('StaggeredPlaylist', null=True)
+    number_in_playlist = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         hosting_date = self.hosting_date and \
@@ -69,4 +63,3 @@ class SSRParticipation(models.Model):
         tdobj = self.start_timestamp - datetime.datetime.now(
             tz=self.start_timestamp.tzinfo)
         return int(tdobj.total_seconds() * 1000)
-

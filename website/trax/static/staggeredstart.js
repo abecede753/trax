@@ -22,15 +22,30 @@ $(document).ready(function() {
     audio.addEventListener("canplaythrough", audio_loaded, false);
     audio.src = bell_url;
 
-    if ($("#event_status").text() === "i") {
-        setInterval(function () { participantstable.ajax.reload(); }, 2000);
-        setInterval(function () { $.ajax( { url: "get_status/"} ).
-            done( function(data) {
-                if (data.result !== "i") { window.location.reload(); }
-
-            }); }, 1000);
-    }
+//    if ($("#event_status").text() === "i") {
+//        // setInterval(function () { participantstable.ajax.reload(); }, 2000);
+//        setInterval(function () { $.ajax( { url: "get_status/"} ).
+//            done( function(data) {
+//                if (data.result !== "i") { window.location.reload(); }
+//
+//            }); }, 1600);
+//    }
+    updateScreen();
 });
+
+function updateScreen() {
+    "use strict";
+    $.ajax( { url: "get_status/"} ).done( function(data) { receive_ajax(data); });
+}
+
+function receive_ajax(data) {
+    "use strict";
+    if (data.status === "i") {  // still initializing
+        $("#participantsdiv").html(data.table);
+        window.setTimeout("update_screen", 1600);
+    }
+}
+
 
 function start_now() {
     "use strict";
