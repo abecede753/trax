@@ -1,42 +1,39 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block title %}Login{% endblock %}
 {% block content %}
 
-    <h1>Login</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <h1>Login <small>if you were here before</small></h1>
+      <form method="post" action=".">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+        {% if next %}
+          {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+              please login with an account that has access.</p>
+          {% else %}
+            <p>Please login to see this page.</p>
+          {% endif %}
+        {% endif %}
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
+        {% bootstrap_form form %}
+        {% buttons %}
+          <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "star" %} Submit
+          </button>
+        {% endbuttons %}
+      </form>
+    </div>
 
-<form method="post" action=".">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
-
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
-{# Assumes you setup the password_reset view in your URLconf #}
-{# <p><a href="{ url 'password_reset' }">Lost password?</a></p> #}
-
+    <div class="col-md-6">
+      <h1>Register <small>as a brand new user</small></h1>
+    <p>If you do not already have an account here, please consider registering.</p>
+    <a class="btn btn-default" href="/accounts/register/?next={{ next }}">Register now!</a>
+    </div>
+  </div>
 {% endblock %}
 

@@ -68,19 +68,23 @@ class Registration(TemplateView):
     template_name = "registration/register.html"
 
     def get(self, request, **kwargs):
+        next_url = request.GET.get('next')
         form = RegistrationForm()
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {
+            'form': form, 'next': next_url})
 
     def post(self, request, **kwargs):
         form = RegistrationForm(request.POST)
+        next_url = request.POST.get('next', '/')
         if not form.is_valid():
-            return render(request, self.template_name, {'form':form})
+            return render(request, self.template_name, {
+                'form':form, 'next': next_url})
         user = Player(username=form.cleaned_data['username'],
                       email=form.cleaned_data['email'])
         user.set_password(form.cleaned_data['password1'])
         user.save()
         login(request, user)
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(next_url)
 
 
 def logout_view(request):
