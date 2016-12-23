@@ -1,3 +1,4 @@
+import random
 from captcha.fields import ReCaptchaField
 
 from django.contrib.auth import get_user_model, logout, login
@@ -46,7 +47,7 @@ class RegistrationForm(ModelForm):
     password2 = forms.CharField(label='Password (again)',
                                 max_length=100,
                                 widget=forms.PasswordInput)
-    # captcha = ReCaptchaField()
+    captcha = ReCaptchaField()
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
@@ -89,7 +90,9 @@ class Registration(TemplateView):
 
 def logout_view(request):
     logout(request)
-    resp = HttpResponseRedirect('/')
+    resp = HttpResponseRedirect('/?{}'.format(
+        str(random.random()).split('.')[1])
+    )
     resp.set_cookie('username', '-')
     return resp
 
