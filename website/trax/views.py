@@ -1,4 +1,3 @@
-import random
 from captcha.fields import ReCaptchaField
 
 from django.contrib.auth import get_user_model, logout, login
@@ -10,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
@@ -88,11 +88,10 @@ class Registration(TemplateView):
         return HttpResponseRedirect(next_url)
 
 
+@never_cache()
 def logout_view(request):
     logout(request)
-    resp = HttpResponseRedirect('/?{}'.format(
-        str(random.random()).split('.')[1])
-    )
+    resp = HttpResponseRedirect('/')
     resp.set_cookie('username', '-')
     return resp
 
