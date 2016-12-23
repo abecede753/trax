@@ -88,7 +88,7 @@ class Registration(TemplateView):
         return HttpResponseRedirect(next_url)
 
 
-@never_cache()
+@never_cache
 def logout_view(request):
     logout(request)
     resp = HttpResponseRedirect('/')
