@@ -68,7 +68,7 @@ class Registration(TemplateView):
     template_name = "registration/register.html"
 
     def get(self, request, **kwargs):
-        next_url = request.GET.get('next')
+        next_url = request.GET.get('next', '/')
         form = RegistrationForm()
         return render(request, self.template_name, {
             'form': form, 'next': next_url})
