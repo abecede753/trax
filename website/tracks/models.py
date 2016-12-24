@@ -88,7 +88,7 @@ class Laptime(models.Model):
                                   help_text="is this in an untuned car?")
     millis = models.IntegerField(default=0)
     millis_per_km = models.IntegerField(default=0)
-    comment = models.TextField(default='')
+    comment = models.TextField(default='', null=True)
     video = EmbedVideoField(null=True)
     link = models.URLField(null=True)
     pc_60fps = models.BooleanField(default=False)

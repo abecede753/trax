@@ -20,8 +20,6 @@ from .models import StaggeredStartRace, SSRParticipation
 from .utils import get_user_car_list
 
 
-# Create your views here.
-
 class RaceCreateForm(forms.ModelForm):
     class Meta:
         model = StaggeredStartRace
