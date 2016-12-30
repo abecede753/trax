@@ -16,9 +16,42 @@ from django.views.generic import CreateView, DetailView
 from trax.choices import RACE_STATES
 from tracks.models import Laptime
 from vehicles.models import Vehicle
-from .models import StaggeredStartRace, SSRParticipation
+from .models import StaggeredStartRace, SSRParticipation, StaggeredPlaylist
 from .utils import get_user_car_list
 
+
+class SSRCreateForm(forms.ModelForm):
+    class Meta:
+        model = StaggeredStartRace
+        fields = ['track', 'vehicle_class', 'laps', 'comment',]
+
+
+@method_decorator(login_required, name='dispatch')
+class SSECreator(CreateView):
+    model = StaggeredStartRace
+    form_class = SSRCreateForm
+
+    def form_valid(self, form):
+        playlist = StaggeredPlaylist()
+        playlist.creator = self.request.user
+        playlist.title = 'StaggeredStart Playlist by {0}'.format(
+            self.request.user.username)
+        playlist.platform = self.request.POST.get('platform')
+        playlist.save()
+
+        form.instance.host = self.request.user
+        form.instance.staggeredplaylist = playlist
+        form.instance.save()
+        return JsonResponse({'data': 'OK'})
+
+    def form_invalid(self, form):
+        import ipdb; ipdb.set_trace()
+        return JsonResponse({'data': {'status': 'ERROR', 'form': form}})
+
+
+
+
+#### OLD STUFF
 
 class RaceCreateForm(forms.ModelForm):
     class Meta:

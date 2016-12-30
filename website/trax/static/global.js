@@ -1,23 +1,31 @@
 var laptimetable;
+var vehicletable;
 $(document).ready(function() {
-    var dt_table = $('.laptimetable').dataTable({
-        language: 'en',
-        order: [[ 0, "desc" ]],
-        lengthMenu: [[25, 50, 100, 200], [25, 50, 100, 200]],
-        columnDefs: [
-            {orderable: true,
-                searchable: true,
-                className: "center",
-                targets: [0, 1]
-            }
-        ],
-        searching: true,
-        processing: true,
-        serverSide: true,
-        stateSave: true,
-        ajax: '/t/api/tracks_list/'
-    });
+//    var dt_table = $('.laptimetable').dataTable({
+//        language: 'en',
+//        order: [[ 0, "desc" ]],
+//        lengthMenu: [[25, 50, 100, 200], [25, 50, 100, 200]],
+//        columnDefs: [
+//            {orderable: true,
+//                searchable: true,
+//                className: "center",
+//                targets: [0, 1]
+//            }
+//        ],
+//        searching: true,
+//        processing: true,
+//        serverSide: true,
+//        stateSave: true,
+//        ajax: '/t/api/tracks_list/'
+//    });
 
+
+    /* vehicles table */
+    vehicletable = $('#vehicletable').DataTable( {
+        // ajax: "laptimes.json",
+        order: [[ 0, "asc" ]],
+        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+    } );
 
     /* tracks table */
     laptimetable = $('#laptimetable').DataTable( {

@@ -24,3 +24,10 @@ class Vehicle(models.Model):
             self.name,
             ', '.join([x.name for x in self.classes.all()]))
 
+    @property
+    def secs_per_km(self):
+        return '{:.3f}'.format(self.cc_millis_per_km/1000.0)
+
+    @property
+    def secs_per_km_stock(self):
+        return '{:.3f}'.format(self.cc_millis_per_km_stock/1000.0)
