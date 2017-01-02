@@ -34,8 +34,7 @@ class LaptimeAddForm(forms.ModelForm):
 
     class Meta:
         model = Laptime
-        fields = ['vehicle', 'untuned',
-                  'comment', 'recorded']
+        fields = ['vehicle', 'comment', 'recorded']
     def __init__(self, *a, **k):
         super(LaptimeAddForm, self).__init__(*a, **k)
         self.fields['vehicle'].empty_label = ''

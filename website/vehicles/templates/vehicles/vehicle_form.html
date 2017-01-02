@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block title %}{{ object.name }} {% endblock %}
+{% block content %}
+  <h1>{{ object.name }}</h1>
+
+  <div class="row">
+    <form action="." method="post">
+      {% csrf_token %}
+      <div class="col-md-4">
+        {% bootstrap_field form.name %}
+        {% bootstrap_field form.description %}
+        {% bootstrap_field form.cc_millis_per_km %}
+        {% bootstrap_field form.cc_millis_per_km_stock %}
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+      <div class="col-md-4">
+        {% bootstrap_field form.classes %}
+      </div>
+    </form>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="pricedown"
+              style="margin-top:0px;margin-bottom:0px;">Calculator</h3>
+        </div>
+        <div class="panel-body">
+          Enter the seconds of a Cutting-Coroners-laptime by Broughy1322
+          here and click "Convert!" to get the correct milliseconds.
+          <div class="row">
+            <div class="col-xs-5">
+              <input class="form-control" type="text" id="calc_laptime">
+            </div>
+            <div class="col-xs-7">
+              (MM:SS.milli)
+              <button onclick="convert_from_laptime_to_cc_millis()" class="btn btn-default">Convert!</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col-xs-5 text-right">
+              <h3 class="pricedown"
+                  style="margin-top:6px;margin-bottom:0px;">Result:
+            </div>
+            <div class="col-xs-6">
+              <input class="form-control form-inline" type="text" id="calc_millis">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}

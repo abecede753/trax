@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block title %}{{ object.track }} {% endblock %}
+{% block content %}
+  <h1>{{ object.name }}</h1>
+
+  <div class="row">
+    <div class="col-md-6">
+    <p>{{ object.description }}</p>
+      <dl class="dl-horizontal">
+        <dt>{% trans "Classes" %}</dt>
+        <dd>
+          {% for vc in object.classes.all %}
+            {{ vc.name }}{% if not forloop.last %},{% endif %}
+          {% endfor %}
+        </dd>
+      {% if object.cc_millis_per_km %}
+        <dt>{% trans "Cutting Coroners km/h" %}</dt>
+        <dd>{{ object.km_per_h }}</dd>
+        <dt>{% trans "CC milliseconds/km" %}</dt>
+        <dd>{{ object.cc_millis_per_km }}</dd>
+      {% endif %}
+        {% if object.cc_millis_per_km_stock %}
+          <dt>{% trans "CC km/h stock" %}</dt>
+          <dd>{{ object.km_per_h_stock }}</dd>
+          <dt>{% trans "CC millis/km stock" %}</dt>
+          <dd>{{ object.cc_millis_per_km_stock }}</dd>
+        {% endif %}
+      </dl>
+    </div>
+
+  <div class="col-md-6">
+    <h3>Lap times</h3>
+    {% for lt in object.laptime_set.all %}
+      {{ lt.player }}, {{ lt.track }}, {{ lt.duration }}, {{ lt.km_per_h }}
+    {% endfor %}
+
+  </div>
+
+  </div>
+  <a class="btn btn-default" href="{% url "vehicle_update" object.pk %}">Edit</a>
+
+
+
+
+
+
+{% endblock %}

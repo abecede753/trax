@@ -108,7 +108,6 @@ class StaggeredStartRaceDetail(DetailView):
                 player=self.request.user,
                 recorded=datetime.date.today(),
                 vehicle=particip.vehicle,
-                untuned=particip.untuned,
                 millis=millis,
                 millis_per_km=millis / event.track.route_length_km,
                 comment='participation in a staggered start race',
@@ -168,7 +167,7 @@ class StaggeredStartRaceDetail(DetailView):
 #        for lt in laptimes:
 #            lt.eventcar = get_eventcar(
 #                user=lt.player, vehicle_pk=lt.vehicle.pk,
-#                stock=lt.untuned, race_km=self.race_km)
+#                race_km=self.race_km)
 #        result = sorted(laptimes, key=lambda x: x.eventcar.total_millis)
 #        return result
 
@@ -177,10 +176,7 @@ def participants_list(request, pk=None):
     ssr = get_object_or_404(StaggeredStartRace, pk=pk)
     result = []
     for lt in ssr.ssrparticipation_set.all():
-        if lt.untuned:
-            vehicle = '{0} (stock)'.format(lt.vehicle.name)
-        else:
-            vehicle = str(lt.vehicle)
+        vehicle = str(lt.vehicle)
         result.append([lt.player.username, vehicle])
     return JsonResponse({'data': result})
 
@@ -188,7 +184,7 @@ def participants_list(request, pk=None):
 class ParticipationForm(forms.ModelForm):
     class Meta:
         model = Laptime
-        fields = ['vehicle', 'untuned']
+        fields = ['vehicle',]
 
 
 # class SSRParticipationView(CreateView):
@@ -207,24 +203,17 @@ def enlist(request, pk):
     slug = request.GET.get('slug')
 
     # TODO "user_entry" (personal lap times) not yet implemented
-    vehicle_pk, user_entry, untuned = slug.split('.')
+    vehicle_pk, user_entry = slug.split('.')
     vehicle = Vehicle.objects.get(pk=vehicle_pk)
-    untuned = bool(int(untuned))
-    if untuned:
-        estimated_net_millis = vehicle.cc_millis_per_km_stock * \
-                               ssr.track.route_length_km * ssr.laps
-    else:
-        estimated_net_millis = vehicle.cc_millis_per_km * \
-                               ssr.track.route_length_km * ssr.laps
+    estimated_net_millis = vehicle.cc_millis_per_km * \
+                           ssr.track.route_length_km * ssr.laps
 
     defaults = {'vehicle': vehicle,
-                'untuned': untuned,
                 'estimated_net_millis': estimated_net_millis}
     participation, created = SSRParticipation.objects.get_or_create(
         player=request.user, staggeredstartrace=ssr, defaults=defaults)
     if not created:
         participation.vehicle = vehicle
-        participation.untuned = untuned
         participation.estimated_net_millis = estimated_net_millis
         participation.save()
     return JsonResponse({'result': 'OK'})

@@ -12,10 +12,11 @@ class Vehicle(models.Model):
     name = models.CharField(max_length=256)
     classes = models.ManyToManyField("vehicles.VehicleClass")
     cc_millis_per_km = models.IntegerField(null=True)
-    cc_millis_per_km_stock = models.IntegerField(null=True)
+    description = models.TextField(null=True)
 
     class Meta:
-        ordering=['classes__name', 'name']
+        ordering=['name', ]
+
     def __str__(self):
         return self.full_name()
 
@@ -26,8 +27,14 @@ class Vehicle(models.Model):
 
     @property
     def secs_per_km(self):
-        return '{:.3f}'.format(self.cc_millis_per_km/1000.0)
+        if self.cc_millis_per_km != 0:
+            return '{:.3f}'.format(self.cc_millis_per_km/1000.0)
+        return ''
 
     @property
-    def secs_per_km_stock(self):
-        return '{:.3f}'.format(self.cc_millis_per_km_stock/1000.0)
+    def km_per_h(self):
+        if self.cc_millis_per_km != 0:
+            return '{:.3f}'.format(
+                (1.0 / self.cc_millis_per_km ) * 1000 * 3600
+            )
+        return '?'

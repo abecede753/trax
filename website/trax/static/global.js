@@ -20,12 +20,51 @@ $(document).ready(function() {
 //    });
 
 
+
     /* vehicles table */
     vehicletable = $('#vehicletable').DataTable( {
         // ajax: "laptimes.json",
         order: [[ 0, "asc" ]],
         lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
     } );
+//    vehicletable = $('#vehicletable').DataTable({
+//        "columnDefs": [
+//            { "visible": false, "targets": 1 }
+//        ],
+//        "order": [[ 1, 'asc' ]],
+//        "displayLength": 50,
+//        "drawCallback": function ( settings ) {
+//            var api = this.api();
+//            var rows = api.rows( {page:'current'} ).nodes();
+//            var last=null;
+//
+//            api.column(1, {page:'current'} ).data().each( function ( group, i ) {
+//                if ( last !== group ) {
+//                    $(rows).eq( i ).before(
+//                        '<tr class="group"><td colspan="5">'+group+'</td></tr>'
+//                    );
+//                    last = group;
+//                }
+//            } );
+//        }
+//    } );
+
+    // Order by the grouping
+    $('#vehicletable tbody').on( 'click', 'tr.group', function () {
+        var currentOrder = table.order()[0];
+        if ( currentOrder[0] === 1 && currentOrder[1] === 'asc' ) {
+            table.order( [ 1, 'desc' ] ).draw();
+        }
+        else {
+            table.order( [ 1, 'asc' ] ).draw();
+        }
+    } );
+
+
+
+
+
+
 
     /* tracks table */
     laptimetable = $('#laptimetable').DataTable( {
@@ -64,3 +103,16 @@ $(document).ready(function() {
 });
 
 
+function convert_from_laptime_to_cc_millis() {
+    "use strict";
+    var value = $("#calc_laptime").val();
+    if (value.indexOf(":") > -1) {
+        var items = value.split(":");
+        var millis = parseFloat(items[0]) * 60 + parseFloat(items[1]);
+    } else {
+        var millis = parseFloat(value);
+    }
+    millis = millis / 2.59 * 1000.0;
+    $("#calc_millis").val(Math.round(millis));
+
+}

@@ -46,8 +46,6 @@ class StaggeredStartRace(models.Model):
 class SSRParticipation(models.Model):
     player = models.ForeignKey("players.Player")
     vehicle = models.ForeignKey("vehicles.Vehicle")
-    untuned = models.BooleanField(default=False,
-                                  help_text="is this in an untuned car?")
     staggeredstartrace = models.ForeignKey('StaggeredStartRace')
     estimated_net_millis = models.IntegerField(
         null=True, help_text='according to calculations the estimated '

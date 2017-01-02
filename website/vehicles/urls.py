@@ -8,7 +8,7 @@ urlpatterns = [
         name='vehicle_list'),
     url(r'^s/(?P<pk>\d+)/$', VehicleDetail.as_view(),
         name='vehicle_detail'),
-    url(r'^vehicles/add/$', VehicleCreate.as_view(),
+    url(r'^add/$', VehicleCreate.as_view(),
         name='vehicle_create'),
     url(r'^s/(?P<pk>\d+)/edit/$', VehicleUpdate.as_view(),
         name='vehicle_update'),

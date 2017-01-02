@@ -84,8 +84,6 @@ class Laptime(models.Model):
     created = models.DateField(auto_now_add=True)
     recorded = models.DateField(null=True)
     vehicle = models.ForeignKey("vehicles.Vehicle")
-    untuned = models.BooleanField(default=False,
-                                  help_text="is this in an untuned car?")
     millis = models.IntegerField(default=0)
     millis_per_km = models.IntegerField(default=0)
     comment = models.TextField(default='', null=True)
@@ -94,12 +92,21 @@ class Laptime(models.Model):
     pc_60fps = models.BooleanField(default=False)
 
     def __str__(self):
-        return '{0} {1} {2.3f}'.format(self.player.username,
-                                       self.vehicle.name,
-                                       self.millis_per_km/1000.0)
+        return '{0} {1}'.format(self.player.username,
+                                self.vehicle.name)
 
     @property
     def duration(self):
         seco, mill = divmod(self.millis, 1000)
         minu, seco = divmod(seco, 60)
         return "{0}:{1:02}.{2:03}".format(int(minu), int(seco), int(mill))
+
+
+    @property
+    def km_per_h(self):
+        if self.millis_per_km != 0:
+            return '{:.3f}'.format(
+                (1.0 / self.millis_per_km ) * 1000 * 3600
+            )
+        return '?'
+

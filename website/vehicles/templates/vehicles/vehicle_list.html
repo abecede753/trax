@@ -13,19 +13,21 @@
         <thead>
         <tr>
           <th>Vehicle</th>
-          <th>Classes</th>
+          <th>Class</th>
           <th>secs/km</th>
+          <th>km/h</th>
           <th>secs/km stock</th>
+          <th>km/h stock</th>
         </tr>
         </thead>
         <tbody>
 {% for o in object_list %}
-<tr><td>{{ o.name }}</td><td>
-  {% for foo in o.classes.all %}
- {{ foo }}{% if not forloop.last %}, {% endif %}
-  {% endfor %}
-
-</td><td>{{ o.secs_per_km }}</td><td>{{ o.secs_per_km_stock|default_if_none:'?' }}</td></tr>
+<tr><td><a href="{% url "vehicle_detail" o.vehicle.pk %}">{{ o.vehicle.name }}</a></td>
+  <td>{{ o.vehicleclass.name }}</td>
+  <td>{{ o.vehicle.secs_per_km|default_if_none:'?' }}</td>
+  <td>{{ o.vehicle.km_per_h|default_if_none:'?' }}</td>
+  <td>{{ o.vehicle.secs_per_km_stock|default_if_none:'?' }}</td>
+  <td>{{ o.vehicle.km_per_h_stock|default_if_none:'?' }}</td></tr>
 {% endfor %}
 
         </tbody>
