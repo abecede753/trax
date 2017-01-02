@@ -16,8 +16,6 @@
           <th>Class</th>
           <th>secs/km</th>
           <th>km/h</th>
-          <th>secs/km stock</th>
-          <th>km/h stock</th>
         </tr>
         </thead>
         <tbody>
@@ -26,8 +24,6 @@
   <td>{{ o.vehicleclass.name }}</td>
   <td>{{ o.vehicle.secs_per_km|default_if_none:'?' }}</td>
   <td>{{ o.vehicle.km_per_h|default_if_none:'?' }}</td>
-  <td>{{ o.vehicle.secs_per_km_stock|default_if_none:'?' }}</td>
-  <td>{{ o.vehicle.km_per_h_stock|default_if_none:'?' }}</td></tr>
 {% endfor %}
 
         </tbody>

@@ -7,15 +7,7 @@
     <form action="{% url "laptime_add" obj.pk %}" method="POST">
       <div class="panel-body">
         {% csrf_token %}
-        <div class="row">
-          <div class="col-sm-9">
-          {% render_field form.vehicle class="combobox form-control" %}
-            </div>
-          <div class="col-sm-3">
-          <div class="checkbox"><label>{% render_field form.untuned %}
-          stock?</label></div>
-          </div>
-        </div>
+        {% render_field form.vehicle class="combobox form-control" %}
         <div>
           <label for="seconds">
             {% trans "lap time" %}
