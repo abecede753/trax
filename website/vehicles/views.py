@@ -1,11 +1,12 @@
-# from django.shortcuts import render
-from django.forms import ModelMultipleChoiceField, CheckboxSelectMultiple, \
+from django.forms import CheckboxSelectMultiple, \
     modelform_factory
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, UpdateView,
                                   DetailView, ListView)
 
-from .models import Vehicle, VehicleClass
+from trax.utils import is_staff_required
+from .models import Vehicle
 
 
 class ModelFormWidgetMixin(object):
@@ -27,6 +28,7 @@ class VehicleDetail(DetailView):
     model = Vehicle
 
 
+@method_decorator(is_staff_required, name='dispatch')
 class VehicleCreate(ModelFormWidgetMixin, CreateView):
     model = Vehicle
     fields = ["name", "cc_millis_per_km", "description", "classes"]
@@ -34,6 +36,7 @@ class VehicleCreate(ModelFormWidgetMixin, CreateView):
     success_url = reverse_lazy('vehicle_list')
 
 
+@method_decorator(is_staff_required, name='dispatch')
 class VehicleUpdate(ModelFormWidgetMixin, UpdateView):
     model = Vehicle
     fields = ["name", "cc_millis_per_km", "description", "classes"]

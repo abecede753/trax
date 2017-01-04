@@ -11,14 +11,20 @@ class VehicleClass(models.Model):
 class Vehicle(models.Model):
     name = models.CharField(max_length=256)
     classes = models.ManyToManyField("vehicles.VehicleClass")
-    cc_millis_per_km = models.IntegerField(null=True)
-    description = models.TextField(null=True)
+    cc_laptime_millis = models.IntegerField(null=True)
+    cc_millis_per_km = models.IntegerField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         ordering=['name', ]
 
     def __str__(self):
         return self.full_name()
+
+    def save(self, *a, **k):
+        if self.cc_laptime_millis:
+            self.cc_millis_per_km = self.cc_laptime_millis / 2.59
+        super(Vehicle, self).save(*a, **k)
 
     def full_name(self):
         return '{0} ({1})'.format(

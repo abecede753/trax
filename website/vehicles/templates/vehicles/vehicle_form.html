@@ -31,7 +31,9 @@
           here and click "Convert!" to get the correct milliseconds.
           <div class="row">
             <div class="col-xs-5">
-              <input class="form-control" type="text" id="calc_laptime">
+              <input class="form-control"
+                     pattern="^\d{1,2}:\d{1,2}\.\d\d?\d?$"
+                     type="text" id="calc_laptime">
             </div>
             <div class="col-xs-7">
               (MM:SS.milli)
