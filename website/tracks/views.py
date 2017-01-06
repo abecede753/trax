@@ -15,17 +15,18 @@ from django.views.generic.edit import CreateView, UpdateView
 from players.models import Player
 from .models import Track, Laptime
 from vehicles.models import Vehicle
-from .forms import TrackForm
+from .forms import TrackForm, SSRCreateForm
 
 
 def track_detail(request, pk):
     t = Track.objects.get(pk=pk)
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
+    ssrform = SSRCreateForm(initial={'track': t})
     return render(
         request, 'tracks/track_detail.html',
-        context={
-            'obj': t, 'form': LaptimeAddForm(
-                initial={'recorded': todaystring})})
+        context={'obj': t,
+                 'form': LaptimeAddForm(initial={'recorded': todaystring}),
+                 'ssrform': ssrform})
 
 
 class LaptimeAddForm(forms.ModelForm):

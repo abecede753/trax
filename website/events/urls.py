@@ -1,12 +1,11 @@
 from django.conf.urls import url
 from randomizer import views
-from .views import StaggeredStartCreator, StaggeredStartRaceDetail, \
+from .views import StaggeredStartRaceCreator, StaggeredStartRaceDetail, \
     participants_list, enlist, StaggeredStartRaceStatus
 
-from .views import SSECreator
-
 urlpatterns = [
-    url(r'^s/$', StaggeredStartCreator.as_view(), name='sscreator'),
+    url(r'^s/add/$', StaggeredStartRaceCreator.as_view(),
+        name='ssr_add'),
     url(r'^s/(?P<pk>\d+)/$', StaggeredStartRaceDetail.as_view(),
         name='staggeredstartrace_detail'),
     url(r'^s/(?P<pk>\d+)/participantstable.json$',
@@ -21,7 +20,4 @@ urlpatterns = [
 
     ####################### NEW STUFF
 
-    url(r'^ss/$',
-        SSECreator.as_view(),
-        name='sse_create'),
 ]

@@ -1,5 +1,6 @@
 from django.forms import ModelForm
 
+from events.models import StaggeredStartRace
 from .models import Track, Laptime
 
 
@@ -15,3 +16,7 @@ class TrackForm(ModelForm):
         ]
 
 
+class SSRCreateForm(ModelForm):
+    class Meta:
+        model = StaggeredStartRace
+        fields = ["vehicle_class", "track", "comment"]

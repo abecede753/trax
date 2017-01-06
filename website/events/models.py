@@ -5,12 +5,12 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 
-class StaggeredPlaylist(models.Model):
-    title = models.CharField(max_length=256)
-    creator = models.ForeignKey('players.Player')
-    created = models.DateTimeField(auto_now_add=True)
-    platform = models.CharField(max_length=8,
-                                choices=PLATFORM_CHOICES, default='pc')
+#class StaggeredPlaylist(models.Model):
+#    title = models.CharField(max_length=256)
+#    creator = models.ForeignKey('players.Player')
+#    created = models.DateTimeField(auto_now_add=True)
+#    platform = models.CharField(max_length=8,
+#                                choices=PLATFORM_CHOICES, default='pc')
 
 
 class StaggeredStartRace(models.Model):
@@ -24,11 +24,11 @@ class StaggeredStartRace(models.Model):
     hosting_date = models.DateTimeField(null=True)
     link = models.URLField(
         null=True, help_text=_("could be a screenshot URL of the results"))
-    comment = models.TextField(default="")
+    comment = models.TextField(default="", blank=True)
     start_timestamp = models.DateTimeField(null=True, default=None)
     per_overtake_deficit_millis = models.IntegerField(null=True, default=600)
-    staggeredplaylist = models.ForeignKey('StaggeredPlaylist', null=True)
-    number_in_playlist = models.PositiveSmallIntegerField(default=0)
+#    staggeredplaylist = models.ForeignKey('StaggeredPlaylist', null=True)
+#    number_in_playlist = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         hosting_date = self.hosting_date and \

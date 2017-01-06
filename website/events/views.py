@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django import forms
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.urls import reverse
@@ -16,57 +17,37 @@ from django.views.generic import CreateView, DetailView
 from trax.choices import RACE_STATES
 from tracks.models import Laptime
 from vehicles.models import Vehicle
-from .models import StaggeredStartRace, SSRParticipation, StaggeredPlaylist
+from .models import StaggeredStartRace, SSRParticipation
 from .utils import get_user_car_list
+
+
+class SSREditForm(forms.ModelForm):
+    class Meta:
+        model = StaggeredStartRace
+        fields = ['track', 'vehicle_class', 'laps', 'comment', ]
 
 
 class SSRCreateForm(forms.ModelForm):
     class Meta:
         model = StaggeredStartRace
-        fields = ['track', 'vehicle_class', 'laps', 'comment',]
+        fields = ['track', 'vehicle_class', 'comment']
 
 
 @method_decorator(login_required, name='dispatch')
-class SSECreator(CreateView):
+class StaggeredStartRaceCreator(CreateView):
     model = StaggeredStartRace
     form_class = SSRCreateForm
 
-    def form_valid(self, form):
-        playlist = StaggeredPlaylist()
-        playlist.creator = self.request.user
-        playlist.title = 'StaggeredStart Playlist by {0}'.format(
-            self.request.user.username)
-        playlist.platform = self.request.POST.get('platform')
-        playlist.save()
+    def get(self, request, *a, **k):
+        raise Http404()
 
+    def form_valid(self, form):
         form.instance.host = self.request.user
-        form.instance.staggeredplaylist = playlist
         form.instance.save()
-        return JsonResponse({'data': 'OK'})
-
-    def form_invalid(self, form):
-        import ipdb; ipdb.set_trace()
-        return JsonResponse({'data': {'status': 'ERROR', 'form': form}})
+        return super(StaggeredStartRaceCreator, self).form_valid(form)
 
 
-
-
-#### OLD STUFF
-
-class RaceCreateForm(forms.ModelForm):
-    class Meta:
-        model = StaggeredStartRace
-        fields = ['track', 'vehicle_class', 'laps', 'comment',]
-
-
-@method_decorator(login_required, name='dispatch')
-class StaggeredStartCreator(CreateView):
-    model = StaggeredStartRace
-    form_class=RaceCreateForm
-
-    def form_valid(self, form):
-        form.instance.host = self.request.user
-        return super(StaggeredStartCreator, self).form_valid(form)
+# OLD STUFF
 
 
 @method_decorator(login_required, name='dispatch')
@@ -115,12 +96,13 @@ class StaggeredStartRaceDetail(DetailView):
             lt.save()
             particip.laptime = lt
             particip.save()
-            messages.add_message(self.request, messages.SUCCESS,
-                                 'Thanks! (a nicer page will follow after the beta')
+            messages.add_message(
+                self.request, messages.SUCCESS,
+                'Thanks! (a nicer page will follow later. Maybe.)')
             return HttpResponseRedirect('/')
 
         if self.request.POST.get('start_in_secs'):
-            nowplus = random.randrange(0,6)
+            nowplus = random.randrange(0, 6)
             nowplus += int(self.request.POST.get('start_in_secs'))
             start_timestamp = datetime.datetime.now() + \
                        datetime.timedelta(milliseconds=nowplus*1000)

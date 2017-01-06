@@ -1,0 +1,35 @@
+{% load i18n %}{% load widget_tweaks %}{% load bootstrap3 %}
+<div id="ssrcreator" class="modal fade">
+  <form action="{% url 'ssr_add' %}" method="post">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Create a staggered start race</h4>
+        </div>
+        <div class="modal-body">
+          <p>In a staggered start race all drivers can choose their favourite car
+            regardless of its performance.
+            I set calculate different start times according to previously
+            measured average speeds of the cars.
+            Ideally all cars will meet again just before the finish line.
+            <br><b>Should be fun!</b></p>
+          <hr>
+          <p>Just tell me the <b>vehicle class</b>, and then I'll show you a link that your players
+            have to go to, so they can enter their car.</p>
+          {% bootstrap_field ssrform.vehicle_class show_label=False %}
+          <p>You can also enter <b>some text</b> here for your participants to read, if you like.</p>
+          {% bootstrap_field ssrform.comment show_label=False %}
+          <input type="hidden" name="track" value="{{ ssrform.track.initial.pk }}">
+          {% csrf_token %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create the race!</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
