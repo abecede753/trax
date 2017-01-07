@@ -105,7 +105,7 @@ ServerDate.amortizationRate = 25; // ms
 // server's clock is too great (threshold set below).  If that's the case then
 // we skip amortization and set the clock to match the server's clock
 // immediately.
-ServerDate.amortizationThreshold = 2000; // ms
+ServerDate.amortizationThreshold = 500; // ms
 
 Object.defineProperty(ServerDate, "synchronizationIntervalDelay", {
   get: function() { return synchronizationIntervalDelay; },
