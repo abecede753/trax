@@ -2,6 +2,19 @@ var player = document.getElementById("gogogo");
 var bell_url = "/static/bell.mp3";
 var participantstable;
 
+function receive_ajax(data) {
+    "use strict";
+    if (data.status === "i") {  // still initializing
+        $("#participantsdiv").html(data.table);
+        window.setTimeout("updateScreen", 1600);
+    }
+}
+
+function updateScreen() {
+    "use strict";
+    $.ajax( { url: "get_status/"} ).done( function(data) { receive_ajax(data); });
+}
+
 $(document).ready(function() {
     "use strict";
     participantstable = $("#participantstable").DataTable( {
@@ -32,20 +45,6 @@ $(document).ready(function() {
 //    }
     updateScreen();
 });
-
-function updateScreen() {
-    "use strict";
-    $.ajax( { url: "get_status/"} ).done( function(data) { receive_ajax(data); });
-}
-
-function receive_ajax(data) {
-    "use strict";
-    if (data.status === "i") {  // still initializing
-        $("#participantsdiv").html(data.table);
-        window.setTimeout("update_screen", 1600);
-    }
-}
-
 
 function start_now() {
     "use strict";

@@ -73,9 +73,10 @@
 {% endblock %}
 
 {% block trax_extra_script %}
+  <script src="/static/serverdate.js"></script>
+  <script src="/static/mespeak/mespeak.js"></script>
   <script src="/static/staggeredstart.js"></script>
   <!-- script src="https://dl.dropboxusercontent.com/s/h0pv1d0gjrtvbce/mespeak.js"></script -->
-  <script src="/static/mespeak/mespeak.js"></script>
   {% if object.status == 'r' %}
     <script>
         meSpeak.loadConfig("/static/mespeak/mespeak_config.json");
