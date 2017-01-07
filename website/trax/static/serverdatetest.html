@@ -26,13 +26,14 @@ along with ServerDate.  If not, see <http://www.gnu.org/licenses/>.
     </HEAD>
 
     <BODY>
+    <span id="server"></span>
         <H1>ServerDate Example</H1>
 
         <P>The precision may improve after a few seconds as a result of clock
         synchronization and amortization.</P>
 
         <TABLE border="1">
-            <TR><TD>server</TD><TD id="server"></TD></TR>
+            <TR><TD>server</TD><TD id="OLDserver"></TD></TR>
             <TR><TD>client</TD><TD id="client"></TD></TR>
             <TR><TD>difference</TD>
                 <TD id="difference" style="text-align: right"></TD></TR>
