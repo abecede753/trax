@@ -56,13 +56,14 @@ class StaggeredStartRace(models.Model):
         """saves the current whole json state for faster access"""
         players = []
         for s in self.ssrparticipation_set.all().order_by('player__username'):
-            players.append({'username': s.player.username,
+            newdict = {'username': s.player.username,
                             'pk': s.player.pk,
                             'vehicle': s.vehicle.name,
                             'estimated_laptime': s.estimated_laptime,
-                            'start_timestamp': int(
-                                s.start_timestamp.timestamp()*1000),
-                            })
+                            }
+            if s.start_timestamp:
+                newdict['timestamp'] = int(s.start_timestamp.timestamp()*1000)
+            players.append(newdict)
         dct = {'status': self.status,
                              'players': players}
         filename = os.path.join(

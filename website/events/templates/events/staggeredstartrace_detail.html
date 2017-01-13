@@ -18,7 +18,7 @@
     <li><a href="#ssrresults" data-toggle="tab">Results</a></li>
   </ul>
 {% endcomment %}
-  <div class="row">
+  <div id="twocols" class="row">
     <div class="col-md-6">
 
       {% if request.user.username == object.host.username %}
@@ -56,6 +56,19 @@
     </div>
   </div>
 
+  <div id="racescreen">
+  <table class="table table-bordered table-condensed" id="participants">
+    <thead>
+    <tr class="info">
+      <td class="col-md-1">&nbsp;</td>
+      <td class="col-md-2">Player</td>
+      <td class="col-md-3">Vehicle</td>
+    </tr>
+    </thead>
+    <tbody id="racebody">
+    </tbody>
+  </table>
+  </div>
 {% endblock %}
 
 {% block trax_extra_script %}

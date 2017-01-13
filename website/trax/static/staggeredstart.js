@@ -1,14 +1,8 @@
 var player = document.getElementById("gogogo");
 var bell_url = "/static/bell.mp3";
-var participantstable;
 var DDEBUG;
-// function receive_ajax(data) {
-//     if (data.status === "i") {  // still initializing
-//         $("#participantsdiv").html(data.table);
-//         window.setTimeout("updateScreen", 1600);
-//     }
-// }
 
+function LOG(txt) { console.log(txt);}
 
 $(document).ready(function() {
 
@@ -20,30 +14,11 @@ $(document).ready(function() {
     var audio = new Audio();
     audio.addEventListener("canplaythrough", audio_loaded, false);
     audio.src = bell_url;
-
-//    if ($("#event_status").text() === "i") {
-//        // setInterval(function () { participantstable.ajax.reload(); }, 2000);
-//        setInterval(function () { $.ajax( { url: "get_status/"} ).
-//            done( function(data) {
-//                if (data.result !== "i") { window.location.reload(); }
-//
-//            }); }, 1600);
-//    }
     call_ajax();
     $("#showvehiclelist").collapse();
 });
 
-function start_now() {
-    player.play();
-    $("body")
-        .stop()
-        .css("background-color", "#00FF00")
-        .animate({ backgroundColor: "#FFFFFF"}, 5000);
-}
-
-var DBG;
 function enlist_car(btn) {
-    DBG = btn;
     $.ajax({url: btn.value})
         .done(function (data) {
             $(".enlist_btn").removeClass("btn-primary");
@@ -57,8 +32,12 @@ function greenlight(pk) {
     $("#img" + pk).attr("src", "/static/green_light.png");
 }
 function usergreenlight(pk) {
-    start_now();
-    $("#img" + pk).attr("src", "/static/green_light.png");
+    player.play();
+    $("body")
+        .stop()
+        .css("background-color", "#00FF00")
+        .animate({ backgroundColor: "#FFFFFF"}, 5000);
+    greenlight(pk);
 }
 
 function getReady() {
@@ -82,31 +61,6 @@ function fill_participants_table(data) {
     }
 }
 
-function process_ajax(response) {
-    var jsn = response.data;
-    DDEBUG = jsn;
-    // initializing / invitation state
-    if (jsn.status === "i") {
-        fill_participants_table(jsn.players);
-        window.setTimeout("call_ajax", 900);
-    }
-
-    // racing starts
-    if (jsn.status === "r") {
-        start_race(jsn.players);
-    }
-}
-
-function call_ajax() {
-    $.ajax(
-        { url: $("#json_url").html() + '?r=' + Math.random() }
-    ).done(
-        function(result) {
-            process_ajax(result.data);
-        }
-    );
-}
-
 function start_race(data) {
     var tb = $("#racebody");
     var myself = $("#username").html();
@@ -119,7 +73,10 @@ function start_race(data) {
                      "class": "text-center"}).appendTo(row);
         $("<td />", {"text": entry.username}).appendTo(row);
         $("<td />", {"text": entry.vehicle}).appendTo(row);
-        var start_in_millis = entry.start_timestamp - ServerDate.now();
+        LOG("start_ts " + entry.timestamp)
+        LOG("NOW " + ServerDate.now())
+        var start_in_millis = entry.timestamp - ServerDate.now();
+        LOG("start_in_millis " + start_in_millis)
 
         if (entry.username === myself) {
             if (start_in_millis > 9000) {
@@ -139,3 +96,39 @@ function start_race(data) {
         }
     }
 }
+
+
+function process_ajax(jsn) {
+    LOG("process_ajax");
+
+    // initializing / invitation state, needs continuous refresh
+    if (jsn.status === "i" || jsn.status === "p") {
+        $("#twocols").show();
+        $("#racescreen").hide();
+        LOG("jsn.status i");
+        fill_participants_table(jsn.players);
+        LOG("settingtimeout");
+        window.setTimeout(call_ajax, 900);
+    }
+
+    // racing starts; don't refresh the page automatically anymore.
+    if (jsn.status === "r") {
+        $("#twocols").hide();
+        $("#racescreen").show();
+        LOG("jsn.status r");
+        start_race(jsn.players);
+    }
+}
+
+function call_ajax() {
+    LOG("call_ajax");
+    $.ajax(
+        { url: $("#json_url").html() + '?r=' + Math.random() }
+    ).done(
+        function(result) {
+            process_ajax(result.data);
+        }
+    );
+}
+
+

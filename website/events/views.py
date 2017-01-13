@@ -103,6 +103,7 @@ class StaggeredStartRaceDetail(DetailView):
             return HttpResponseRedirect('/')
 
         if self.request.POST.get('start_in_secs'):
+
             nowplus = random.randrange(0, 6)
             nowplus += int(self.request.POST.get('start_in_secs'))
             start_timestamp = datetime.datetime.now() + \
@@ -122,6 +123,7 @@ class StaggeredStartRaceDetail(DetailView):
 
 #            self.race_km = self.object.track.route_length_km * self.object.laps
             self.calculate_players_start_timestamps()
+            self.object.update_json()
 
         return super(StaggeredStartRaceDetail, self).get(*a, **k)
 
