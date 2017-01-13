@@ -1,6 +1,7 @@
 var player = document.getElementById("gogogo");
 var bell_url = "/static/bell.mp3";
 var DDEBUG;
+var myId;
 
 function LOG(txt) { console.log(txt);}
 
@@ -69,8 +70,11 @@ function start_race(data) {
     for (idx = 0; idx < data.length; idx+=1) {
         var entry = data[idx];
         var row = $("<tr />", {}).appendTo(tb);
-        $("<td />", {"text": "<img src=\"/static/red_light.png\" id=\"" + entry.username + "\">",
-                     "class": "text-center"}).appendTo(row);
+        var imgcol = $("<td />", {"class": "text-center"}).appendTo(row);
+        var img = $("<img />", {"src": "/static/red_light.png",
+            "style": "width:16px;height:16px",
+            "id":"img" + entry.pk
+                     }).appendTo(imgcol);
         $("<td />", {"text": entry.username}).appendTo(row);
         $("<td />", {"text": entry.vehicle}).appendTo(row);
         LOG("start_ts " + entry.timestamp)
@@ -84,13 +88,14 @@ function start_race(data) {
                     {variant:"f5", wordgap:5});
             }
             if (start_in_millis > 2000) {
-                setTimeout( function() { usergreenlight( entry.username ); }, start_in_millis );
+                setTimeout( function() { usergreenlight( entry.pk ); }, start_in_millis );
                 setTimeout( function() { getReady(); }, start_in_millis - 5000 );
             }
+            myId = entry.pk;
         } else {
             if (start_in_millis > 2000) {
                 setTimeout(function () {
-                    greenlight(entry.username);
+                    greenlight(entry.pk);
                 }, start_in_millis);
             }
         }
