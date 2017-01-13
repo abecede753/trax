@@ -3,21 +3,9 @@ var bell_url = "/static/bell.mp3";
 var DDEBUG;
 var myId;
 
-function LOG(txt) { console.log(txt);}
-
-$(document).ready(function() {
-
-    function audio_loaded() {
-        player.src = bell_url;
-        $("#testsoundbtn").show();
-    }
-
-    var audio = new Audio();
-    audio.addEventListener("canplaythrough", audio_loaded, false);
-    audio.src = bell_url;
-    call_ajax();
-    $("#showvehiclelist").collapse();
-});
+function LOG(txt) {
+    //console.log(txt);
+}
 
 function enlist_car(btn) {
     $.ajax({url: btn.value})
@@ -113,7 +101,7 @@ function process_ajax(jsn) {
         LOG("jsn.status i");
         fill_participants_table(jsn.players);
         LOG("settingtimeout");
-        window.setTimeout(call_ajax, 900);
+        window.setTimeout(call_ajax, 1700);
     }
 
     // racing starts; don't refresh the page automatically anymore.
@@ -136,4 +124,18 @@ function call_ajax() {
     );
 }
 
+
+$(document).ready(function() {
+
+    function audio_loaded() {
+        player.src = bell_url;
+        $("#testsoundbtn").show();
+    }
+
+    var audio = new Audio();
+    audio.addEventListener("canplaythrough", audio_loaded, false);
+    audio.src = bell_url;
+    call_ajax();
+    $("#showvehiclelist").collapse();
+});
 
