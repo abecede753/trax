@@ -29,6 +29,14 @@ function usergreenlight(pk) {
     greenlight(pk);
 }
 
+function teststart() {
+    player.play();
+    $("body")
+        .stop()
+        .css("background-color", "#00FF00")
+        .animate({ backgroundColor: "#FFFFFF"}, 5000);
+}
+
 function getReady() {
     meSpeak.speak("Get ready!", {variant:"f5", wordgap:5});
 }
