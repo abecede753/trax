@@ -35,14 +35,12 @@ def get_user_car_list(user, vehicle_class):
     also split into two lists for better html display."""
     result = []
 
+    # LATER: request.user.playervehiclespeed_set.all()...
     for ccvehicle in Vehicle.objects.filter(
         classes__in=[vehicle_class,],
             cc_millis_per_km__isnull=False):
-        result.append(EventCar(
-            user=user, vehicle=ccvehicle,
-            millis_per_km=ccvehicle.cc_millis_per_km
-        ))
-    sorted_result = sorted(result, key=lambda x: x.display_name)
+        result.append(ccvehicle)
+    sorted_result = sorted(result, key=lambda x: x.name)
     rowcount = int(len(sorted_result)/2)
     p1 = sorted_result[:rowcount]
     p2 = sorted_result[rowcount:]

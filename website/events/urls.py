@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^s/(?P<pk>\d+)/participantstable.json$',
         participants_list,
         name='participantslist'),
-    url(r'^s/(?P<pk>\d+)/enlist$',
+    url(r'^s/(?P<pk>\d+)/enlist/(?P<vehicle_pk>\d+)/$',
         enlist,
         name='staggeredstartrace_enlist'),
     url(r'^s/(?P<pk>\d+)/get_status/$',

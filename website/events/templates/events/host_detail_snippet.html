@@ -1,3 +1,4 @@
+<h3>Invite players</h3>
 <p>Use this link to invite some players:
   <input
       class="form-control"
@@ -5,50 +6,55 @@
       value="{{ invite_url }}"
       onClick="this.select();">
 </p>
-<p>
-  {{ object.comment }}
-</p>
-<h3>What to do next?</h3>
-<p>As soon as every player is in the table, you can tell me when to start the race.</p>
-
 <div class="panel panel-default">
   <div class="panel-body">
     <form action="." method="post">
       {% csrf_token %}
-
       <div class="row">
         <div class="col-xs-6">
           Start in about
         </div>
-        <div class="col-xs-6 form-inline text-right">
+        <div class="col-xs-6 form-inline">
           <input value="15" style="width:5em;" type="text"
                  class="form-control" name="start_in_secs"> seconds
         </div>
-
         <div class="col-xs-6">
           Per overtake time deficit
         </div>
-        <div class="col-xs-6 form-inline text-right">
+        <div class="col-xs-6 form-inline">
           <input value="600" style="width:5em;" type="text"
                  class="form-control" name="per_overtake_deficit_millis"> millisecs
         </div>
-        <div class="col-xs-12 text-right">
+        <div class="col-xs-12">
+          (for every car a player has to overtake, this amount of milliseconds
+          will be subtracted from his start time delay,
+          so he is not being punished for being in a faster vehicle.)
+        </div>
+        <div class="col-xs-12 text-center">
           <button class="btn btn-primary btn-block">Ok, let's do it!</button>
         </div>
-
       </div>
-
-
       <div class="form-inline">
       </div>
       <div class="form-inline">
       </div>
-
     </form>
   </div>
 </div>
-<p>Then, everyone will get a visual and audible signal to start racing.</p>
-<hr>
+{% if object.comment %}
+  <h3>Information for this race</h3>
+  {{ object.comment }}
+  <hr>
+{% endif %}
+<h3>What to do next?</h3>
+<p>Choose your vehicle if you want to drive too. (Click above on the
+  corresponding link, then come back here.)</p>
+<p>To see all joined players, click on "Starting order" above.</p>
+<p>As soon as every player has joined,
+  you can tell me when to start the race.
+  Just fill out the form on the right, and off you go!</p>
+<p>Everyone will get a visual and audible signal when it's time for them to
+  start racing.</p>
 <p>Interested how it will sound and look? Find out here:
   {% include "events/gogogotestbutton.html" %}
 </p>

@@ -1,30 +1,16 @@
 var player = document.getElementById("gogogo");
 var bell_url = "/static/bell.mp3";
 var participantstable;
+var DDEBUG;
+// function receive_ajax(data) {
+//     if (data.status === "i") {  // still initializing
+//         $("#participantsdiv").html(data.table);
+//         window.setTimeout("updateScreen", 1600);
+//     }
+// }
 
-function receive_ajax(data) {
-    "use strict";
-    if (data.status === "i") {  // still initializing
-        $("#participantsdiv").html(data.table);
-        window.setTimeout("updateScreen", 1600);
-    }
-}
-
-function updateScreen() {
-    "use strict";
-    $.ajax( { url: "get_status/"} ).done( function(data) { receive_ajax(data); });
-}
 
 $(document).ready(function() {
-    "use strict";
-    participantstable = $("#participantstable").DataTable( {
-        language: {
-            "emptyTable": "Waiting for players to join..."
-        },
-        ajax: "participantstable.json",
-        "deferRender": true
-    } );
-
 
     function audio_loaded() {
         player.src = bell_url;
@@ -43,11 +29,11 @@ $(document).ready(function() {
 //
 //            }); }, 1600);
 //    }
-    updateScreen();
+    call_ajax();
+    $("#showvehiclelist").collapse();
 });
 
 function start_now() {
-    "use strict";
     player.play();
     $("body")
         .stop()
@@ -57,25 +43,99 @@ function start_now() {
 
 var DBG;
 function enlist_car(btn) {
-    "use strict";
-    var url = $("#enlist_url").text() + "?slug=";
-    url += btn.value;
-    $.ajax({url: url})
+    DBG = btn;
+    $.ajax({url: btn.value})
         .done(function (data) {
-            console.log(data);
             $(".enlist_btn").removeClass("btn-primary");
             $(btn).addClass("btn-primary");
+            $("#showvehiclelist").collapse("hide");
+            $("#togglevehiclelist").text(btn.textContent);
         });
 }
 
 function greenlight(pk) {
-    "use strict";
     $("#img" + pk).attr("src", "/static/green_light.png");
 }
 function usergreenlight(pk) {
-    "use strict";
     start_now();
     $("#img" + pk).attr("src", "/static/green_light.png");
 }
 
+function getReady() {
+    meSpeak.speak("Get ready!", {variant:"f5", wordgap:5});
+}
+
 $("<img/>")[0].src = "/static/green_light.png";
+
+meSpeak.loadConfig("/static/mespeak/mespeak_config.json");
+meSpeak.loadVoice('/static/mespeak/voices/en/en-us.json');
+
+function fill_participants_table(data) {
+    var tb = $("#participantsbody");
+    tb.html("");
+    for (idx = 0; idx < data.length; idx++) {
+        var entry = data[idx];
+        var row = $("<tr />", {}).appendTo(tb);
+        $("<td />", {"text": " ", "class": "text-center"}).appendTo(row);
+        $("<td />", {"text": entry.username}).appendTo(row);
+        $("<td />", {"text": entry.vehicle}).appendTo(row);
+    }
+}
+
+function process_ajax(response) {
+    var jsn = response.data;
+    DDEBUG = jsn;
+    // initializing / invitation state
+    if (jsn.status === "i") {
+        fill_participants_table(jsn.players);
+        window.setTimeout("call_ajax", 900);
+    }
+
+    // racing starts
+    if (jsn.status === "r") {
+        start_race(jsn.players);
+    }
+}
+
+function call_ajax() {
+    $.ajax(
+        { url: $("#json_url").html() + '?r=' + Math.random() }
+    ).done(
+        function(result) {
+            process_ajax(result.data);
+        }
+    );
+}
+
+function start_race(data) {
+    var tb = $("#racebody");
+    var myself = $("#username").html();
+    var idx;
+    tb.html("");
+    for (idx = 0; idx < data.length; idx+=1) {
+        var entry = data[idx];
+        var row = $("<tr />", {}).appendTo(tb);
+        $("<td />", {"text": "<img src=\"/static/red_light.png\" id=\"" + entry.username + "\">",
+                     "class": "text-center"}).appendTo(row);
+        $("<td />", {"text": entry.username}).appendTo(row);
+        $("<td />", {"text": entry.vehicle}).appendTo(row);
+        var start_in_millis = entry.start_timestamp - ServerDate.now();
+
+        if (entry.username === myself) {
+            if (start_in_millis > 9000) {
+                meSpeak.speak("You are in position, number " + (idx + 1) + ".",
+                    {variant:"f5", wordgap:5});
+            }
+            if (start_in_millis > 2000) {
+                setTimeout( function() { usergreenlight( entry.username ); }, start_in_millis );
+                setTimeout( function() { getReady(); }, start_in_millis - 5000 );
+            }
+        } else {
+            if (start_in_millis > 2000) {
+                setTimeout(function () {
+                    greenlight(entry.username);
+                }, start_in_millis);
+            }
+        }
+    }
+}

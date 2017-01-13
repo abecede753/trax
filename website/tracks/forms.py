@@ -19,4 +19,4 @@ class TrackForm(ModelForm):
 class SSRCreateForm(ModelForm):
     class Meta:
         model = StaggeredStartRace
-        fields = ["vehicle_class", "track", "comment"]
+        fields = ["vehicle_class", "laps", "track", "comment"]

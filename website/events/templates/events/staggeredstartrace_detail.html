@@ -7,68 +7,54 @@
 {% block content %}
 
   <div class="hidden" id="event_status">{{ object.status }}</div>
+  <div class="hidden" id="json_url">{{ object.json_url }}</div>
 
-  {% if object.status == 'i' %}
-    <h1>{{ object.track }}</h1>
-    <div class="row" id="showform" >
-      <div class="col-md-4">
-      <dl class="dl-horizontal">
-        <dt>Host:</dt><dd>{{ object.host }}</dd>
-        <dt>Vehicle class:</dt><dd>{{ object.vehicle_class }}</dd>
-        <dt>Number of laps:</dt><dd>{{ object.laps }}</dd>
+  <h1><small>{{ object.laps }} laps on </small>{{ object.track }} <small>[{{ object.track.platform }}] hosted by {{ object.host }}</small></h1>
+  {% comment %}
+  <ul class="nav nav-pills">
+    <li class="active"><a href="#ssrdetailsnippet" data-toggle="tab">Details</a></li>
+    <li><a href="#ssrvehicleselect" data-toggle="tab">Choose your vehicle</a></li>
+    <li><a href="#ssrstartingorder" data-toggle="tab">Starting order</a></li>
+    <li><a href="#ssrresults" data-toggle="tab">Results</a></li>
+  </ul>
+{% endcomment %}
+  <div class="row">
+    <div class="col-md-6">
 
-      </dl>
-        {% if request.user.username == object.host.username %}
-          {% include "events/host_detail_snippet.html" %}
-        {% else %}
-          {% include "events/participant_detail_snippet.html" %}
-        {% endif %}
-      </div>
-      <div class="col-md-8" id="playerlist">
-        {% include "events/enlist_form.html" %}
-        <h2>Current players</h2>
-        <table id="participantstable" class="table table-striped table-bordered">
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Vehicle</th>
-          </tr>
-          </thead>
-          <tbody>
-          </tbody>
-
-        </table>
-      </div>
+      {% if request.user.username == object.host.username %}
+        {% include "events/host_detail_snippet.html" %}
+      {% else %}
+        {% include "events/participant_detail_snippet.html" %}
+      {% endif %}
     </div>
-  {% endif %}
 
-  {% if object.status == 'r' %}
-    <h1 id="userpos"></h1>
-    <form action="." method="post">
-    {% csrf_token %}
-    After the race please tell me your best lap time: <input type="text" name="personal_laptime">
-      (MM:SS.milli)
-    <button type="submit" class="btn btn-primary">Save</button>
-    </form>
-    <audio id="gogogo"></audio>
-    <table class="table">
-      <thead>
-      <th>&nbsp;</th>
-      <th>Name</th>
-      <th>Vehicle</th>
-      <tbody>
-      {% for p in object.ssrparticipation_set.all %}
-        <tr>
-          <td id="line{{ p.pk }}"><img id="img{{ p.pk }}" src="/static/red_light.png" width="24" height="24"></td>
-          <td>{{ p.player }}</td>
-          <td>{{ p.vehicle }}</td>
+    <div class="col-md-6">
+      <div class="alert alert-info">
+        <h4 class="text-center"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+          This one's important!
+          <span class="glyphicon glyphicon-alert" aria-hidden="true"></span></h4>
+        <p>You will <b>not</b> hear the sound of the start signal if you minimize
+          your browser window, so <b>keep it open</b> in the background!
+          Do <b>not</b> click on the little "_" icon of the browser window's upper right corner!</p>
+        <p>Also, this feature has only been tested in Chrome, Firefox and Chromium browsers.
+          Use at your own risk in other browsers like Internet Explorer etc.</p>
+      </div>
+
+     {% include "events/enlist_form.html" %}
+      <table class="table table-bordered table-condensed" id="participants">
+        <thead>
+        <tr class="info">
+          <td class="col-md-1">&nbsp;</td>
+          <td class="col-md-2">Player</td>
+          <td class="col-md-3">Vehicle</td>
         </tr>
-      {% endfor %}
-      </tbody>
-      <tfoot><tr><td></td><td></td><td></td></tr></tfoot>
-      </thead>
-    </table>
-  {% endif %}
+        </thead>
+        <tbody id="participantsbody">
+        </tbody>
+      </table>
+
+    </div>
+  </div>
 
 {% endblock %}
 
@@ -76,32 +62,4 @@
   <script src="/static/serverdate.js"></script>
   <script src="/static/mespeak/mespeak.js"></script>
   <script src="/static/staggeredstart.js"></script>
-  <!-- script src="https://dl.dropboxusercontent.com/s/h0pv1d0gjrtvbce/mespeak.js"></script -->
-  {% if object.status == 'r' %}
-    <script>
-        meSpeak.loadConfig("/static/mespeak/mespeak_config.json");
-        meSpeak.loadVoice('/static/mespeak/voices/en/en-us.json');
-        $(document).ready(function() {
-            {% for p in object.ssrparticipation_set.all %}
-                {% if p.player.pk == request.user.pk %}
-                    $("#userpos").text('You are in position n° ' + {{ forloop.counter }} + '.');
-                    {% if p.start_in_millis > 2000 %}
-                        {% if p.start_in_millis > 9000 %}
-                        meSpeak.speak('You are in pohsition, number ' + {{ forloop.counter }} + '.',
-                            {variant:"f5", wordgap:5});
-                        {% endif %}
-                        setTimeout( function() {usergreenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
-                        setTimeout( function() {meSpeak.speak("Get ready!", {variant:"f5", wordgap:5}); },
-                            {{ p.start_in_millis }} - 5000 );
-                    {% else %}
-                        setTimeout( function() { greenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
-                    {% endif %}
-                {% else %}
-                    setTimeout( function() { greenlight( {{ p.pk }} ); }, {{ p.start_in_millis }} );
-                {% endif %}
-
-            {% endfor %}
-        });
-    </script>
-  {% endif %}
 {% endblock %}

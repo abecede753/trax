@@ -19,6 +19,9 @@
           <p>Just tell me the <b>vehicle class</b>, and then I'll show you a link that your players
             have to go to, so they can enter their car.</p>
           {% bootstrap_field ssrform.vehicle_class show_label=False %}
+          <p>How many laps? </p>
+          {% bootstrap_field ssrform.laps show_label=False %}
+
           <p>You can also enter <b>some text</b> here for your participants to read, if you like.</p>
           {% bootstrap_field ssrform.comment show_label=False %}
           <input type="hidden" name="track" value="{{ ssrform.track.initial.pk }}">

@@ -95,3 +95,4 @@ ENV/
 .DS_Store
 
 trax_local_db.odb
+**/trax/static/ssr/*json

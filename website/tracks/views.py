@@ -41,30 +41,34 @@ class LaptimeAddForm(forms.ModelForm):
         self.fields['vehicle'].empty_label = ''
 
 
+@login_required
 def laptime_add(request, lap_pk):
     if request.method == 'POST':
+        vehicle = get_object_or_404(Vehicle, pk=request.POST.get('vehicle'))
+        t = Track.objects.get(pk=lap_pk)
+        l = Laptime()
+        l.track = t
+        l.player = request.user
+        l.vehicle = vehicle
         try:
-            t = Track.objects.get(pk=lap_pk)
-            l = Laptime()
-            l.track = t
-            l.player = request.user
-            l.vehicle = Vehicle.objects.get(pk=request.POST.get('vehicle'))
             parts = request.POST.get('seconds')
             m, rest = parts.split(':')
             millis = 1000 * (int(m)*60 + float(rest))
-            l.millis = millis
-            l.millis_per_km = millis / t.route_length_km
-            l.comment = request.POST.get('comment', '')
-            yy,mm,dd = request.POST.get('recorded').split('-')
-            l.recorded = datetime.date(int(yy), int(mm), int(dd))
-            l.created = datetime.datetime.now()
-            l.save()
-            messages.add_message(request, messages.SUCCESS,
-                                 "Okay, your laptime was saved.")
-        except:  # TODO
+        except:
             messages.add_message(
                 request, messages.ERROR,
-                'There was an error, and the programmer was too lazy to check which exactly it was. Try again with some valid input.')
+                'I did not understand your laptime input. Please use the format MM:SS.milli')
+            return HttpResponseRedirect(reverse('track_detail', args=(t.pk,)))
+
+        l.millis = millis
+        l.millis_per_km = millis / t.route_length_km
+        l.comment = request.POST.get('comment', '')
+        yy,mm,dd = request.POST.get('recorded').split('-')
+        l.recorded = datetime.date(int(yy), int(mm), int(dd))
+        l.created = datetime.datetime.now()
+        l.save()
+        messages.add_message(request, messages.SUCCESS,
+                             "Okay, your laptime was saved.")
     return HttpResponseRedirect(reverse('track_detail', args=(t.pk,)))
 
 

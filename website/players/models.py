@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import UserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy
+from .utils import update_player_racing_stats
 
 from trax.utils import get_object_by_string
 
@@ -45,9 +46,10 @@ class Player(AbstractBaseUser):
     nickname = models.CharField(max_length=512, default='')  # alternative form
     is_staff = models.BooleanField(default=False)
     email = models.EmailField(null=True)
+    defaultspeedmultiplier = models.FloatField(default=1.0)
+
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'username'
-
     objects = UserManager()
 
     def __str__(self):
@@ -58,3 +60,22 @@ def register(self, rscname, nickname, email):
     player = Player(rscname=rscname, nickname=nickname,
                     email=email)
     player.save()
+
+
+class PlayerVehicle(models.Model):
+    player = models.ForeignKey("players.Player")
+    vehicle = models.ForeignKey("vehicles.Vehicle")
+    multiplier = models.FloatField(default=1.0)
+
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from tracks.models import Laptime
+
+@receiver(post_save, sender=Laptime)
+def my_handler(sender, instance=None, **kwargs):
+    if instance:
+        player = Player.objects.get(username=instance.player.username)
+        update_player_racing_stats(player)
+
+

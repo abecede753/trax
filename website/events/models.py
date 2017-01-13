@@ -1,9 +1,13 @@
 import datetime
-from trax.choices import PLATFORM_CHOICES, RACE_STATES
+import json
+import os
+
+from django.conf import settings
 from django.db import models
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
+from trax.choices import PLATFORM_CHOICES, RACE_STATES
 
 #class StaggeredPlaylist(models.Model):
 #    title = models.CharField(max_length=256)
@@ -16,7 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 class StaggeredStartRace(models.Model):
     track = models.ForeignKey('tracks.Track')
     vehicle_class = models.ForeignKey('vehicles.VehicleClass', null=True)
-    laps = models.PositiveSmallIntegerField(default=1)
+    laps = models.PositiveSmallIntegerField(default=5)
     host = models.ForeignKey('players.Player')
     created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=RACE_STATES.choices,
@@ -42,14 +46,39 @@ class StaggeredStartRace(models.Model):
         return reverse_lazy('staggeredstartrace_detail',
                             kwargs={'pk': self.pk})
 
+    @property
+    def json_url(self):
+        return os.path.join(
+            settings.STATIC_URL, 'ssr',
+            '{0}.json'.format(self.pk))
+
+    def update_json(self):
+        """saves the current whole json state for faster access"""
+        players = []
+        for s in self.ssrparticipation_set.all().order_by('player__username'):
+            players.append({'username': s.player.username,
+                            'pk': s.player.pk,
+                            'vehicle': s.vehicle.name,
+                            'estimated_laptime': s.estimated_laptime,
+                            'start_timestamp': int(
+                                s.start_timestamp.timestamp()*1000),
+                            })
+        dct = {'status': self.status,
+                             'players': players}
+        filename = os.path.join(
+            settings.STATIC_ROOT, 'ssr',
+            '{0}.json'.format(self.pk))
+        with open(filename, 'w') as f:
+            f.write(json.dumps({'data': dct}, separators=(',', ':')))
+
 
 class SSRParticipation(models.Model):
     player = models.ForeignKey("players.Player")
     vehicle = models.ForeignKey("vehicles.Vehicle")
     staggeredstartrace = models.ForeignKey('StaggeredStartRace')
-    estimated_net_millis = models.IntegerField(
+    estimated_laptime = models.IntegerField(
         null=True, help_text='according to calculations the estimated '
-                             'total racing net time for the whole race.')
+                             'total racing net time for one lap.')
     laptime = models.ForeignKey("tracks.Laptime", null=True)
     start_timestamp = models.DateTimeField(null=True)
 

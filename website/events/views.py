@@ -44,6 +44,7 @@ class StaggeredStartRaceCreator(CreateView):
     def form_valid(self, form):
         form.instance.host = self.request.user
         form.instance.save()
+        form.instance.update_json()
         return super(StaggeredStartRaceCreator, self).form_valid(form)
 
 
@@ -124,11 +125,11 @@ class StaggeredStartRaceDetail(DetailView):
 
         return super(StaggeredStartRaceDetail, self).get(*a, **k)
 
-
-
     def calculate_players_start_timestamps(self):
         parts = list(self.object.ssrparticipation_set.all().order_by(
-            '-estimated_net_millis'))
+            '-estimated_laptime'))
+        for p in parts:
+            p.estimated_net_millis = p.estimated_laptime * self.object.laps
         total_millis = parts[0].estimated_net_millis
         previous_racestart_dt = this_racestart_dt = self.object.start_timestamp
         raceend_dt = self.object.start_timestamp + datetime.timedelta(
@@ -178,26 +179,24 @@ class ParticipationForm(forms.ModelForm):
 #         return super(StaggeredStartCreator, self).form_valid(form)
 
 @login_required
-def enlist(request, pk):
+def enlist(request, pk, vehicle_pk):
     ssr = get_object_or_404(StaggeredStartRace, pk=pk)
 
-    #eventcar = get_eventcar_by_slug(request.user, request.GET.get('slug'))
-    slug = request.GET.get('slug')
-
-    # TODO "user_entry" (personal lap times) not yet implemented
-    vehicle_pk, user_entry = slug.split('.')
     vehicle = Vehicle.objects.get(pk=vehicle_pk)
-    estimated_net_millis = vehicle.cc_millis_per_km * \
-                           ssr.track.route_length_km * ssr.laps
+    estimated_laptime = (vehicle.cc_millis_per_km *
+                         ssr.track.route_length_km *
+                         request.user.defaultspeedmultiplier)
+
 
     defaults = {'vehicle': vehicle,
-                'estimated_net_millis': estimated_net_millis}
+                'estimated_laptime': estimated_laptime}
     participation, created = SSRParticipation.objects.get_or_create(
         player=request.user, staggeredstartrace=ssr, defaults=defaults)
     if not created:
         participation.vehicle = vehicle
-        participation.estimated_net_millis = estimated_net_millis
+        participation.estimated_laptime = estimated_laptime
         participation.save()
+    ssr.update_json()
     return JsonResponse({'result': 'OK'})
 
 
@@ -206,4 +205,16 @@ class StaggeredStartRaceStatus(DetailView):
     model = StaggeredStartRace
 
     def get(self, *a, **k):
-        return JsonResponse({'result': self.get_object().status})
+        obj = self.get_object()
+        players = []
+        for s in obj.ssrparticipation_set.all().order_by('player__username'):
+            players.append({'username': s.player.username,
+                            'pk': s.player.pk,
+                            'vehicle': s.vehicle.name,
+                            'start_time': 0})
+        return JsonResponse({'result': self.get_object().status,
+                             'players': s})
+
+    def get_players(self):
+        s = self.get_object()
+        return s.ssrparticipation_set.all()[0].player.username

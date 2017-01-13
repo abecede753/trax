@@ -1,14 +1,13 @@
 <div class="row">
   <div class="col-sm-12">
-    <h3>Which car do you want to use?</h3>
-    <div class="row">
-      <span class="hidden" id="enlist_url">{% url 'staggeredstartrace_enlist' pk=object.pk %}</span>
+    <button class="btn btn-default big" id="togglevehiclelist" data-toggle="collapse" data-target="#showvehiclelist">Choose your car</button>
+    <div class="row" id="showvehiclelist">
       {% for listpart in vehicle_list %}
         <div class="col-xs-6">
           {% for entry in listpart %}
             <button class="enlist_btn btn btn-sm form-control btn-default"
                     onclick="enlist_car(this);"
-                    value="{{ entry.slug }}">{{ entry.display_name }}</button>
+                    value="{% url 'staggeredstartrace_enlist' pk=object.pk vehicle_pk=entry.pk %}">{{ entry.name }}</button>
 
           {% endfor %}
         </div>
