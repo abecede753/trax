@@ -11,6 +11,7 @@
     <h1>
       {{ obj.title }} <small>[{{ obj.get_platform_display }}] by {{ obj.author }}</small>
 
+      {% if request.user.is_authenticated %}
       <small class="pull-right">
         <a href="{% url "track_edit" obj.pk %}" class="btn btn-default">
           <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
@@ -23,6 +24,7 @@
           <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
           Start a race…</a>
       </small>
+      {% endif %}
 
     </h1>
   </div>
