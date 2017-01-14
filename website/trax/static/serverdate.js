@@ -227,7 +227,7 @@ function synchronize() {
     // low latency.
     if (iteration < 10) {
       iteration++;
-      setTimeout(function () { requestSample(); }, 500 + Math.round(Math.random()*1050));
+      setTimeout(function () { requestSample(); }, 400 + Math.round(Math.random()*200));
       console.log("iteration");
     }
     else {
@@ -254,7 +254,7 @@ function synchronize() {
 
 // Tag logged messages for better readability.
 function log(message) {
-    if (console && console.log) { console.log("[ServerDate] " + message); }
+//    if (console && console.log) { console.log("[ServerDate] " + message); }
 }
 
 offset = serverNow - scriptLoadTime;

@@ -55,7 +55,7 @@ class StaggeredStartRace(models.Model):
     def update_json(self):
         """saves the current whole json state for faster access"""
         players = []
-        for s in self.ssrparticipation_set.all().order_by('player__username'):
+        for s in self.ssrparticipation_set.all().order_by('-estimated_laptime'):
             newdict = {'username': s.player.username,
                             'pk': s.player.pk,
                             'vehicle': s.vehicle.name,

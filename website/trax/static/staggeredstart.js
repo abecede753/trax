@@ -1,10 +1,9 @@
 var player = document.getElementById("gogogo");
 var bell_url = "/static/bell.mp3";
 var DDEBUG;
-var myId;
 
 function LOG(txt) {
-//    console.log(txt);
+//    console.log("SSR: " + txt);
 }
 
 function enlist_car(btn) {
@@ -18,15 +17,15 @@ function enlist_car(btn) {
 }
 
 function greenlight(pk) {
-    $("#img" + pk).attr("src", "/static/green_light.png");
+    LOG("imgracer" + pk + " is now green?");
+//    $("#imgracer" + pk).attr("src", "/static/green_light.png");
 }
-function usergreenlight(pk) {
+function usergreenlight() {
     player.play();
     $("body")
         .stop()
         .css("background-color", "#00FF00")
         .animate({ backgroundColor: "#FFFFFF"}, 5000);
-    greenlight(pk);
 }
 
 function teststart() {
@@ -40,8 +39,6 @@ function teststart() {
 function getReady() {
     meSpeak.speak("Get ready!", {variant:"f5", wordgap:5});
 }
-
-$("<img/>")[0].src = "/static/green_light.png";
 
 meSpeak.loadConfig("/static/mespeak/mespeak_config.json");
 meSpeak.loadVoice('/static/mespeak/voices/en/en-us.json');
@@ -63,37 +60,35 @@ function start_race(data) {
     var myself = $("#username").html();
     var idx;
     tb.html("");
+    var serverdatenow = ServerDate.now();
     for (idx = 0; idx < data.length; idx+=1) {
         var entry = data[idx];
         var row = $("<tr />", {}).appendTo(tb);
         var imgcol = $("<td />", {"class": "text-center"}).appendTo(row);
         var img = $("<img />", {"src": "/static/red_light.png",
             "style": "width:16px;height:16px",
-            "id":"img" + entry.pk
+            "id":"imgracer" + data[idx].pk
                      }).appendTo(imgcol);
-        $("<td />", {"text": entry.username}).appendTo(row);
-        $("<td />", {"text": entry.vehicle}).appendTo(row);
-        LOG("start_ts " + entry.username + " " + entry.timestamp)
-        LOG("NOW " + ServerDate.now())
-        var start_in_millis = entry.timestamp - ServerDate.now();
-        LOG("start_in_millis " + start_in_millis)
+        $("<td />", {"text": data[idx].username}).appendTo(row);
+        $("<td />", {"text": data[idx].vehicle}).appendTo(row);
+        var start_in_millis = data[idx].timestamp - serverdatenow;
+        LOG("start_ts " + data[idx].pk + "=" + data[idx].username + " " + start_in_millis);
 
-        if (entry.username === myself) {
+        if (data[idx].username === myself) {
+            LOG("data[idx].username is myself" + data[idx].username + " = " + myself);
             if (start_in_millis > 9000) {
                 meSpeak.speak("You are in position, number " + (idx + 1) + ".",
                     {variant:"f5", wordgap:5});
             }
-            if (start_in_millis > 2000) {
-                setTimeout( function() { usergreenlight( entry.pk ); }, start_in_millis );
-                setTimeout( function() { getReady(); }, start_in_millis - 5000 );
+            if (start_in_millis > 5100) {
+                setTimeout(function () { getReady(); }, start_in_millis - 5000);
             }
-            myId = entry.pk;
-        } else {
-            if (start_in_millis > 2000) {
-                setTimeout(function () {
-                    greenlight(entry.pk);
-                }, start_in_millis);
+            if (start_in_millis > 2100) {
+                setTimeout( function() { usergreenlight(); }, start_in_millis );
             }
+        }
+        if (start_in_millis > 2100) {
+            setTimeout('$("#imgracer' + data[idx].pk + '").attr("src", "/static/green_light.png")', start_in_millis);
         }
     }
 }
@@ -146,8 +141,19 @@ $(window).load(function() {
     audio.src = bell_url;
     call_ajax();
     $("#showvehiclelist").collapse();
+
+    $("#startraceform").submit(function(event) {
+
+        /* stop form from submitting normally */
+        event.preventDefault();
+
+        /* get some values from elements on the page: */
+        var $form = $(this);
+        var url = $form.attr('action');
+        $.get(url + '?' + $('#startraceform').serialize())
+
+    });
+    console.log("window load finished");
     $("#twocols").show();
     $("#loading").hide();
-    console.log("window load finished");
 });
-

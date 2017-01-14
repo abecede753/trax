@@ -74,6 +74,29 @@ class StaggeredStartRaceDetail(DetailView):
         if obj.status == RACE_STATES.planning:
             obj.status = RACE_STATES.initializing
             obj.save()
+        if self.request.GET.get('start_in_secs'):
+
+            nowplus = random.randrange(0, 6)
+            nowplus += int(self.request.GET.get('start_in_secs'))
+            start_timestamp = datetime.datetime.now() + \
+                              datetime.timedelta(milliseconds=nowplus*1000)
+            self.object = self.get_object()
+            self.object.start_timestamp = start_timestamp
+            self.object.status = RACE_STATES.running
+
+            overtake_deficit = None
+            try:
+                overtake_deficit = int(self.request.GET.get('per_overtake_deficit_millis'))
+            except:
+                pass
+            self.object.per_overtake_deficit_millis = overtake_deficit
+
+            self.object.save()
+
+            #            self.race_km = self.object.track.route_length_km * self.object.laps
+            self.calculate_players_start_timestamps()
+            self.object.update_json()
+
         return super(StaggeredStartRaceDetail, self).get(*a, **k)
 
     def post(self, *a, **k):
@@ -101,29 +124,6 @@ class StaggeredStartRaceDetail(DetailView):
                 self.request, messages.SUCCESS,
                 'Thanks! (a nicer page will follow later. Maybe.)')
             return HttpResponseRedirect('/')
-
-        if self.request.POST.get('start_in_secs'):
-
-            nowplus = random.randrange(0, 6)
-            nowplus += int(self.request.POST.get('start_in_secs'))
-            start_timestamp = datetime.datetime.now() + \
-                       datetime.timedelta(milliseconds=nowplus*1000)
-            self.object = self.get_object()
-            self.object.start_timestamp = start_timestamp
-            self.object.status = RACE_STATES.running
-
-            overtake_deficit = None
-            try:
-                overtake_deficit = int(self.request.POST.get('per_overtake_deficit_millis'))
-            except:
-                pass
-            self.object.per_overtake_deficit_millis = overtake_deficit
-
-            self.object.save()
-
-#            self.race_km = self.object.track.route_length_km * self.object.laps
-            self.calculate_players_start_timestamps()
-            self.object.update_json()
 
         return super(StaggeredStartRaceDetail, self).get(*a, **k)
 
