@@ -4,7 +4,7 @@ var DDEBUG;
 var myId;
 
 function LOG(txt) {
-    //console.log(txt);
+//    console.log(txt);
 }
 
 function enlist_car(btn) {
@@ -73,7 +73,7 @@ function start_race(data) {
                      }).appendTo(imgcol);
         $("<td />", {"text": entry.username}).appendTo(row);
         $("<td />", {"text": entry.vehicle}).appendTo(row);
-        LOG("start_ts " + entry.timestamp)
+        LOG("start_ts " + entry.username + " " + entry.timestamp)
         LOG("NOW " + ServerDate.now())
         var start_in_millis = entry.timestamp - ServerDate.now();
         LOG("start_in_millis " + start_in_millis)
@@ -133,7 +133,8 @@ function call_ajax() {
 }
 
 
-$(document).ready(function() {
+$(window).load(function() {
+    console.log("window load starting");
 
     function audio_loaded() {
         player.src = bell_url;
@@ -145,5 +146,8 @@ $(document).ready(function() {
     audio.src = bell_url;
     call_ajax();
     $("#showvehiclelist").collapse();
+    $("#twocols").show();
+    $("#loading").hide();
+    console.log("window load finished");
 });
 

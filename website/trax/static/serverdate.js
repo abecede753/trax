@@ -37,12 +37,7 @@ var ServerDate = (function(serverNow) {
 var
   // Remember when the script was loaded.
   scriptLoadTime = Date.now(),
-
-  // Remember the URL of this script so we can call it again during
-  // synchronization.
-  scripts = document.getElementsByTagName("script"),
-  URL = scripts[scripts.length - 1].src,
-
+  URL = "/robots.txt",
   synchronizationIntervalDelay,
   synchronizationInterval,
   precision,
@@ -106,6 +101,8 @@ ServerDate.amortizationRate = 25; // ms
 // we skip amortization and set the clock to match the server's clock
 // immediately.
 ServerDate.amortizationThreshold = 100; // ms
+
+ServerDate.sync_done = false;
 
 Object.defineProperty(ServerDate, "synchronizationIntervalDelay", {
   get: function() { return synchronizationIntervalDelay; },
@@ -182,7 +179,7 @@ function synchronize() {
 
     // Ask the server for another copy of ServerDate.js but specify a unique number on the URL querystring
 	// so that we don't get the browser cached Javascript file
-	request.open("GET", URL + "?noCache=" + Date.now());
+	request.open("GET", URL + "?x=" + Date.now());
 
     // At the earliest possible moment of the response, record the time at
     // which we received it.
@@ -230,7 +227,8 @@ function synchronize() {
     // low latency.
     if (iteration < 10) {
       iteration++;
-      requestSample();
+      setTimeout(function () { requestSample(); }, 500 + Math.round(Math.random()*1050));
+      console.log("iteration");
     }
     else {
       // Set the offset target to the best sample collected.
@@ -256,7 +254,7 @@ function synchronize() {
 
 // Tag logged messages for better readability.
 function log(message) {
-//    if (console && console.log) { console.log("[ServerDate] " + message); }
+    if (console && console.log) { console.log("[ServerDate] " + message); }
 }
 
 offset = serverNow - scriptLoadTime;

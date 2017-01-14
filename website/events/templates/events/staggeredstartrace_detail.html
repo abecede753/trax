@@ -9,16 +9,14 @@
   <div class="hidden" id="event_status">{{ object.status }}</div>
   <div class="hidden" id="json_url">{{ object.json_url }}</div>
 
+
   <h1><small>{{ object.laps }} laps on </small>{{ object.track }} <small>[{{ object.track.platform }}] hosted by {{ object.host }}</small></h1>
-  {% comment %}
-  <ul class="nav nav-pills">
-    <li class="active"><a href="#ssrdetailsnippet" data-toggle="tab">Details</a></li>
-    <li><a href="#ssrvehicleselect" data-toggle="tab">Choose your vehicle</a></li>
-    <li><a href="#ssrstartingorder" data-toggle="tab">Starting order</a></li>
-    <li><a href="#ssrresults" data-toggle="tab">Results</a></li>
-  </ul>
-{% endcomment %}
-  <div id="twocols" class="row">
+
+  <div id="loading" class="row text-center">
+    <button class="btn btn-lg btn-info"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>
+  </div>
+
+  <div id="twocols" class="row" style="display:none">
     <div class="col-md-6">
 
       {% if request.user.username == object.host.username %}
@@ -56,7 +54,7 @@
     </div>
   </div>
 
-  <div id="racescreen">
+  <div id="racescreen" style="display:none">
   <table class="table table-bordered table-condensed" id="participants">
     <thead>
     <tr class="info">

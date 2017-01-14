@@ -20,4 +20,6 @@ urlpatterns = [
     url(r'^accounts/register/$', views.Registration.as_view(), name="register"),
     url(r'^imprint/$', TemplateView.as_view(template_name='trax/imprint.html'),
         name="imprint"),
+    url(r'^robots.txt$', TemplateView.as_view(template_name='trax/imprint.html'),
+                      name="DEVELOPMENTrobots.txt"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
