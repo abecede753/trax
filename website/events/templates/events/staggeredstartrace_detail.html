@@ -68,8 +68,16 @@
   <form action="." method="post">
     {% csrf_token %}
     <h1>One little thing to do...</h1>
-    <p>After the race please tell me your best lap time: <input type="text" name="personal_laptime">
-      (MM:SS.milli)</p>
+    <p>After the race please tell me your best lap time:
+
+      <input name="personal_laptime"
+             required
+             pattern="^\d{1,2}:\d{1,2}\.\d\d?\d?$"
+             id="seconds"
+             title="e.g. '1:03.123'"
+             alt="alttext"
+             type="text">(MM:SS.milli)
+   </p>
     <button type="submit" class="btn btn-primary">Save</button>
   </form>
 </div>
