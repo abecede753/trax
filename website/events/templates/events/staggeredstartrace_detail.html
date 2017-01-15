@@ -70,8 +70,17 @@
     </tbody>
   </table>
   </div>
-{% endblock %}
 
+<div id="resultform" style="display:none">
+  <form action="." method="post">
+    {% csrf_token %}
+    <h1>One little thing to do...</h1>
+    <p>After the race please tell me your best lap time: <input type="text" name="personal_laptime">
+      (MM:SS.milli)</p>
+    <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+</div>
+{% endblock %}
 {% block trax_extra_script %}
   <script src="/static/serverdate.js"></script>
   <script src="/static/mespeak/mespeak.js"></script>

@@ -88,6 +88,13 @@ function fill_participants_table(data) {
     }
 }
 
+function show_result_form() {
+    console.log("show result form");
+    $("#twocols").hide();
+    $("#racescreen").hide();
+    $("#loading").hide();
+    $("#resultform").show();
+}
 function start_race(data) {
     var tb = $("#racebody");
     var myself = $("#username").html();
@@ -113,26 +120,18 @@ function start_race(data) {
                 meSpeak.speak("You are in position, number " + (idx + 1) + ".",
                     {variant:"f5", wordgap:5});
             }
-            if (start_in_millis > 5100) {
-                setTimeout(function () { getReady(); }, start_in_millis - 5000);
-            }
-            if (start_in_millis > 3100) {
-                setTimeout(function () { meSpeak.speak("3", {variant:"f5", wordgap:5}); }, start_in_millis - 3000);
-            }
-            if (start_in_millis > 2100) {
-                setTimeout(function () { meSpeak.speak("2", {variant:"f5", wordgap:5}); }, start_in_millis - 2000);
-            }
-            if (start_in_millis > 1100) {
-                setTimeout(function () { meSpeak.speak("1?", {variant:"f5", wordgap:5}); }, start_in_millis - 1000);
-            }
-            if (start_in_millis > 400) {
-                setTimeout( function() { usergreenlight(); }, start_in_millis );
-            }
+            if (start_in_millis > 5100) { setTimeout(function () { getReady(); }, start_in_millis - 5000); }
+            if (start_in_millis > 3100) { setTimeout(function () { meSpeak.speak("3", {variant:"f5", wordgap:5}); }, start_in_millis - 3000); }
+            if (start_in_millis > 2100) { setTimeout(function () { meSpeak.speak("2", {variant:"f5", wordgap:5}); }, start_in_millis - 2000); }
+            if (start_in_millis > 1100) { setTimeout(function () { meSpeak.speak("1?", {variant:"f5", wordgap:5}); }, start_in_millis - 1000); }
+            if (start_in_millis > 400) { setTimeout( function() { usergreenlight(); }, start_in_millis ); }
         }
         if (start_in_millis > 2100) {
             setTimeout('$("#imgracer' + data[idx].pk + '").attr("src", "/static/green_light.png")', start_in_millis);
         }
     }
+    var resultformshow = data[data.length - 1].timestamp - serverdatenow + 2000;
+    setTimeout(function() {show_result_form();}, resultformshow);
 }
 
 
@@ -171,7 +170,7 @@ function call_ajax() {
 
 
 $(window).load(function() {
-    console.log("window load starting");
+    LOG("window load starting");
 
     $("#showvehiclelist").collapse();
 
@@ -186,7 +185,7 @@ $(window).load(function() {
         $.get(url + '?' + $('#startraceform').serialize())
 
     });
-    console.log("window load finished");
+    LOG("window load finished");
     WindowLoadFinished = true;
 //    $("#twocols").show();
 //    $("#loading").hide();
