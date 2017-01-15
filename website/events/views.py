@@ -30,7 +30,7 @@ class SSREditForm(forms.ModelForm):
 class SSRCreateForm(forms.ModelForm):
     class Meta:
         model = StaggeredStartRace
-        fields = ['track', 'vehicle_class', 'comment']
+        fields = ['track', 'laps', 'vehicle_class', 'comment']
 
 
 @method_decorator(login_required, name='dispatch')
