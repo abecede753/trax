@@ -1,10 +1,42 @@
 var player = document.getElementById("gogogo");
-var bell_url = "/static/bell.mp3";
+var bell_url = "/static/bell.m4a";
 var DDEBUG;
+
+var WindowLoadFinished = false;
 
 function LOG(txt) {
 //    console.log("SSR: " + txt);
 }
+
+function audio_loaded() {
+    LOG("audio loaded????????????????");
+    player.src = bell_url;
+    $("#testsoundbtn").show();
+}
+
+//var audio = new Audio();
+//audio.addEventListener("canplaythrough", audio_loaded, false);
+//audio.src = bell_url;
+
+function launchApp(l) {
+    LOG("AUDIO JQUERY LOADED???");
+}
+
+  function loadAudio(){
+    var audio = new Audio();
+    audio.src = bell_url;
+    audio.preload = "auto";
+    audio.volume = 1;
+    $(audio).on("loadeddata", launchApp);  // jQuery checking
+    return audio;
+  }
+LOG("AUDIO SHHHIIIIT START");
+var bellsound = loadAudio();
+  LOG("AUDIO SHHHIIIIT CALLED");
+
+
+
+
 
 function enlist_car(btn) {
     $.ajax({url: btn.value})
@@ -21,7 +53,7 @@ function greenlight(pk) {
 //    $("#imgracer" + pk).attr("src", "/static/green_light.png");
 }
 function usergreenlight() {
-    player.play();
+    bellsound.play();
     $("body")
         .stop()
         .css("background-color", "#00FF00")
@@ -29,7 +61,7 @@ function usergreenlight() {
 }
 
 function teststart() {
-    player.play();
+    bellsound.play();
     $("body")
         .stop()
         .css("background-color", "#00FF00")
@@ -131,15 +163,6 @@ function call_ajax() {
 $(window).load(function() {
     console.log("window load starting");
 
-    function audio_loaded() {
-        player.src = bell_url;
-        $("#testsoundbtn").show();
-    }
-
-    var audio = new Audio();
-    audio.addEventListener("canplaythrough", audio_loaded, false);
-    audio.src = bell_url;
-    call_ajax();
     $("#showvehiclelist").collapse();
 
     $("#startraceform").submit(function(event) {
@@ -154,6 +177,26 @@ $(window).load(function() {
 
     });
     console.log("window load finished");
-    $("#twocols").show();
-    $("#loading").hide();
+    WindowLoadFinished = true;
+//    $("#twocols").show();
+//    $("#loading").hide();
 });
+
+function wait_for_other_stuff() {
+    var done = true;
+    if (!ServerDateInSync) {
+        LOG("Waiting for server time to finish synchronizing.")
+        done = false;
+    }
+    if (!ServerDateInSync) {
+        LOG("Waiting for window load finish.")
+        done = false;
+    }
+    if (!done) { setTimeout(wait_for_other_stuff, 300);}
+    else {
+        $("#twocols").show();
+        $("#loading").hide();
+        call_ajax();
+    }
+}
+wait_for_other_stuff();

@@ -28,6 +28,8 @@ if (!Date.now) {
     Date.now = function() { return new Date().getTime(); }
 }
 
+var ServerDateInSync = false;
+
 var ServerDate = (function(serverNow) {
 // This is the first time we align with the server's clock by using the time
 // this script was generated (serverNow) and noticing the client time before
@@ -235,6 +237,7 @@ function synchronize() {
       setTarget(best);
 
       synchronizing = false;
+      ServerDateInSync = true;
     }
   }
 
