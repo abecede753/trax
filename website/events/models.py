@@ -55,11 +55,25 @@ class StaggeredStartRace(models.Model):
     def update_json(self):
         """saves the current whole json state for faster access"""
         players = []
+        current_index = -1
+        racetime = 0
+
         for s in self.ssrparticipation_set.all().order_by('-estimated_laptime'):
+            current_index += 1
+            if current_index == 0:
+                racetime = s.estimated_laptime * self.laps
+            start_after_first = datetime.timedelta(
+                milliseconds=racetime - (s.estimated_laptime * self.laps))
+            minutes = int(start_after_first.seconds / 60)
+            seconds = int(start_after_first.seconds % 60)
+            millis = int(start_after_first.microseconds / 1000)
+            startafterstr = '{0:02d}:{1:02d}.{2:03d}'.format(
+                minutes, seconds, millis)
             newdict = {'username': s.player.username,
                             'pk': s.player.pk,
                             'vehicle': s.vehicle.name,
                             'estimated_laptime': s.estimated_laptime,
+                            'start_after_first': startafterstr,
                             }
             if s.start_timestamp:
                 newdict['timestamp'] = int(s.start_timestamp.timestamp()*1000)

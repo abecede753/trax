@@ -9,7 +9,6 @@ function LOG(txt) {
 }
 
 function audio_loaded() {
-    LOG("audio loaded????????????????");
     player.src = bell_url;
     $("#testsoundbtn").show();
 }
@@ -22,17 +21,15 @@ function launchApp(l) {
     LOG("AUDIO JQUERY LOADED???");
 }
 
-  function loadAudio(){
+function loadAudio(){
     var audio = new Audio();
     audio.src = bell_url;
     audio.preload = "auto";
     audio.volume = 1;
     $(audio).on("loadeddata", launchApp);  // jQuery checking
     return audio;
-  }
-LOG("AUDIO SHHHIIIIT START");
+}
 var bellsound = loadAudio();
-  LOG("AUDIO SHHHIIIIT CALLED");
 
 
 
@@ -61,12 +58,13 @@ function usergreenlight() {
 }
 
 function teststart() {
-    setTimeout(function () { meSpeak.speak("3", {variant:"f5", wordgap:5}); }, 100);
-    setTimeout(function () { meSpeak.speak("2", {variant:"f5", wordgap:5}); }, 1100);
-    setTimeout(function () { meSpeak.speak("1?", {variant:"f5", wordgap:5}); }, 2100);
+    setTimeout(function () { meSpeak.speak("5", {variant:"f5"}); }, 100);
+    setTimeout(function () { meSpeak.speak("4", {variant:"f5"}); }, 1100);
+    setTimeout(function () { meSpeak.speak("3", {variant:"f5"}); }, 2100);
+    setTimeout(function () { meSpeak.speak("2", {variant:"f5"}); }, 3100);
     setTimeout(function () {
         usergreenlight();
-    }, 3100);
+    }, 5100);
 }
 
 function getReady() {
@@ -85,6 +83,7 @@ function fill_participants_table(data) {
         $("<td />", {"text": " ", "class": "text-center"}).appendTo(row);
         $("<td />", {"text": entry.username}).appendTo(row);
         $("<td />", {"text": entry.vehicle}).appendTo(row);
+        $("<td />", {"text": entry.start_after_first}).appendTo(row);
     }
 }
 
@@ -108,9 +107,10 @@ function start_race(data) {
         var img = $("<img />", {"src": "/static/red_light.png",
             "style": "width:16px;height:16px",
             "id":"imgracer" + data[idx].pk
-                     }).appendTo(imgcol);
+        }).appendTo(imgcol);
         $("<td />", {"text": data[idx].username}).appendTo(row);
         $("<td />", {"text": data[idx].vehicle}).appendTo(row);
+        $("<td />", {"text": entry.start_after_first}).appendTo(row);
         var start_in_millis = data[idx].timestamp - serverdatenow;
         LOG("start_ts " + data[idx].pk + "=" + data[idx].username + " " + start_in_millis);
 
@@ -120,17 +120,21 @@ function start_race(data) {
                 meSpeak.speak("You are in position, number " + (idx + 1) + ".",
                     {variant:"f5", wordgap:5});
             }
-            if (start_in_millis > 5100) { setTimeout(function () { getReady(); }, start_in_millis - 5000); }
-            if (start_in_millis > 3100) { setTimeout(function () { meSpeak.speak("3", {variant:"f5", wordgap:5}); }, start_in_millis - 3000); }
-            if (start_in_millis > 2100) { setTimeout(function () { meSpeak.speak("2", {variant:"f5", wordgap:5}); }, start_in_millis - 2000); }
-            if (start_in_millis > 1100) { setTimeout(function () { meSpeak.speak("1?", {variant:"f5", wordgap:5}); }, start_in_millis - 1000); }
+            if (start_in_millis > 7100) { setTimeout(function () { getReady(); }, start_in_millis - 7000); }
+            if (start_in_millis > 5100) {
+                setTimeout(function () { meSpeak.speak("5", {variant:"f5", wordgap:0}); }, start_in_millis - 5000);
+                setTimeout(function () { meSpeak.speak("4", {variant:"f5", wordgap:0}); }, start_in_millis - 4000);
+                setTimeout(function () { meSpeak.speak("3", {variant:"f5", wordgap:0}); }, start_in_millis - 3000);
+                setTimeout(function () { meSpeak.speak("2", {variant:"f5", wordgap:0}); }, start_in_millis - 2000);
+                // setTimeout(function () { meSpeak.speak("1", {variant:"f5", wordgap:0}); }, start_in_millis - 1000);
+            }
             if (start_in_millis > 400) { setTimeout( function() { usergreenlight(); }, start_in_millis ); }
         }
-        if (start_in_millis > 2100) {
+        if (start_in_millis > 100) {
             setTimeout('$("#imgracer' + data[idx].pk + '").attr("src", "/static/green_light.png")', start_in_millis);
         }
     }
-    var resultformshow = data[data.length - 1].timestamp - serverdatenow + 2000;
+    var resultformshow = data[data.length - 1].timestamp - serverdatenow + 10000;
     setTimeout(function() {show_result_form();}, resultformshow);
 }
 
