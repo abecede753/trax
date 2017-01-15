@@ -9,18 +9,21 @@ def update_player_racing_stats(player, commit=True):
     laptimes = list(Laptime.objects.filter(
         player=player).select_related(
         'vehicle').order_by('-recorded', '-created'))[:8]
-    millpkm_user = 0
-    millpkm_cc = 0
-    allmultipliers = []
-    for lt in laptimes:
-        millpkm_user += lt.millis_per_km
-        millpkm_cc += lt.vehicle.cc_millis_per_km
-        allmultipliers.append(
-            1 / lt.vehicle.cc_millis_per_km * lt.millis_per_km)
+    if not laptimes:
+        player.defaultspeedmultiplier = 1.0
+    else:
+        millpkm_user = 0
+        millpkm_cc = 0
+        allmultipliers = []
+        for lt in laptimes:
+            millpkm_user += lt.millis_per_km
+            millpkm_cc += lt.vehicle.cc_millis_per_km
+            allmultipliers.append(
+                1 / lt.vehicle.cc_millis_per_km * lt.millis_per_km)
 
-    clean_multipliers = remove_outliers(allmultipliers)
-    player.defaultspeedmultiplier = (sum(clean_multipliers)
-                                     / len(clean_multipliers))
+        clean_multipliers = remove_outliers(allmultipliers)
+        player.defaultspeedmultiplier = (sum(clean_multipliers)
+                                         / len(clean_multipliers))
     if commit:
         player.save()
 
