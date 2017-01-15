@@ -61,11 +61,12 @@ function usergreenlight() {
 }
 
 function teststart() {
-    bellsound.play();
-    $("body")
-        .stop()
-        .css("background-color", "#00FF00")
-        .animate({ backgroundColor: "#FFFFFF"}, 5000);
+    setTimeout(function () { meSpeak.speak("3", {variant:"f5", wordgap:5}); }, 100);
+    setTimeout(function () { meSpeak.speak("2", {variant:"f5", wordgap:5}); }, 1100);
+    setTimeout(function () { meSpeak.speak("1?", {variant:"f5", wordgap:5}); }, 2100);
+    setTimeout(function () {
+        usergreenlight();
+    }, 3100);
 }
 
 function getReady() {
@@ -108,14 +109,23 @@ function start_race(data) {
 
         if (data[idx].username === myself) {
             LOG("data[idx].username is myself" + data[idx].username + " = " + myself);
-            if (start_in_millis > 9000) {
+            if (start_in_millis > 8000) {
                 meSpeak.speak("You are in position, number " + (idx + 1) + ".",
                     {variant:"f5", wordgap:5});
             }
             if (start_in_millis > 5100) {
                 setTimeout(function () { getReady(); }, start_in_millis - 5000);
             }
+            if (start_in_millis > 3100) {
+                setTimeout(function () { meSpeak.speak("3", {variant:"f5", wordgap:5}); }, start_in_millis - 3000);
+            }
             if (start_in_millis > 2100) {
+                setTimeout(function () { meSpeak.speak("2", {variant:"f5", wordgap:5}); }, start_in_millis - 2000);
+            }
+            if (start_in_millis > 1100) {
+                setTimeout(function () { meSpeak.speak("1?", {variant:"f5", wordgap:5}); }, start_in_millis - 1000);
+            }
+            if (start_in_millis > 400) {
                 setTimeout( function() { usergreenlight(); }, start_in_millis );
             }
         }
