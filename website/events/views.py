@@ -21,12 +21,6 @@ from .models import StaggeredStartRace, SSRParticipation
 from .utils import get_user_car_list
 
 
-class SSREditForm(forms.ModelForm):
-    class Meta:
-        model = StaggeredStartRace
-        fields = ['track', 'vehicle_class', 'laps', 'comment', ]
-
-
 class SSRCreateForm(forms.ModelForm):
     class Meta:
         model = StaggeredStartRace
@@ -46,9 +40,6 @@ class StaggeredStartRaceCreator(CreateView):
         form.instance.save()
         form.instance.update_json()
         return super(StaggeredStartRaceCreator, self).form_valid(form)
-
-
-# OLD STUFF
 
 
 @method_decorator(login_required, name='dispatch')
@@ -171,14 +162,6 @@ class ParticipationForm(forms.ModelForm):
         model = Laptime
         fields = ['vehicle',]
 
-
-# class SSRParticipationView(CreateView):
-#     model = Laptime
-#     form_class=ParticipationForm
-#
-#     def form_valid(self, form):  # TODO
-#         form.instance.host = self.request.user
-#         return super(StaggeredStartCreator, self).form_valid(form)
 
 @login_required
 def enlist(request, pk, vehicle_pk):

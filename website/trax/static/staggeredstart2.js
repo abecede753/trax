@@ -80,11 +80,12 @@ function fill_participants_table(data) {
     for (var idx = 0; idx < data.length; idx++) {
         var entry = data[idx];
         var row = $("<tr />", {}).appendTo(tb);
-        $("<td />", {"text": " ", "class": "text-center"}).appendTo(row);
+        $("<td />", {"text": idx+1, "class": "text-center"}).appendTo(row);
         $("<td />", {"text": entry.username}).appendTo(row);
         $("<td />", {"text": entry.vehicle}).appendTo(row);
         $("<td />", {"text": entry.start_after_first}).appendTo(row);
     }
+    $("#num_participants").html(data.length);
 }
 
 function show_result_form() {

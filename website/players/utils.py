@@ -4,7 +4,7 @@ import numpy as np
 
 
 def update_player_racing_stats(player, commit=True):
-    # use only the most recent 10 races  TODO parametrize "8"
+    # use only the most recent *n* races  TODO parametrize "8"
 
     laptimes = list(Laptime.objects.filter(
         player=player).select_related(
