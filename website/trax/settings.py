@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'tracks',
     'trax',
     'events',
-#    'compressor',
+    'compressor',
 ]
+
+COMPRESS_ENABLED = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -128,6 +130,6 @@ NOCAPTCHA = True
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'compressor.finders.CompressorFinder',
+    'compressor.finders.CompressorFinder',
 ]
 

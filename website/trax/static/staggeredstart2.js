@@ -77,7 +77,7 @@ meSpeak.loadVoice('/static/mespeak/voices/en/en-us.json');
 function fill_participants_table(data) {
     var tb = $("#participantsbody");
     tb.html("");
-    for (idx = 0; idx < data.length; idx++) {
+    for (var idx = 0; idx < data.length; idx++) {
         var entry = data[idx];
         var row = $("<tr />", {}).appendTo(tb);
         $("<td />", {"text": " ", "class": "text-center"}).appendTo(row);
@@ -97,10 +97,9 @@ function show_result_form() {
 function start_race(data) {
     var tb = $("#racebody");
     var myself = $("#username").html();
-    var idx;
     tb.html("");
     var serverdatenow = ServerDate.now();
-    for (idx = 0; idx < data.length; idx+=1) {
+    for (var idx = 0; idx < data.length; idx+=1) {
         var entry = data[idx];
         var row = $("<tr />", {}).appendTo(tb);
         var imgcol = $("<td />", {"class": "text-center"}).appendTo(row);

@@ -101,7 +101,8 @@ def laptime_json(request, track_pk):
             track__pk=track_pk,
             recorded__isnull=False).select_related('vehicle', 'player'):
         data.append({
-            'vehicle': str(laptime.vehicle),
+            # TODO this is a very ugly hack. pls improve
+            'vehicle':'<a href="/v/s/{0}/">{1}</a>'.format( laptime.vehicle.pk, laptime.vehicle),
             'duration': {'display': laptime.duration,
                          'millis': laptime.millis},
             'name': str(laptime.player),

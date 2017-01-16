@@ -9,7 +9,7 @@
 
   <div class="row">
     <div class="col-md-6">
-    <p>{{ object.description }}</p>
+    <p>{{ object.description|default_if_none:'' }}</p>
       <dl class="dl-horizontal">
         <dt>{% trans "Classes" %}</dt>
         <dd>
@@ -28,9 +28,30 @@
 
   <div class="col-md-6">
     <h3>Lap times</h3>
-    {% for lt in object.laptime_set.all %}
-      {{ lt.player }}, {{ lt.track }}, {{ lt.duration }}, {{ lt.km_per_h }}
-    {% endfor %}
+
+    <table id="vehiclelaptimetable" class="table table-striped table-bordered">
+      <thead>
+      <tr>
+        <th>Track</th>
+        <th>Player</th>
+        <th>Duration</th>
+        <th>km/h</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for o in object.laptime_set.all %}
+        <tr><td><a href="{% url "track_detail" o.track.pk %}">{{ o.track }}</a></td>
+        <td>{{ o.player }}</td>
+        <td>{{ o.duration }}</td>
+        <td>{{ o.km_per_h }}</td>
+        </tr>
+      {% endfor %}
+
+      </tbody>
+    </table>
+
+
+
 
   </div>
 

@@ -1,5 +1,6 @@
 var laptimetable;
 var vehicletable;
+var vehiclelaptimetable;
 $(document).ready(function() {
 //    var dt_table = $('.laptimetable').dataTable({
 //        language: 'en',
@@ -27,6 +28,7 @@ $(document).ready(function() {
         order: [[ 0, "asc" ]],
         lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
     } );
+
 //    vehicletable = $('#vehicletable').DataTable({
 //        "columnDefs": [
 //            { "visible": false, "targets": 1 }
@@ -85,6 +87,12 @@ $(document).ready(function() {
     } );
 
 
+    /* vehicle laptime table */
+    vehiclelaptimetable = $('#vehiclelaptimetable').DataTable( {
+        // ajax: "laptimes.json",
+        order: [[ 0, "asc" ]],
+        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+    } );
 
     /* animate login/register */
 

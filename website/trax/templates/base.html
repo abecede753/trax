@@ -1,4 +1,5 @@
 {% extends 'bootstrap3/bootstrap3.html' %}
+{% load compress %}
 {% load static %}
 {% load bootstrap3 %}
 {% load i18n %}
@@ -49,13 +50,11 @@
         <ul class="nav navbar-nav">
           <li class="{% block menu_homepage_active %}{% endblock %}"><a href="{% url "homepage" %}"><b>GTARacing.net</b></a></li>
           <li class="{% block menu_tracks_active %}{% endblock %}"><a href="{% url "track_list" %}">Tracks</a></li>
+          <li class="{% block menu_vehicles_active %}{% endblock %}"><a href="{% url "vehicle_list" %}">Vehicles</a></li>
           <li class="{% block menu_racelist_active %}{% endblock %}"><a href="{% url "randomracelist" %}">Random grid generator</a></li>
           {% if user.is_authenticated %}
             <li><a href="{% url "track_add" %}">Add a track</a></li>
           {% endif %}
-          {% comment %}
-        <li><a href="#">Randomizer</a></li>
-        {% endcomment %}
         </ul>
         {% comment %}
       <form class="navbar-form navbar-left">
@@ -114,9 +113,11 @@
   <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
   <script src="//cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
+  {% compress js %}
   <script src="{% static "jquery.color.js" %}"></script>
   <script src="{% static "bootstrap-combobox.js" %}"></script>
   <script src="{% static "global.js" %}"></script>
+  {% endcompress %}
 
   {% block trax_extra_script %}{% endblock %}
 {% endblock %}
