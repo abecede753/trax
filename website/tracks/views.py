@@ -3,6 +3,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django import forms
+from django.http import Http404
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -22,10 +23,18 @@ def track_detail(request, pk):
     t = Track.objects.get(pk=pk)
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
     ssrform = SSRCreateForm(initial={'track': t})
+
+    if not t.creator:
+        creator = None
+    else:
+        creator = t.creator.username
+    can_edit = (request.user.username == creator) or \
+               request.user.is_staff
     return render(
         request, 'tracks/track_detail.html',
         context={'obj': t,
                  'form': LaptimeAddForm(initial={'recorded': todaystring}),
+                 'can_edit': can_edit,
                  'ssrform': ssrform})
 
 
@@ -90,6 +99,20 @@ class TrackCreate(CreateView):
 class TrackEdit(UpdateView):
     model = Track
     form_class = TrackForm
+
+    def form_valid(self, form):
+        """special permissions check
+        NOTE: make nicer whenever time available for that."""
+        #import ipdb; ipdb.set_trace()
+        if form.instance.creator:
+            creator = form.instance.creator.username
+        else:
+            creator = None
+        user = self.request.user
+
+        if (creator == user.username) or user.is_staff:
+            return super(TrackEdit, self).form_valid(form)
+        raise Http404()
 
 
 def laptime_json(request, track_pk):
