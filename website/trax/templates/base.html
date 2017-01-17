@@ -115,6 +115,7 @@
 
   <div class="container">{% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
     {% block content %}nothing here.{% endblock %}</div>
+  {% compress js %}
     <script src="{% static 'jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap.min.js' %}"></script>
     <script src="{% static 'jquery.dataTables.min.js' %}"></script>
@@ -123,6 +124,7 @@
     <script src="{% static 'jquery.color.js' %}"></script>
     <script src="{% static 'bootstrap-combobox.js' %}"></script>
     <script src="{% static 'global.js' %}"></script>
+  {% endcompress %}
   {% block trax_extra_script %}{% endblock %}
 {% endblock %}
 </body>
