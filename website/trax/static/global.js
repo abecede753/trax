@@ -29,28 +29,6 @@ $(document).ready(function() {
         lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
     } );
 
-//    vehicletable = $('#vehicletable').DataTable({
-//        "columnDefs": [
-//            { "visible": false, "targets": 1 }
-//        ],
-//        "order": [[ 1, 'asc' ]],
-//        "displayLength": 50,
-//        "drawCallback": function ( settings ) {
-//            var api = this.api();
-//            var rows = api.rows( {page:'current'} ).nodes();
-//            var last=null;
-//
-//            api.column(1, {page:'current'} ).data().each( function ( group, i ) {
-//                if ( last !== group ) {
-//                    $(rows).eq( i ).before(
-//                        '<tr class="group"><td colspan="5">'+group+'</td></tr>'
-//                    );
-//                    last = group;
-//                }
-//            } );
-//        }
-//    } );
-
     // Order by the grouping
     $('#vehicletable tbody').on( 'click', 'tr.group', function () {
         var currentOrder = table.order()[0];
@@ -61,11 +39,6 @@ $(document).ready(function() {
             table.order( [ 1, 'asc' ] ).draw();
         }
     } );
-
-
-
-
-
 
 
     /* tracks table */
