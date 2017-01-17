@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}GTARacing.net{% endblock %}
+{% block title %}Hi {% if not request.user.is_authenticated %}there{% else %}{{ request.user }}{% endif %}!{% endblock %}
 {% block content %}
 
   <div class="row">
