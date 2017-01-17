@@ -73,9 +73,6 @@
           <li class="{% block menu_tracks_active %}{% endblock %}"><a href="{% url "track_list" %}">Tracks</a></li>
           <li class="{% block menu_vehicles_active %}{% endblock %}"><a href="{% url "vehicle_list" %}">Vehicles</a></li>
           <li class="{% block menu_racelist_active %}{% endblock %}"><a href="{% url "randomracelist" %}">Random grid generator</a></li>
-          {% if user.is_authenticated %}
-            <li><a href="{% url "track_add" %}">Add a track</a></li>
-          {% endif %}
         </ul>
         {% comment %}
       <form class="navbar-form navbar-left">

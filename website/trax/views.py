@@ -26,7 +26,7 @@ class Homepage(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Homepage, self).get_context_data(**kwargs)
-        tracks = Track.objects.all()
+        tracks = Track.objects.all().order_by('-pk')[:10]
         context['tracks'] = tracks
         return context
 

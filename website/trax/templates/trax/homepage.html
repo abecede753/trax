@@ -5,7 +5,7 @@
 {% block content %}
 
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
       {% if not request.user.is_authenticated %}
         <h1>Hi there! </h1>
         <p><b>Welcome to gtaracing.net!</b></p>
@@ -16,10 +16,11 @@
         <h1>Hi {{ request.user }}!</h1>
       {% endif %}
       <p>This little website aims to be a resource for all kinds of racing activities in GTA online.
-        At the moment, there is a <b>Track Database</b> (right here --&gt;) with the possibility to
-        enter your fastest laps.
+        At the moment, there is a <b>Track Database</b> with the possibility to enter your fastest laps.
         Registered users can also create new tracks. As soon as there are enough tracks,
         we'll have some kind of search / filter functionality as well.
+      </p>
+      <p>There's also a list of all land <b>vehicles</b> where you can see how other racers performed on various tracks.
       </p>
       <p>Furthermore, there is a <b>Random Grid Generator</b> available, so if you host an event with
         multiple races, you can make sure that every participant has a fair chance with their
@@ -32,7 +33,7 @@
         quick, whereas slower drivers may start a bit earlier to make them be able to still participate
         competitively.</p>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-7">
       <h1>The most recent tracks
         <small class="pull-right">
           <a href="{% url "track_add" %}" class="btn btn-primary">
@@ -43,16 +44,20 @@
 
       <table class="table table-striped table-bordered table-condensed">
         <thead>
+        <th>&nbsp;</th>
         <th>{% trans "Title" %}</th>
         <th>{% trans "Author" %}</th>
-        <th>{% trans "Link" %}</th>
+        <th class="text-right">{% trans "Players" %}</th>
+        <th class="text-right">{% trans "length km" %}</th>
         </thead>
         <tbody>
         {% for foo in tracks %}
           <tr>
+            <td>{{ foo.get_platform_display }}</td>
             <td><a href="{{ foo.get_absolute_url }}">{{ foo.title }}</a></td>
             <td>{{ foo.author }}</td>
-            <td><a href="{{ foo.link }}" target="_blank">{{ foo.link }}</a></td>
+            <td class="text-right">{{ foo.num_players }}</td>
+            <td class="text-right">{{ foo.route_length_km }}</td>
           </tr>
         {% endfor %}
 
