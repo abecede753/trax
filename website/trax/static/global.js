@@ -1,6 +1,21 @@
 var laptimetable;
 var vehicletable;
 var vehiclelaptimetable;
+
+function format_laptimestableinfo ( d ) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Link:</td>'+
+            '<td>'+d.link+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Comment:</td>'+
+            '<td>'+d.comment+'</td>'+
+        '</tr>'+
+    '</table>';
+}
+
 $(document).ready(function() {
 //    var dt_table = $('.laptimetable').dataTable({
 //        language: 'en',
@@ -45,6 +60,11 @@ $(document).ready(function() {
     laptimetable = $('#laptimetable').DataTable( {
         ajax: "laptimes.json",
         columns: [
+            { className:      "details-control",
+              orderable:      false,
+              data:           null,
+              defaultContent: ""
+            },
             { data: "vehicle" },
             { data: {
                 _: "duration.display",
@@ -58,6 +78,23 @@ $(document).ready(function() {
         ],
         "deferRender": true
     } );
+    // Add event listener to laptimetable for opening and closing details
+    $('#laptimetable tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = laptimetable.row( tr );
+
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format_laptimestableinfo(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+
 
 
     /* vehicle laptime table */

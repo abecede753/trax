@@ -126,7 +126,9 @@ def laptime_json(request, track_pk):
                          'millis': laptime.millis},
             'name': str(laptime.player),
             'date': {'display': laptime.recorded.strftime('%Y-%m-%d'),
-                     'timestamp':laptime.recorded.strftime('%Y-%m-%d')}
+                     'timestamp':laptime.recorded.strftime('%Y-%m-%d')},
+            'comment': laptime.comment,
+            'link': laptime.link
         })
     return JsonResponse({'data': data},
                         json_dumps_params={'separators':(',', ':')})
