@@ -87,7 +87,7 @@ class Laptime(models.Model):
     vehicle = models.ForeignKey("vehicles.Vehicle")
     millis = models.IntegerField(default=0)
     millis_per_km = models.IntegerField(default=0)
-    comment = models.TextField(default='', null=True)
+    comment = models.TextField(default='', null=True, blank=True)
     video = EmbedVideoField(null=True)
     link = models.URLField(null=True)
     pc_60fps = models.BooleanField(default=False)
