@@ -81,12 +81,9 @@ class TrackCreate(CreateView):
     model = Track
     form_class = TrackForm
 
-
-#    def form_valid(self, form):
-#        # This method is called when valid form data has been POSTed.
-#        # It should return an HttpResponse.
-#        # form.send_email()
-#        return super(TrackView, self).form_valid(form)
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        return super(TrackCreate, self).form_valid(form)
 
 
 @method_decorator(login_required, name='dispatch')

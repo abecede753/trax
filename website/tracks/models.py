@@ -11,6 +11,7 @@ class Track(models.Model):
     title = models.CharField(unique=True, max_length=256)
     description = models.TextField(blank=True, default='')
     author = models.CharField(max_length=64, default='', null=False)
+    creator = models.ForeignKey("players.Player", null=True)
     link = models.URLField(null=True)
     video = EmbedVideoField(null=True)
     game_mode = models.CharField(max_length=8, choices=GAME_MODES,
