@@ -7,7 +7,7 @@ from django.db import models
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
-from trax.choices import PLATFORM_CHOICES, RACE_STATES
+from trax.choices import PLATFORM_CHOICES, RACE_STATES, SSR_ALGORITHMS
 
 #class StaggeredPlaylist(models.Model):
 #    title = models.CharField(max_length=256)
@@ -33,6 +33,8 @@ class StaggeredStartRace(models.Model):
     per_overtake_deficit_millis = models.IntegerField(null=True, default=600)
 #    staggeredplaylist = models.ForeignKey('StaggeredPlaylist', null=True)
 #    number_in_playlist = models.PositiveSmallIntegerField(default=0)
+    algorithm = models.CharField(max_length=2, choices=SSR_ALGORITHMS,
+                                 default='SA')
 
     def __str__(self):
         hosting_date = self.hosting_date and \

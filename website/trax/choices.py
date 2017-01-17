@@ -18,6 +18,12 @@ PLATFORM_CHOICES = (
     ('xb3', _('XBox 360')),
 )
 
+SSR_ALGORITHMS = (
+    ('SA', _("Slow Assist")),
+    ('PF', _("Photo Finish")),
+    ('SO', _("Standard Only")),
+)
+
 
 class _Rs:
     planning = 'p'

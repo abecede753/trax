@@ -24,7 +24,7 @@ from .utils import get_user_car_list
 class SSRCreateForm(forms.ModelForm):
     class Meta:
         model = StaggeredStartRace
-        fields = ['track', 'laps', 'vehicle_class', 'comment']
+        fields = ['track', 'laps', 'algorithm', 'vehicle_class', 'comment']
 
 
 @method_decorator(login_required, name='dispatch')
@@ -168,9 +168,14 @@ def enlist(request, pk, vehicle_pk):
     ssr = get_object_or_404(StaggeredStartRace, pk=pk)
 
     vehicle = Vehicle.objects.get(pk=vehicle_pk)
+    multiplier = 1.0
+    if ssr.algorithm == 'PF':
+        multiplier = request.user.defaultspeedmultiplier
+    if ssr.algorithm == 'SA':
+        multiplier = max(1.0, request.user.defaultspeedmultiplier)
     estimated_laptime = (vehicle.cc_millis_per_km *
                          ssr.track.route_length_km *
-                         request.user.defaultspeedmultiplier)
+                         multiplier)
 
 
     defaults = {'vehicle': vehicle,

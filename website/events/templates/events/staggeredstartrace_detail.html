@@ -13,6 +13,7 @@
 
 
   <h1><small>{{ object.laps }} laps on </small>{{ object.track }} <small>[{{ object.track.platform }}] hosted by {{ object.host }}</small></h1>
+  <p><small>Algorithm for starting times: {{ object.get_algorithm_display }}</small></p>
 
   <div id="loading" class="row text-center">
     <button class="btn btn-lg btn-info"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>
