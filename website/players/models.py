@@ -68,14 +68,20 @@ class PlayerVehicle(models.Model):
     multiplier = models.FloatField(default=1.0)
 
 
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from tracks.models import Laptime
 
 @receiver(post_save, sender=Laptime)
-def my_handler(sender, instance=None, **kwargs):
+def lt_save_update_racing_stats(sender, instance=None, **kwargs):
     if instance:
         player = Player.objects.get(username=instance.player.username)
         update_player_racing_stats(player)
 
+
+@receiver(post_delete, sender=Laptime)
+def lt_save_delete_racing_stats(sender, instance=None, **kwargs):
+    if instance:
+        player = Player.objects.get(username=instance.player.username)
+        update_player_racing_stats(player)
 

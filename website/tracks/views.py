@@ -103,7 +103,6 @@ class TrackEdit(UpdateView):
     def form_valid(self, form):
         """special permissions check
         NOTE: make nicer whenever time available for that."""
-        #import ipdb; ipdb.set_trace()
         if form.instance.creator:
             creator = form.instance.creator.username
         else:
