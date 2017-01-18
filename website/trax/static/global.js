@@ -60,10 +60,10 @@ $(document).ready(function() {
     laptimetable = $('#laptimetable').DataTable( {
         ajax: "laptimes.json",
         columns: [
-            { className:      "details-control",
+            { className:      "details-control text-center",
               orderable:      false,
               data:           null,
-              defaultContent: ""
+              defaultContent: "<span class=\"glyphicon glyphicon-info-sign\"></span>"
             },
             { data: "vehicle" },
             { data: {
