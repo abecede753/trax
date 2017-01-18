@@ -4,10 +4,10 @@ var vehiclelaptimetable;
 
 function format_laptimestableinfo ( d ) {
     // `d` is the original data object for the row
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+    return '<table cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;">'+
         '<tr>'+
             '<td>Link:</td>'+
-            '<td>'+d.link+'</td>'+
+            '<td><a href="'+d.link+'" target="_blank">' + d.link + '</a></td>'+
         '</tr>'+
         '<tr>'+
             '<td>Comment:</td>'+
