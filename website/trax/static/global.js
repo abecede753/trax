@@ -67,7 +67,7 @@ $(document).ready(function() {
             { className:      "details-control text-center",
               orderable:      false,
               data:           null,
-              defaultContent: "<span class=\"glyphicon glyphicon-info-sign\"></span>"
+              defaultContent: "<span role=\"button\" class=\"glyphicon glyphicon-info-sign\"></span>"
             },
             { data: "vehicle" },
             { data: {
