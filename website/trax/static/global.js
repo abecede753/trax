@@ -6,17 +6,19 @@ function format_laptimestableinfo ( d ) {
     // `d` is the original data object for the row
     var strg = '';
     strg += '<table cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;">';
-    if (d.link !== null) {
+    if (d.link !== null && d.link !== '') {
         strg += '<tr>'+
             '<td>Link:</td>'+
             '<td><a href="'+d.link+'" target="_blank">' + d.link + '</a></td>'+
         '</tr>';
     }
-    strg += '<tr>'+
-            '<td>Comment:</td>'+
-            '<td>'+d.comment+'</td>'+
-        '</tr>'+
-    '</table>';
+    if (d.comment !== null && d.comment !== '') {
+        strg += '<tr>' +
+            '<td>Comment:</td>' +
+            '<td>' + d.comment + '</td>' +
+            '</tr>';
+    }
+    strg += '</table>';
     return strg;
 }
 
