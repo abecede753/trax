@@ -72,6 +72,7 @@ def laptime_add(request, lap_pk):
         l.millis = millis
         l.millis_per_km = millis / t.route_length_km
         l.comment = request.POST.get('comment', '')
+        l.link = request.POST.get('anylink', '')
         yy,mm,dd = request.POST.get('recorded').split('-')
         l.recorded = datetime.date(int(yy), int(mm), int(dd))
         l.created = datetime.datetime.now()
