@@ -4,16 +4,20 @@ var vehiclelaptimetable;
 
 function format_laptimestableinfo ( d ) {
     // `d` is the original data object for the row
-    return '<table cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
+    var strg = '';
+    strg += '<table cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;">';
+    if (d.link !== null) {
+        strg += '<tr>'+
             '<td>Link:</td>'+
             '<td><a href="'+d.link+'" target="_blank">' + d.link + '</a></td>'+
-        '</tr>'+
-        '<tr>'+
+        '</tr>';
+    }
+    strg += '<tr>'+
             '<td>Comment:</td>'+
             '<td>'+d.comment+'</td>'+
         '</tr>'+
     '</table>';
+    return strg;
 }
 
 $(document).ready(function() {
