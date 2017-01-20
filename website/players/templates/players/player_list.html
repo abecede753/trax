@@ -1,33 +1,24 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}GTARacing.net{% endblock %}
+{% block title %}Players{% endblock %}
 {% block content %}
 
   <div class="row">
     <div class="col-md-12">
-      <h1>The tracks
-        <small class="pull-right">
-          <a href="{% url "track_add" %}" class="btn btn-default">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            Add a track</a>
-        </small>
-      </h1>
+      <h1>The players</h1>
 
       <table class="table table-striped table-bordered table-condensed">
         <thead>
         <th>_</th>
-        <th>{% trans "Title" %}</th>
-        <th>{% trans "Author" %}</th>
-        <th>{% trans "Link" %}</th>
+        <th>{% trans "Name" %}</th>
+        <th>{% trans "Score" %}</th>
         </thead>
         <tbody>
-        {% for track in object_list %}
+        {% for p in object_list %}
           <tr>
-            <td>{{ track.get_platform_display }}</td>
-            <td><a href="{{ track.get_absolute_url }}">{{ track.title }}</a></td>
-            <td>{{ track.author }}</td>
-            <td><a href="{{ track.link }}" target="_blank">{{ track.link }}</a></td>
+            <td>{{ p.username }}</td>
+            <td>{{ p.defaultspeedmultiplier }}</td>
           </tr>
         {% endfor %}
 
