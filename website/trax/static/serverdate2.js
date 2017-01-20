@@ -198,6 +198,7 @@ function synchronize() {
       if (this.status == 200) {
         try {
           // Process the server's Date from the response header
+            console.log(this.getResponseHeader("Date"));
 		  processSample((new Date(this.getResponseHeader("Date"))).getTime());
         }
         catch (exception) {
