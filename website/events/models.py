@@ -5,6 +5,7 @@ import os
 from django.conf import settings
 from django.db import models
 from django.urls import reverse_lazy
+# from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from trax.choices import PLATFORM_CHOICES, RACE_STATES, SSR_ALGORITHMS
@@ -104,6 +105,7 @@ class SSRParticipation(models.Model):
 
     @property
     def start_in_millis(self):
+        # tdobj = self.start_timestamp - now()
         tdobj = self.start_timestamp - datetime.datetime.now(
             tz=self.start_timestamp.tzinfo)
         return int(tdobj.total_seconds() * 1000)

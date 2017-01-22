@@ -39,7 +39,7 @@ var ServerDate = (function(serverNow) {
 var
   // Remember when the script was loaded.
   scriptLoadTime = Date.now(),
-  URL = "/robots.txt",
+  URL = "/miniutil/now",
   synchronizationIntervalDelay,
   synchronizationInterval,
   precision,
@@ -197,9 +197,7 @@ function synchronize() {
       // If OK
       if (this.status == 200) {
         try {
-          // Process the server's Date from the response header
-            console.log(this.getResponseHeader("Date"));
-		  processSample((new Date(this.getResponseHeader("Date"))).getTime());
+		  processSample(Math.round(Number(this.responseText)*1000));
         }
         catch (exception) {
           log("Unable to read the server's response.");
@@ -258,7 +256,7 @@ function synchronize() {
 
 // Tag logged messages for better readability.
 function log(message) {
-//    if (console && console.log) { console.log("[ServerDate] " + message); }
+    if (console && console.log) { console.log("[ServerDate] " + message); }
 }
 
 offset = serverNow - scriptLoadTime;

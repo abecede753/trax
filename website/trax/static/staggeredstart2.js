@@ -5,7 +5,7 @@ var DDEBUG;
 var WindowLoadFinished = false;
 
 function LOG(txt) {
-//    console.log("SSR: " + txt);
+    console.log("SSR: " + txt);
 }
 
 function audio_loaded() {

@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.forms import Form, ModelForm
 from django import forms
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -107,4 +108,10 @@ def login_view(request):
     if request.user.is_authenticated():
         resp.set_cookie('username', request.user.username)
     return resp
+
+def timestamp_dev(request):
+    from django.utils.timezone import now
+    n = now()
+    return HttpResponse('{0:.9f}'.format(n.timestamp()), content_type="text/plain")
+
 

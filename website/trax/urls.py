@@ -22,4 +22,5 @@ urlpatterns = [
         name="imprint"),
     url(r'^robots.txt$', TemplateView.as_view(template_name='trax/imprint.html'),
                       name="DEVELOPMENTrobots.txt"),
+    url(r'^miniutil/now$', views.timestamp_dev, name="DEVELOPMENTnow"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
