@@ -1,8 +1,9 @@
-{% extends "base.html" %}
+{% extends "tracks/track_base.html" %}
 {% load widget_tweaks %}
 {% load i18n %}
 
-{% block title %}Trax{% endblock %}
+{% block title %}{% if form.instance.pk %}Edit track
+  "{{ form.instance.title }}"{% else %}Add a new track{% endif %}{% endblock %}
 {% block content %}
   <div class="row">
   <div class="col-md-12">

@@ -72,6 +72,9 @@
           <li class="{% block menu_homepage_active %}{% endblock %}"><a href="{% url "homepage" %}"><b>GTARacing.net</b></a></li>
           <li class="{% block menu_tracks_active %}{% endblock %}"><a href="{% url "track_list" %}">Tracks</a></li>
           <li class="{% block menu_vehicles_active %}{% endblock %}"><a href="{% url "vehicle_list" %}">Vehicles</a></li>
+        {% comment %}
+          <li class="{% block menu_players_active %}{% endblock %}"><a href="{% url "player_list" %}">Players</a></li>
+        {% endcomment %}
           <li class="{% block menu_racelist_active %}{% endblock %}"><a href="{% url "randomracelist" %}">Random grid generator</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "trax_base.html" %}
 {% load i18n %}
 
 {% block title %}Hi {% if not request.user.is_authenticated %}there{% else %}{{ request.user }}{% endif %}!{% endblock %}
