@@ -22,6 +22,15 @@ from .local_settings import *  # noqa
 
 # Application definition
 
+try:
+    x = CACHES
+except:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
+    }
+
 INSTALLED_APPS = [
     'embed_video',
     'randomizer',

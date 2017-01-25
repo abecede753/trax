@@ -1,4 +1,5 @@
 from captcha.fields import ReCaptchaField
+from collections import OrderedDict
 
 from django.contrib.auth import get_user_model, logout, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -14,10 +15,9 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
+
 from players.models import Player
-
-
-from tracks.models import Track
+from tracks.models import Track, Laptime
 
 _User = get_user_model()
 
@@ -29,7 +29,25 @@ class Homepage(TemplateView):
         context = super(Homepage, self).get_context_data(**kwargs)
         tracks = Track.objects.all().order_by('-pk')[:10]
         context['tracks'] = tracks
+        context['toplaps'] = self.get_top_laps()
         return context
+
+    def get_top_laps(self, num_items=5):
+        l = Laptime.objects.filter(
+            vehicle__classes__name__in=('Sport', 'Super', 'Muscke')).order_by(
+            'millis_per_km')
+        tracks = {}
+        for x in l:
+            for cl in x.vehicle.classes.all():
+                current_time = x.millis
+                key = (x.track.pk, cl.pk)
+                if (not tracks.get(key)) or (
+                    current_time < tracks.get(key).millis):
+                    tracks[key] = x
+        ordered = OrderedDict(
+            sorted(tracks.items(), key=lambda t: t[1].millis_per_km))
+        return list(tracks.values())[:num_items]
+
 
 
 class RegistrationForm(ModelForm):
@@ -109,7 +127,18 @@ def login_view(request):
         resp.set_cookie('username', request.user.username)
     return resp
 
+def export_tables_as_sheets(request):
+    qs = Laptime.objects.all().select_related('track', 'player', 'vehicle')
+    column_names = ['pk', 'millis', 'millis_per_km', 'vehicle__name']
+    return excel.make_response_from_query_sets(query_sets, column_names, 'xls',
+                                               file_name="custom")
+
+
+
+
 def timestamp_dev(request):
+    """replacement for the little shell script returning the current datetime
+    for the SSR creator."""
     from django.utils.timezone import now
     n = now()
     return HttpResponse('{0:.9f}'.format(n.timestamp()), content_type="text/plain")

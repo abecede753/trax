@@ -73,6 +73,10 @@ class Track(models.Model):
         minu, seco = divmod(self.typical_laptime, 60)
         return "{0}:{1:02}".format(int(minu), int(seco))
 
+    @property
+    def route_length(self, unit='km'):
+        return "{:.02f}".format(self.route_length_km)
+
 
 def get_track_by_string(s):
     """returns a track object, if something with a score > 70 could be found."""

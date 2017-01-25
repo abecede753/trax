@@ -5,7 +5,7 @@
 {% block content %}
 
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-4">
       {% if not request.user.is_authenticated %}
         <h1>Hi there! </h1>
         <p><b>Welcome to gtaracing.net!</b></p>
@@ -33,7 +33,34 @@
         quick, whereas slower drivers may start a bit earlier to make them be able to still participate
         competitively.</p>
     </div>
-    <div class="col-md-7">
+    <div class="col-md-8">
+      <h1>Some great lap times</h1>
+
+      <table class="table table-striped table-bordered table-condensed">
+        <thead>
+        <th>{% trans "Track" %}</th>
+        <th>{% trans "Driver" %}</th>
+        <th>{% trans "Vehicle" %}</th>
+        <th class="text-right">{% trans "Time" %}</th>
+        </thead>
+        <tbody>
+        {% for lap in toplaps %}
+          <tr>
+            <td>
+              {% if lap.link %}
+                <a href="{{ lap.link }}"
+                   title="external link as proof" target="_blank"><span class="glyphicon glyphicon-link"></span></a>
+              {% endif %}
+              <a href="{{ lap.track.get_absolute_url }}">{{ lap.track }}</a>
+            </td>
+            <td>{{ lap.player }}</td>
+            <td>{{ lap.vehicle }}</td>
+            <td class="text-right">{{ lap.duration }}</td>
+          </tr>
+        {% endfor %}
+
+        </tbody>
+      </table>
       <h1>The most recent tracks
         <small class="pull-right">
           <a href="{% url "track_add" %}" class="btn btn-primary">
@@ -57,7 +84,7 @@
             <td><a href="{{ foo.get_absolute_url }}">{{ foo.title }}</a></td>
             <td>{{ foo.author }}</td>
             <td class="text-right">{{ foo.num_players }}</td>
-            <td class="text-right">{{ foo.route_length_km }}</td>
+            <td class="text-right">{{ foo.route_length }}</td>
           </tr>
         {% endfor %}
 

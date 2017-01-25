@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.decorators.cache import cache_page
 from django.views.generic import TemplateView
 
 from . import views
@@ -14,7 +15,7 @@ urlpatterns = [
     url(r'^r/', include('randomizer.urls')),
     url(r'^e/', include('events.urls')),
     url(r'^p/', include('players.urls')),
-    url(r'^$', views.Homepage.as_view(), name="homepage"),
+    url(r'^$', cache_page(60*10)(views.Homepage.as_view()), name="homepage"),
     url(r'^accounts/login/$', views.login_view, name="login"),
     url(r'^accounts/logout/$', views.logout_view, name="logout"),
     url(r'^accounts/register/$', views.Registration.as_view(), name="register"),

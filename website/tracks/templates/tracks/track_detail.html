@@ -62,7 +62,7 @@
       <dl class="dl-horizontal">
         <dt>{% trans "game mode" %}</dt><dd>{{ obj.get_game_mode_display }}</dd>
         <dt>{% trans "route type" %}</dt><dd>{{ obj.get_route_type_display }}</dd>
-        <dt>{% trans "route length" %}</dt><dd>{{ obj.route_length_km }} km</dd>
+        <dt>{% trans "route length" %}</dt><dd>{{ obj.route_length }} km</dd>
         <dt>{% trans "num players" %}</dt><dd>{{ obj.num_players }}</dd>
         <dt>{% trans "typical lap time" %}</dt><dd>{{ obj.duration }}</dd>
         <dt>{% trans "pit lane" %}</dt><dd>{% if not obj.pit_lane %}NOT {% endif %}available</dd>
