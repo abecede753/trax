@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, DetailView
 
@@ -93,28 +93,33 @@ class StaggeredStartRaceDetail(DetailView):
     def post(self, *a, **k):
         if self.request.POST.get('personal_laptime'):
             timestr = self.request.POST.get('personal_laptime')
-            minu, seco = timestr.split(':')
-            millis = int(minu) * 60 * 1000 + float(seco) * 1000
-            event = self.get_object()
-            particip = SSRParticipation.objects.get(
-                staggeredstartrace=event,
-                player__username=self.request.user.username)
-            lt = Laptime(
-                track=event.track,
-                player=self.request.user,
-                recorded=datetime.date.today(),
-                vehicle=particip.vehicle,
-                millis=millis,
-                millis_per_km=millis / event.track.route_length_km,
-                comment='participation in a staggered start race',
-            )
-            lt.save()
-            particip.laptime = lt
-            particip.save()
-            messages.add_message(
-                self.request, messages.SUCCESS,
-                'Thanks! (a nicer page will follow later. Maybe.)')
-            return HttpResponseRedirect('/')
+            if timestr != '-1':
+                minu, seco = timestr.split(':')
+                millis = int(minu) * 60 * 1000 + float(seco) * 1000
+                event = self.get_object()
+                particip = SSRParticipation.objects.get(
+                    staggeredstartrace=event,
+                    player__username=self.request.user.username)
+                lt = Laptime(
+                    track=event.track,
+                    player=self.request.user,
+                    recorded=datetime.date.today(),
+                    vehicle=particip.vehicle,
+                    millis=millis,
+                    millis_per_km=millis / event.track.route_length_km,
+                    comment='participation in a staggered start race',
+                )
+                lt.save()
+                particip.laptime = lt
+                particip.save()
+                messages.add_message(
+                    self.request, messages.SUCCESS,
+                    'Thanks! (a nicer page will follow later. Maybe.)')
+            return render(self.request,
+                          'events/staggeredstartrace_wait_for_more.html',
+                          )
+
+
 
         return super(StaggeredStartRaceDetail, self).get(*a, **k)
 
@@ -188,6 +193,15 @@ def enlist(request, pk, vehicle_pk):
         participation.save()
     ssr.update_json()
     return JsonResponse({'result': 'OK'})
+
+
+@login_required
+def check_for_newer_ssr(request, pk):
+    ssr = get_object_or_404(StaggeredStartRace, pk=pk)
+    newer = StaggeredStartRace.objects.filter(pk__gt=pk, host=ssr.host)
+    if newer:
+        return JsonResponse({'result': newer[0].get_absolute_url()})
+    return JsonResponse({'result': None})
 
 
 @method_decorator(login_required, name='dispatch')

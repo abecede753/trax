@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from randomizer import views
 from .views import StaggeredStartRaceCreator, StaggeredStartRaceDetail, \
-    participants_list, enlist, StaggeredStartRaceStatus
+    participants_list, enlist, StaggeredStartRaceStatus, check_for_newer_ssr
 
 urlpatterns = [
     url(r'^s/add/$', StaggeredStartRaceCreator.as_view(),
@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^s/(?P<pk>\d+)/get_status/$',
         StaggeredStartRaceStatus.as_view(),
         name='get_status'),
-
-    ####################### NEW STUFF
-
+    url(r'^s/(?P<pk>\d+)/check_for_newer/$',
+        check_for_newer_ssr,
+        name='check_for_newer_ssr'),
 ]

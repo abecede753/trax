@@ -1,0 +1,41 @@
+{% extends "events/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load compress %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block title %}Waiting...{% endblock %}
+{% block content %}
+
+
+  <h1>Are we finished yet?</h1>
+  <p>The host of the previous race may run another StaggeredStartRace.
+    I'll check every few seconds for you and will show you when it's ready.
+  </p>
+  <p>If the host's playlist is over, can I interest you in some
+    cool <a href="{% url 'track_list' %}">Tracks</a>?</p>
+
+  <p class="text-center">
+    <img src="/static/infinity.gif"><br>
+    <small>Waiting for the host to start a new SSR...</small></p>
+{% endblock %}
+
+
+{% block trax_extra_script %}
+  <script>
+      $(document).ready(function(){
+          setInterval(check_for_newer_ssr, 3000);
+          function check_for_newer_ssr(){
+              $.ajax({
+                  url: "check_for_newer/",
+                  success: function(data) {
+                      if (data.result) {
+                          location.replace(data.result);
+                      }
+                  }
+              });
+          }
+      });
+  </script>
+{% endblock %}
