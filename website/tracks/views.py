@@ -160,3 +160,11 @@ def tracks_json(request):
     return JsonResponse({'data': data},
                         json_dumps_params={'separators':(',', ':')})
 
+
+@login_required
+def laptime_delete(request, lap_pk):
+    laptime = get_object_or_404(Laptime, pk=lap_pk)
+    if request.user.pk != laptime.player.pk:
+        raise Http404
+    laptime.delete()
+    return JsonResponse({'data':'ok'})

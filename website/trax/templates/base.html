@@ -24,6 +24,8 @@
           href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css"
           href="{% static "bootstrap-combobox.css" %}" />
+    <link rel="stylesheet" type="text/css"
+          href="{% static "bootstrap-dialog.css" %}" />
     <link rel="apple-touch-icon" sizes="57x57" href="{% static "/fav2/apple-icon-57x57.png" %}">
     <link rel="apple-touch-icon" sizes="60x60" href="{% static "/fav2/apple-icon-60x60.png" %}">
     <link rel="apple-touch-icon" sizes="72x72" href="{% static "/fav2/apple-icon-72x72.png" %}">
@@ -63,9 +65,7 @@
           <li class="{% block menu_homepage_active %}{% endblock %}"><a href="{% url "homepage" %}"><b>GTARacing.net</b></a></li>
           <li class="{% block menu_tracks_active %}{% endblock %}"><a href="{% url "track_list" %}">Tracks</a></li>
           <li class="{% block menu_vehicles_active %}{% endblock %}"><a href="{% url "vehicle_list" %}">Vehicles</a></li>
-        {% comment %}
           <li class="{% block menu_players_active %}{% endblock %}"><a href="{% url "player_list" %}">Players</a></li>
-        {% endcomment %}
           <li class="{% block menu_racelist_active %}{% endblock %}"><a href="{% url "randomracelist" %}">Random grid generator</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -77,6 +77,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 <span id="username">{{ request.user }}</span> <span class="caret"></span></a>
               <ul class="dropdown-menu">
+                <li><a href="{% url "player_detail" request.user.pk %}">My lap times</a></li>
                 <li><a href="{% url "logout" %}">Log out</a></li>
               </ul>
             {% else %}
@@ -115,6 +116,7 @@
     <script src="{% static 'bootstrap-select.min.js' %}"></script>
     <script src="{% static 'jquery.color.js' %}"></script>
     <script src="{% static 'bootstrap-combobox.js' %}"></script>
+    <script src="{% static 'bootstrap-dialog.js' %}"></script>
     <script src="{% static 'global.js' %}"></script>
   {% endcompress %}
   {% block trax_extra_script %}{% endblock %}

@@ -111,13 +111,27 @@ $(document).ready(function() {
     } );
 
     /* main tracks table */
-    vehiclelaptimetable = $('#tracktable').DataTable( {
+    tracktable = $('#tracktable').DataTable( {
         // ajax: "laptimes.json",
         order: [[ 1, "asc" ]],
         lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
     } );
-    /* animate login/register */
 
+    /* player laptime table */
+    playerlaptimetable = $('#playerlaptimetable').DataTable( {
+        // ajax: "laptimes.json",
+        order: [[ 1, "asc" ]],
+        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+    } );
+
+    /* player laptime table */
+    playerstable = $('#playerstable').DataTable( {
+        // ajax: "laptimes.json",
+        order: [[ 1, "asc" ]],
+        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+    } );
+
+    /* animate login/register */
     $('#loginreg').on('fadeout', function () {
         $(this).fadeTo( "slow", 0.1, function(){ $(this).trigger('fadein'); });
     });

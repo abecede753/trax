@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import UserManager
 from django.db import models
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy
 from .utils import update_player_racing_stats
 
@@ -54,6 +55,10 @@ class Player(AbstractBaseUser):
 
     def __str__(self):
         return self.nickname or self.username
+
+    def get_absolute_url(self):
+        return reverse_lazy('player_detail',
+                            kwargs={'pk': self.pk})
 
 
 def register(self, rscname, nickname, email):
