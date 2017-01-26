@@ -110,6 +110,12 @@ $(document).ready(function() {
         lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
     } );
 
+    /* main tracks table */
+    vehiclelaptimetable = $('#tracktable').DataTable( {
+        // ajax: "laptimes.json",
+        order: [[ 1, "asc" ]],
+        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+    } );
     /* animate login/register */
 
     $('#loginreg').on('fadeout', function () {
