@@ -23,8 +23,8 @@
         <tbody>
         {% for l in object.laptime_set.all %}
           <tr>
-            <td>{{ l.track }}</td>
-            <td>{{ l.vehicle }}</td>
+            <td><a href="{% url "track_detail" l.track.pk %}">{{ l.track }}</a></td>
+            <td><a href="{% url "vehicle_detail" l.vehicle.pk %}">{{ l.vehicle }}</a></td>
             <td>{{ l.created }}</td>
             <td>{{ l.comment }}</td>
             <td>{% if l.link %}

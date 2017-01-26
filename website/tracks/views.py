@@ -125,7 +125,7 @@ def laptime_json(request, track_pk):
             'vehicle':'<a href="/v/s/{0}/">{1}</a>'.format( laptime.vehicle.pk, laptime.vehicle),
             'duration': {'display': laptime.duration,
                          'millis': laptime.millis},
-            'name': str(laptime.player),
+            'name':'<a href="/p/{0}/">{1}</a>'.format( laptime.player.pk, laptime.player),
             'date': {'display': laptime.recorded.strftime('%Y-%m-%d'),
                      'timestamp':laptime.recorded.strftime('%Y-%m-%d')},
             'comment': laptime.comment,

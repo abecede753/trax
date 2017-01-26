@@ -53,8 +53,8 @@
               {% endif %}
               <a href="{{ lap.track.get_absolute_url }}">{{ lap.track }}</a>
             </td>
-            <td>{{ lap.player }}</td>
-            <td>{{ lap.vehicle }}</td>
+            <td><a href="{{ lap.player.get_absolute_url }}">{{ lap.player }}</a></td>
+            <td><a href="{{ lap.vehicle.get_absolute_url }}">{{ lap.vehicle }}</a></td>
             <td class="text-right">{{ lap.duration }}</td>
           </tr>
         {% endfor %}

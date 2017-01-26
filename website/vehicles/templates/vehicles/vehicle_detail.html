@@ -41,7 +41,7 @@
       <tbody>
       {% for o in object.laptime_set.all %}
         <tr><td><a href="{% url "track_detail" o.track.pk %}">{{ o.track }}</a></td>
-        <td>{{ o.player }}</td>
+        <td><a href="{% url "player_detail" o.player.pk %}">{{ o.player }}</a></td>
         <td>{{ o.duration }}</td>
         <td>{{ o.km_per_h }}</td>
         </tr>
