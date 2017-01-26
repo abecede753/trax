@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class VehicleClass(models.Model):
@@ -44,3 +45,6 @@ class Vehicle(models.Model):
                 (1.0 / self.cc_millis_per_km ) * 1000 * 3600
             )
         return '?'
+
+    def get_absolute_url(self):
+        return reverse('vehicle_detail', args=[str(self.pk)])
