@@ -63,7 +63,12 @@
       </table>
       <h1>The most recent tracks
         <small class="pull-right">
-          <a href="{% url "track_add" %}" class="btn btn-primary">
+          <a href="{% url "track_list" %}" class="btn btn-default">
+            <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+            View all tracks</a>
+        </small>
+        <small class="pull-right">
+          <a href="{% url "track_add" %}" class="btn btn-default">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             Add a track</a>
         </small>
