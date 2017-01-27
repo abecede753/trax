@@ -98,3 +98,5 @@ trax_local_db.odb
 **/trax/static/ssr/*json
 **/webscraper_experiments.ipynb
 **/website/trax/media/**
+**/website/trax/static/CACHE/**
+**/website/uwsgi.ini
