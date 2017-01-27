@@ -1,4 +1,6 @@
 {% extends "tracks/track_base.html" %}
+{% load static %}
+{% load thumbnail %}
 {% load bootstrap3 %}
 {% load embed_video_tags %}{% load i18n %}
 
@@ -34,7 +36,14 @@
   </div>
   <div class="row">
     <div class="col-md-4 ">
+      {% if obj.image %}
+        <a href="/media/{{ obj.image }}" target="_blank">
+        <img src="{% thumbnail obj.image 320x200 crop %}" style="width:100%" alt="">
+        </a>
+        <h3 class="pricedown">Description</h3>
+        {% else %}
       <h3 class="pricedown" style="padding-top:0;margin-top:0">Description</h3>
+      {% endif %}
       {% if obj.description %}
         <p>{{ obj.description }}</p>
       {% else %}

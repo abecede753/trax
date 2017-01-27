@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'trax',
     'events',
     'compressor',
+    'easy_thumbnails',
+
 ]
 
 MIDDLEWARE = [
@@ -126,6 +128,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'trax', 'static')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'trax', 'media')
 
 NOCAPTCHA = True
 

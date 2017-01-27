@@ -1,3 +1,5 @@
+from easy_thumbnails.fields import ThumbnailerImageField
+
 from trax.choices import GAME_MODES, ROUTE_TYPES, PLATFORM_CHOICES
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -50,6 +52,8 @@ class Track(models.Model):
                                 choices=PLATFORM_CHOICES, default='pc')
     reference_track = models.BooleanField(
         default=False, help_text=_("Is this a reference track for laptimes?"))
+    image = ThumbnailerImageField(upload_to='trackimages', blank=True)
+
 
     @property
     def terrains(self):

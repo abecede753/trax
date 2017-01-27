@@ -21,7 +21,7 @@
   {% endif %}
 
   <div class="row">
-    <form action="." method="post">
+    <form action="." method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="col-md-7">
         <dl class="dl-horizontal">
@@ -94,6 +94,9 @@
           <dt><label for="id_video">Showcase video</label></dt>
           <dd>{% render_field form.video class="form-control" %}
             {{ form.video.help_text }}</dd>
+          <dt><hr><label for="id_image">Image</label></dt>
+          <dd><hr>{{ form.image }}
+            {{ form.image.help_text }}</dd>
         </dl>
       </div>
       <div class="row">

@@ -1,18 +1,11 @@
-from django.forms import CheckboxSelectMultiple, \
-    modelform_factory
+from django.forms import CheckboxSelectMultiple
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, UpdateView,
                                   DetailView, ListView)
 
-from trax.utils import is_staff_required
+from trax.utils import is_staff_required, ModelFormWidgetMixin
 from .models import Vehicle
-
-
-class ModelFormWidgetMixin(object):
-    def get_form_class(self):
-        return modelform_factory(self.model, fields=self.fields,
-                                 widgets=self.widgets)
 
 
 class VehicleList(ListView):
