@@ -60,7 +60,7 @@
     </div>
     <div class="col-md-4">
       {% if obj.description and obj.image %}
-        <h3 class="pricedown">Video</h3>
+        <h3 class="pricedown" style="padding-top:0;margin-top:0">Video</h3>
         {% if obj.video %}
           <div class="text-right">{% video obj.video '320x200' is_secure=True %}</div>
         {% else %}
