@@ -16,17 +16,17 @@
         <h1>Hi {{ request.user }}!</h1>
       {% endif %}
       <p>This little website aims to be a resource for all kinds of racing activities in GTA online.
-        At the moment, there is a <b>Track Database</b> with the possibility to enter your fastest laps.
-        Registered users can also create new tracks. As soon as there are enough tracks,
-        we'll have some kind of search / filter functionality as well.
+        At the moment, there is a list of great <a href="{% url "track_list" %}"><b>tracks</b></a> with the possibility to enter your fastest laps.
+        Registered users can also create new tracks.
       </p>
-      <p>There's also a list of all land <b>vehicles</b> where you can see how other racers performed on various tracks.
+      <p>There's also a list of all land <a href="{% url "vehicle_list" %}"><b>vehicles</b></a> where you can see how other racers performed on various tracks.
       </p>
-      <p>Furthermore, there is a <b>Random Grid Generator</b> available, so if you host an event with
+      <p>Furthermore, there is a <a href="{% url "randomracelist" %}"><b>Random Grid Generator</b></a> available, so if you host an event with
         multiple races, you can make sure that every participant has a fair chance with their
         positions on the starting grid.</p>
-      <p><b><em>NEW!</em></b> You can host <b>Staggered Start Races</b>! Your drivers can choose any car they like, and I'll
-        try to find out when everyone can start, so all drivers have an equal chance for winning a race.
+      <p><b><em>NEW!</em></b> You can host <b>Staggered Start Races</b>! Open the page of any track and click the button "Host a staggered start race".
+        Your drivers can choose any car they like, and I'll
+        try to find out when everyone can start, so everyone has an equal chance for winning a race.
         It is based on either Broughy1322's laps around Cutting Coroners GP ("Standard Only"), or your own laps
         that you entered here before ("Photo Finish") or a mixture of both ("Slow Assist"), meaning that drivers
         who are faster than Broughy on CCGP still use the standard Broughy-time and are not "punished" for being

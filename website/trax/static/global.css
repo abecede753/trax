@@ -38,38 +38,15 @@ body {
 }
 */
 
-@font-face {
-    font-family: "pricedown";
-    src: url("/static/fnt/32893D_0_0.woff") format('woff');
-}
-
-@font-face {
-    font-family: "pricedown";
-    src: url("/static/fnt/32893D_0_0.woff") format('woff');
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: "pricedown";
-    src: url("/static/fnt/32893D_0_0.woff") format('woff');
-    font-weight: bold;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: "pricedown";
-    src: url("/static/fnt/32893D_0_0.woff") format('woff');
-    font-style: italic;
-}
 h1, h2, h3, .h1, .h2, .h3
 {
-  font-family: pricedown, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   line-height: 0.8;
   color: #888;
 }
 .pricedown {
-    font-family: pricedown, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .pricedown>small, h1>small {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
