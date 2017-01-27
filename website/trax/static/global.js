@@ -48,6 +48,9 @@ $(document).ready(function() {
         // ajax: "laptimes.json",
         order: [[ 0, "asc" ]],
         lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+        "initComplete": function(settings, json) {
+            $(".dataTables_filter input").select().focus();
+        }
     } );
 
     // Order by the grouping
@@ -115,6 +118,9 @@ $(document).ready(function() {
         // ajax: "laptimes.json",
         order: [[ 1, "asc" ]],
         lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+        "initComplete": function(settings, json) {
+            $(".dataTables_filter input").select().focus();
+        }
     } );
 
     /* player laptime table */
@@ -144,6 +150,7 @@ $(document).ready(function() {
     $('.combobox').combobox({bsVersion: '3'});
 
 
+    /* if we have a datatable, focus the filter field */
 });
 
 
