@@ -49,14 +49,24 @@
       {% else %}
         <p>This track has no description. Maybe you'd like to add one?</p>
       {% endif %}
+    {% if obj.description && obj.image %}{% else %}
       <h3 class="pricedown">Video</h3>
       {% if obj.video %}
         <div class="text-right">{% video obj.video '320x200' is_secure=True %}</div>
       {% else %}
         <p>This track has no video. Maybe you'd like to add one? Send a <a href="https://socialclub.rockstargames.com/member/abe.cede/" target="_blank">message to Abe.Cede via Socialclub</a> with a video URL.</p>
       {% endif %}
+    {% endif %}
     </div>
     <div class="col-md-4">
+      {% if obj.description && obj.image %}
+        <h3 class="pricedown">Video</h3>
+        {% if obj.video %}
+          <div class="text-right">{% video obj.video '320x200' is_secure=True %}</div>
+        {% else %}
+          <p>This track has no video. Maybe you'd like to add one? Send a <a href="https://socialclub.rockstargames.com/member/abe.cede/" target="_blank">message to Abe.Cede via Socialclub</a> with a video URL.</p>
+        {% endif %}
+      {% endif %}
       <h3 class="pricedown" style="padding-top:0;margin-top:0">Surface
         <small>(move mouse over the colors to see the terrain type and percentage)</small></h3>
       <div class="progress">
