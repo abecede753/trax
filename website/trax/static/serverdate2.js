@@ -218,18 +218,18 @@ function synchronize() {
       sample = new Offset(serverNow + precision - responseTime,
         precision);
 
-    log("sample: " + iteration + ", offset: " + String(sample));
 
     // Remember the best sample so far.
     if ((iteration == 1) || (precision <= best.precision))
       best = sample;
+    console.log("sample: " + iteration + ", offset: " + String(sample) + " best: " + best);
 
     // Take 10 samples so we get a good chance of at least one sample with
     // low latency.
     if (iteration < 10) {
       iteration++;
-      setTimeout(function () { requestSample(); }, 400 + Math.round(Math.random()*200));
-      console.log("iteration");
+      setTimeout(function () { requestSample(); }, 200 + Math.round(Math.random()*100));
+      log("iteration");
     }
     else {
       // Set the offset target to the best sample collected.
