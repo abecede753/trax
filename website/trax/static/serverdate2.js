@@ -256,7 +256,7 @@ function synchronize() {
 
 // Tag logged messages for better readability.
 function log(message) {
-    if (console && console.log) { console.log("[ServerDate] " + message); }
+//    if (console && console.log) { console.log("[ServerDate] " + message); }
 }
 
 offset = serverNow - scriptLoadTime;
