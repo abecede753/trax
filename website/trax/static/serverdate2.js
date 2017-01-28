@@ -222,7 +222,7 @@ function synchronize() {
     // Remember the best sample so far.
     if ((iteration == 1) || (precision <= best.precision))
       best = sample;
-    console.log("sample: " + iteration + ", offset: " + String(sample) + " best: " + best);
+    // console.log("sample: " + iteration + ", offset: " + String(sample) + " best: " + best);
 
     // Take 10 samples so we get a good chance of at least one sample with
     // low latency.
