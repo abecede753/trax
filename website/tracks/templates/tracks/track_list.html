@@ -28,7 +28,14 @@
         {% for track in object_list %}
           <tr>
             <td>{{ track.get_platform_display }}</td>
-            <td><a href="{{ track.get_absolute_url }}">{{ track.title }}</a></td>
+            <td>{% if track.video %}
+              <span class="glyphicon glyphicon-film"></span>
+            {% endif %}
+            {% if track.image %}
+              <span class="glyphicon glyphicon-picture"></span>
+            {% endif %}
+            <a href="{{ track.get_absolute_url }}">
+              {{ track.title }}</a></td>
             <td class="text-right">{{ track.num_laptimes }}</td>
             <td class="text-right">{{ track.duration }}</td>
             <td class="text-right">{{ track.num_players }}</td>
