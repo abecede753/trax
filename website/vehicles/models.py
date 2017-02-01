@@ -42,9 +42,17 @@ class Vehicle(models.Model):
     def km_per_h(self):
         if self.cc_millis_per_km != 0:
             return '{:.3f}'.format(
-                (1.0 / self.cc_millis_per_km ) * 1000 * 3600
+                (1.0 / self.cc_millis_per_km  * 1000 * 3600)
             )
-        return '?'
+        return ''
+
+    @property
+    def miles_per_h(self):
+        if self.cc_millis_per_km != 0:
+            return '{:.3f}'.format(
+                (1.0 / self.cc_millis_per_km * 1000 * 3600 * 0.621371)
+            )
+        return ''
 
     def get_absolute_url(self):
         return reverse('vehicle_detail', args=[str(self.pk)])

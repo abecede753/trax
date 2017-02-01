@@ -3,6 +3,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django import forms
+from django.db.models import Count
 from django.http import Http404
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
@@ -84,6 +85,11 @@ def laptime_add(request, lap_pk):
 
 class TrackList(ListView):
     model = Track
+
+    def get_queryset(self):
+        queryset = Track.objects.all().annotate(num_laptimes=Count('laptime'))
+        return queryset
+
 
 
 @method_decorator(login_required, name='dispatch')

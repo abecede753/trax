@@ -18,19 +18,24 @@
         <thead>
         <th>_</th>
         <th>{% trans "Title" %}</th>
+        <th>{% trans "# Laptimes" %}</th>
+        <th>{% trans "Typical laptime" %}</th>
+        <th>{% trans "Players" %}</th>
+        <th>{% trans "Length km" %}</th>
         <th>{% trans "Author" %}</th>
-        <th>{% trans "Link" %}</th>
         </thead>
         <tbody>
         {% for track in object_list %}
           <tr>
             <td>{{ track.get_platform_display }}</td>
             <td><a href="{{ track.get_absolute_url }}">{{ track.title }}</a></td>
+            <td class="text-right">{{ track.num_laptimes }}</td>
+            <td class="text-right">{{ track.duration }}</td>
+            <td class="text-right">{{ track.num_players }}</td>
+            <td class="text-right">{{ track.route_length }}</td>
             <td>{{ track.author }}</td>
-            <td><a href="{{ track.link }}" target="_blank">{{ track.link }}</a></td>
           </tr>
         {% endfor %}
-
         </tbody>
       </table>
     </div>

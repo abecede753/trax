@@ -64,7 +64,6 @@ $(document).ready(function() {
         }
     } );
 
-
     /* tracks table */
     laptimetable = $('#laptimetable').DataTable( {
         ajax: "laptimes.json",
