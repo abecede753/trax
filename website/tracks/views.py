@@ -126,9 +126,12 @@ def laptime_json(request, track_pk):
     for laptime in Laptime.objects.filter(
             track__pk=track_pk,
             recorded__isnull=False).select_related('vehicle', 'player'):
+        classes = laptime.vehicle.classes.all()
+        strclasses = ',' + ','.join([x.name for x in classes]) + ','
         data.append({
             # TODO this is a very ugly hack. pls improve
             'vehicle':'<a href="/v/s/{0}/">{1}</a>'.format( laptime.vehicle.pk, laptime.vehicle),
+            'classes': strclasses,
             'duration': {'display': laptime.duration,
                          'millis': '{:020}'.format(laptime.millis)},
             'name':'<a href="/p/{0}/">{1}</a>'.format( laptime.player.pk, laptime.player),

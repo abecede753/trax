@@ -82,7 +82,9 @@ $(document).ready(function() {
             { data: {
                 _:    "date.display",
                 sort: "date.timestamp"
-            } }
+            } },
+            { data: "classes",
+              visible: false}
         ],
         "deferRender": true
     } );
@@ -102,6 +104,13 @@ $(document).ready(function() {
             tr.addClass('shown');
         }
     } );
+
+    $('#filterbyvehicleclass').on( 'click', 'button', function () {
+        laptimetable.columns(5).search($(this).data("value")).draw();
+    });
+
+
+    /* ################################################################################### */
 
 
 
