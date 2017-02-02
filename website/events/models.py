@@ -35,7 +35,7 @@ class StaggeredStartRace(models.Model):
 #    staggeredplaylist = models.ForeignKey('StaggeredPlaylist', null=True)
 #    number_in_playlist = models.PositiveSmallIntegerField(default=0)
     algorithm = models.CharField(max_length=2, choices=SSR_ALGORITHMS,
-                                 default='SA')
+                                 default='SO')
 
     def __str__(self):
         hosting_date = self.hosting_date and \
