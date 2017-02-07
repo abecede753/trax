@@ -86,7 +86,7 @@
         <dt>{% trans "num players" %}</dt><dd>{{ obj.num_players }}</dd>
         <dt>{% trans "typical lap time" %}</dt><dd>{{ obj.duration }}</dd>
         <dt>{% trans "pit lane" %}</dt><dd>{% if not obj.pit_lane %}NOT {% endif %}available</dd>
-        <dt>{% trans "RSC link" %}</dt><dd><a href="{{ obj.link }}" target="_blank">{{ obj.link }}</a></dd>
+        <dt>{% trans "RSC link" %}</dt><dd>{{ obj.link|urlizetrunc:25|url_target_blank }}</dd>
         <dt>{% trans "classes" %}</dt>
         <dd>{% for foo in obj.car_classes.all %}{{  foo }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
