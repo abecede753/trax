@@ -4,6 +4,10 @@ from django.urls import reverse
 
 class VehicleClass(models.Model):
     name = models.CharField(max_length=256)
+    parent = models.ForeignKey("self", null=True, default=None, blank=True)
+
+    class Meta:
+        ordering=['name', ]
 
     def __str__(self):
         return self.name
@@ -15,6 +19,8 @@ class Vehicle(models.Model):
     cc_laptime_millis = models.IntegerField(null=True)
     cc_millis_per_km = models.IntegerField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering=['name', ]
