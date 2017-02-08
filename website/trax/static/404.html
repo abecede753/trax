@@ -1,10 +1,25 @@
 <html>
-<head>Four Oh Four</head>
+<head><title>Four Oh Four</title>
+  <style>
+    body, html{
+      height:100%;
+    }
+    .c{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height:100%;
+    }
+    .cc { text-align:center;}
+  </style>
+</head>
 <body>
-<p style="text-align:center">
-  <img src="/static/404.png">
-  <hr>
-This page does not exist. You could navigate to the <b><a href="/">start page</a></b>, if you like.
-</p>
+<div class="c"><div>
+  <p class="cc"><img src="/static/404.png"></p>
+  <hr style="width:50%">
+  <p class="cc">
+    This page does not exist. You could navigate<br />
+    to the <b><a href="/">start page</a></b>, if you like.</p>
+</div></div>
 </body>
 </html>
