@@ -109,3 +109,34 @@ class SSRParticipation(models.Model):
         tdobj = self.start_timestamp - datetime.datetime.now(
             tz=self.start_timestamp.tzinfo)
         return int(tdobj.total_seconds() * 1000)
+
+
+class PitAssistant(models.Model):
+    title = models.CharField(max_length=256)
+    description = models.TextField(default='')
+    created = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=1, choices=RACE_STATES.choices,
+                              default=RACE_STATES.planning)
+    num_pitstops = models.PositiveSmallIntegerField(default=1)
+    duration_seconds = models.PositiveSmallIntegerField(default=30)
+    start_timestamp = models.DateTimeField(null=True)
+    ingame_start_at_seconds = models.PositiveIntegerField(null=True)
+
+
+class PitAParticipation(models.Model):
+    player = models.ForeignKey("players.Player")
+    pitassistant = models.ForeignKey('events.PitAssistant')
+
+
+class PitAPitstop(models.Model):
+    pitaparticipation = models.ForeignKey('events.PitAParticipation')
+    start_timestamp = models.DateTimeField(null=True, default=None)
+    end_timestamp = models.DateTimeField(null=True, default=None)
+
+
+class PitLogEntry(models.Model):
+    pitassistant = models.ForeignKey('events.PitAssistant')
+    ingameseconds_created = models.IntegerField()
+    text = models.CharField(max_length=1024, default='', blank=True)
+
+
