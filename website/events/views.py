@@ -65,6 +65,9 @@ class StaggeredStartRaceDetail(DetailView):
         if obj.status == RACE_STATES.planning:
             obj.status = RACE_STATES.initializing
             obj.save()
+        SSRParticipation.objects.get_or_create(player=self.request.user,
+                                               staggeredstartrace=obj)
+        obj.update_json()
         if self.request.GET.get('start_in_secs'):
 
             nowplus = random.randrange(0, 6)
@@ -155,6 +158,10 @@ class StaggeredStartRaceDetail(DetailView):
 
 def participants_list(request, pk=None):
     ssr = get_object_or_404(StaggeredStartRace, pk=pk)
+    if request.user.pk not in ssr.ssrparticipation_set.all().values_list('player__id', flat=True):
+        print("usernot in")
+    else:
+        print("userIN")
     result = []
     for lt in ssr.ssrparticipation_set.all():
         vehicle = str(lt.vehicle)
@@ -182,7 +189,6 @@ def enlist(request, pk, vehicle_pk):
                          ssr.track.route_length_km *
                          multiplier)
 
-
     defaults = {'vehicle': vehicle,
                 'estimated_laptime': estimated_laptime}
     participation, created = SSRParticipation.objects.get_or_create(
@@ -194,6 +200,14 @@ def enlist(request, pk, vehicle_pk):
     ssr.update_json()
     return JsonResponse({'result': 'OK'})
 
+
+@login_required
+def announce(request, pk):
+    ssr = get_object_or_404(StaggeredStartRace, pk=pk)
+    SSRParticipation.objects.get_or_create(
+        player=request.user, staggeredstartrace=ssr)
+    ssr.update_json()
+    return JsonResponse({'result': 'OK'})
 
 @login_required
 def check_for_newer_ssr(request, pk):
@@ -212,9 +226,13 @@ class StaggeredStartRaceStatus(DetailView):
         obj = self.get_object()
         players = []
         for s in obj.ssrparticipation_set.all().order_by('player__username'):
+            if s.vehicle:
+                vehicle_name = s.vehicle.name
+            else:
+                vehicle_name = ''
             players.append({'username': s.player.username,
                             'pk': s.player.pk,
-                            'vehicle': s.vehicle.name,
+                            'vehicle': vehicle_name,
                             'start_time': 0})
         return JsonResponse({'result': self.get_object().status,
                              'players': s})

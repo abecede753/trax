@@ -47,32 +47,31 @@
 
 {% block trax_extra_script %}
   <script>
-      var laptime_to_delete;
-      function confirm(link) {
-          laptime_to_delete = link;
-          BootstrapDialog.confirm({
-              title: 'Warning',
-              message: 'Delete this lap time entry? You can not undo this action.',
-              type: BootstrapDialog.TYPE_WARNING,
-              closable: true,
-              draggable: true,
-              btnCancelLabel: "No, don't delete it!",
-              btnOKLabel: "Yes, delete the entry!",
-              btnOKClass: 'btn-warning',
-              callback: function (result) {
-                  // result will be true if button was click, while it will be false if users close the dialog directly.
-                  if (result) {
-                      $.ajax({
-                          url: "/t/l/" + laptime_to_delete + "/delete/",
-                          success: function(data) {
-                              location.reload();
-                          }
-                      });
-                  }
+    var laptime_to_delete;
+    function confirm(link) {
+      laptime_to_delete = link;
+      BootstrapDialog.confirm({
+        title: 'Warning',
+        message: 'Delete this lap time entry? You can not undo this action.',
+        type: BootstrapDialog.TYPE_WARNING,
+        closable: true,
+        draggable: true,
+        btnCancelLabel: "No, don't delete it!",
+        btnOKLabel: "Yes, delete the entry!",
+        btnOKClass: 'btn-warning',
+        callback: function (result) {
+          // result will be true if button was click, while it will be false if users close the dialog directly.
+          if (result) {
+            $.ajax({
+              url: "/t/l/" + laptime_to_delete + "/delete/",
+              success: function(data) {
+                location.reload();
               }
-          });
-      }
+            });
+          }
+        }
+      });
+    }
 
   </script>
-
 {% endblock %}

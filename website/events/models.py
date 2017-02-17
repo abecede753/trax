@@ -59,14 +59,19 @@ class StaggeredStartRace(models.Model):
         """saves the current whole json state for faster access"""
         players = []
         current_index = -1
+        already_seen_a_vehicle = False
         racetime = 0
 
         for s in self.ssrparticipation_set.all().order_by('-estimated_laptime'):
             current_index += 1
-            if current_index == 0:
-                racetime = s.estimated_laptime * self.laps
+            estimated_laptime = 0
+            if s.estimated_laptime:
+                estimated_laptime = s.estimated_laptime
+            if not already_seen_a_vehicle and estimated_laptime:
+                already_seen_a_vehicle = True
+                racetime = estimated_laptime * self.laps
             start_after_first = datetime.timedelta(
-                milliseconds=racetime - (s.estimated_laptime * self.laps))
+                milliseconds=racetime - (estimated_laptime * self.laps))
             minutes = int(start_after_first.seconds / 60)
             seconds = int(start_after_first.seconds % 60)
             millis = int(start_after_first.microseconds / 1000)
@@ -74,15 +79,14 @@ class StaggeredStartRace(models.Model):
                 minutes, seconds, millis)
             newdict = {'username': s.player.username,
                             'pk': s.player.pk,
-                            'vehicle': s.vehicle.name,
-                            'estimated_laptime': s.estimated_laptime,
+                            'vehicle': s.vehicle and s.vehicle.name or '',
+                            'estimated_laptime': estimated_laptime,
                             'start_after_first': startafterstr,
                             }
             if s.start_timestamp:
                 newdict['timestamp'] = int(s.start_timestamp.timestamp()*1000)
             players.append(newdict)
-        dct = {'status': self.status,
-                             'players': players}
+        dct = {'status': self.status, 'players': players}
         filename = os.path.join(
             settings.STATIC_ROOT, 'ssr',
             '{0}.json'.format(self.pk))
@@ -92,7 +96,7 @@ class StaggeredStartRace(models.Model):
 
 class SSRParticipation(models.Model):
     player = models.ForeignKey("players.Player")
-    vehicle = models.ForeignKey("vehicles.Vehicle")
+    vehicle = models.ForeignKey("vehicles.Vehicle", null=True, blank=True)
     staggeredstartrace = models.ForeignKey('StaggeredStartRace')
     estimated_laptime = models.IntegerField(
         null=True, help_text='according to calculations the estimated '
