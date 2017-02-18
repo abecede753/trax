@@ -3,23 +3,23 @@ var vehicletable;
 var vehiclelaptimetable;
 
 function format_laptimestableinfo ( d ) {
-    // `d` is the original data object for the row
-    var strg = '';
-    strg += '<table cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;">';
-    if (d.link !== null && d.link !== '') {
-        strg += '<tr>'+
-            '<td>Link:</td>'+
-            '<td><a href="'+d.link+'" target="_blank">' + d.link + '</a></td>'+
-        '</tr>';
-    }
-    if (d.comment !== null && d.comment !== '') {
-        strg += '<tr>' +
-            '<td>Comment:</td>' +
-            '<td>' + d.comment + '</td>' +
-            '</tr>';
-    }
-    strg += '</table>';
-    return strg;
+  // `d` is the original data object for the row
+  var strg = '';
+  strg += '<table cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;">';
+  if (d.link !== null && d.link !== '') {
+    strg += '<tr>'+
+      '<td>Link:</td>'+
+      '<td><a href="'+d.link+'" target="_blank">' + d.link + '</a></td>'+
+      '</tr>';
+  }
+  if (d.comment !== null && d.comment !== '') {
+    strg += '<tr>' +
+      '<td>Comment:</td>' +
+      '<td>' + d.comment + '</td>' +
+      '</tr>';
+  }
+  strg += '</table>';
+  return strg;
 }
 
 $(document).ready(function() {
@@ -43,135 +43,138 @@ $(document).ready(function() {
 
 
 
-    /* vehicles table */
-    vehicletable = $('#vehicletable').DataTable( {
-        // ajax: "laptimes.json",
-        order: [[ 0, "asc" ]],
-        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
-        "initComplete": function(settings, json) {
-            $(".dataTables_filter input").select().focus();
-        }
-    } );
+  /* vehicles table */
+  vehicletable = $('#vehicletable').DataTable( {
+    // ajax: "laptimes.json",
+    order: [[ 0, "asc" ]],
+    lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+    "initComplete": function(settings, json) {
+      $(".dataTables_filter input").select().focus();
+    }
+  } );
 
-    // Order by the grouping
-    $('#vehicletable tbody').on( 'click', 'tr.group', function () {
-        var currentOrder = table.order()[0];
-        if ( currentOrder[0] === 1 && currentOrder[1] === 'asc' ) {
-            table.order( [ 1, 'desc' ] ).draw();
-        }
-        else {
-            table.order( [ 1, 'asc' ] ).draw();
-        }
-    } );
+  // Order by the grouping
+  $('#vehicletable tbody').on( 'click', 'tr.group', function () {
+    var currentOrder = table.order()[0];
+    if ( currentOrder[0] === 1 && currentOrder[1] === 'asc' ) {
+      table.order( [ 1, 'desc' ] ).draw();
+    }
+    else {
+      table.order( [ 1, 'asc' ] ).draw();
+    }
+  } );
 
-    /* tracks table */
-    laptimetable = $('#laptimetable').DataTable( {
-        ajax: "laptimes.json",
-        columns: [
-            { className:      "details-control text-center",
-              orderable:      false,
-              data:           null,
-              defaultContent: "<span role=\"button\" class=\"glyphicon glyphicon-info-sign\"></span>"
-            },
-            { data: "vehicle" },
-            { data: {
-                _: "duration.display",
-                sort: "duration.millis"
-            } },
-            { data: "name" },
-            { data: {
-                _:    "date.display",
-                sort: "date.timestamp"
-            } },
-            { data: "classes",
-              visible: false}
-        ],
-        "deferRender": true
-    } );
-    // Add event listener to laptimetable for opening and closing details
-    $('#laptimetable tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = laptimetable.row( tr );
+  /* tracks table */
+  laptimetable = $('#laptimetable').DataTable( {
+    ajax: "laptimes.json",
+    columns: [
+      { className:      "details-control text-center",
+        orderable:      false,
+        data:           null,
+        defaultContent: "<span role=\"button\" class=\"glyphicon glyphicon-info-sign\"></span>"
+      },
+      { data: "vehicle" },
+      { data: {
+        _: "duration.display",
+        sort: "duration.millis"
+      } },
+      { data: "name" },
+      { data: {
+        _:    "date.display",
+        sort: "date.timestamp"
+      } },
+      { data: "classes",
+        visible: false}
+    ],
+    "deferRender": true
+  } );
+  // Add event listener to laptimetable for opening and closing details
+  $('#laptimetable tbody').on('click', 'td.details-control', function () {
+    var tr = $(this).closest('tr');
+    var row = laptimetable.row( tr );
 
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            row.child( format_laptimestableinfo(row.data()) ).show();
-            tr.addClass('shown');
-        }
-    } );
+    if ( row.child.isShown() ) {
+      // This row is already open - close it
+      row.child.hide();
+      tr.removeClass('shown');
+    }
+    else {
+      // Open this row
+      row.child( format_laptimestableinfo(row.data()) ).show();
+      tr.addClass('shown');
+    }
+  } );
 
-    $('#filterbyvehicleclass').on( 'click', 'button', function () {
-        laptimetable.columns(5).search($(this).data("value")).draw();
-    });
-
-
-    /* ################################################################################### */
+  $('#filterbyvehicleclass').on( 'click', 'button', function () {
+    laptimetable.columns(5).search($(this).data("value")).draw();
+  });
 
 
-
-    /* vehicle laptime table */
-    vehiclelaptimetable = $('#vehiclelaptimetable').DataTable( {
-        // ajax: "laptimes.json",
-        order: [[ 0, "asc" ]],
-        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
-    } );
-
-    /* main tracks table */
-    tracktable = $('#tracktable').DataTable( {
-        // ajax: "laptimes.json",
-        order: [[ 1, "asc" ]],
-        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
-        "initComplete": function(settings, json) {
-            $(".dataTables_filter input").select().focus();
-        }
-    } );
-
-    /* player laptime table */
-    playerlaptimetable = $('#playerlaptimetable').DataTable( {
-        // ajax: "laptimes.json",
-        order: [[ 1, "asc" ]],
-        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
-    } );
-
-    /* player laptime table */
-    playerstable = $('#playerstable').DataTable( {
-        // ajax: "laptimes.json",
-        order: [[ 1, "asc" ]],
-        lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
-    } );
-
-    /* animate login/register */
-    $('#loginreg').on('fadeout', function () {
-        $(this).fadeTo( "slow", 0.1, function(){ $(this).trigger('fadein'); });
-    });
-    $('#loginreg').on('fadein', function () {
-        $(this).fadeTo( "slow", 1, function(){ $(this).delay(500).trigger('fadeout'); });
-    });
-    $('#loginreg').trigger('fadeout');
-
-    /* various settings */
-    $('.combobox').combobox({bsVersion: '3'});
+  /* ################################################################################### */
 
 
-    /* if we have a datatable, focus the filter field */
+
+  /* vehicle laptime table */
+  vehiclelaptimetable = $('#vehiclelaptimetable').DataTable( {
+    // ajax: "laptimes.json",
+    order: [[ 0, "asc" ]],
+    lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+  } );
+
+  /* main tracks table */
+  tracktable = $('#tracktable').DataTable( {
+    // ajax: "laptimes.json",
+    order: [[ 1, "asc" ]],
+    lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+    "initComplete": function(settings, json) {
+      $(".dataTables_filter input").select().focus();
+    }
+  } );
+
+  /* player laptime table */
+  playerlaptimetable = $('#playerlaptimetable').DataTable( {
+    // ajax: "laptimes.json",
+    order: [[ 1, "asc" ]],
+    lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+  } );
+
+  /* player laptime table */
+  playerstable = $('#playerstable').DataTable( {
+    // ajax: "laptimes.json",
+    order: [[ 1, "asc" ]],
+    lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
+  } );
+
+  /* animate login/register */
+  $('#loginreg').on('fadeout', function () {
+    $(this).fadeTo( "slow", 0.1, function(){ $(this).trigger('fadein'); });
+  });
+  $('#loginreg').on('fadein', function () {
+    $(this).fadeTo( "slow", 1, function(){ $(this).delay(500).trigger('fadeout'); });
+  });
+  $('#loginreg').trigger('fadeout');
+
+  /* various settings */
+  $('.combobox').combobox({bsVersion: '3'});
+
+
+  /* if we have a datatable, focus the filter field */
+
+  $('[data-toggle="tooltip"]').tooltip();
+
 });
 
 
 function convert_from_laptime_to_cc_millis() {
-    "use strict";
-    var value = $("#calc_laptime").val();
-    if (value.indexOf(":") > -1) {
-        var items = value.split(":");
-        var millis = parseFloat(items[0]) * 60 + parseFloat(items[1]);
-    } else {
-        var millis = parseFloat(value);
-    }
-    millis = millis / 2.59 * 1000.0;
-    $("#calc_millis").val(Math.round(millis));
+  "use strict";
+  var value = $("#calc_laptime").val();
+  if (value.indexOf(":") > -1) {
+    var items = value.split(":");
+    var millis = parseFloat(items[0]) * 60 + parseFloat(items[1]);
+  } else {
+    var millis = parseFloat(value);
+  }
+  millis = millis / 2.59 * 1000.0;
+  $("#calc_millis").val(Math.round(millis));
 
 }

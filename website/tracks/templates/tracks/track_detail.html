@@ -73,6 +73,7 @@
       <div class="progress">
         {% for terrain in obj.terrains %}
           <div
+              data-toggle="tooltip"
               title="{{ terrain.perc }}% {{ terrain.type }}"
               class="progress-bar terrain_{{ terrain.class }}"
               style="width: {{ terrain.perc }}%">
