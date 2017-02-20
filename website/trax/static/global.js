@@ -162,6 +162,12 @@ $(document).ready(function() {
 
   $('[data-toggle="tooltip"]').tooltip();
 
+  /* submit any form only once */
+  $('form').submit(function(){
+    $('button[type=submit]', this).attr('disabled', 'disabled');
+  });
+
+
 });
 
 

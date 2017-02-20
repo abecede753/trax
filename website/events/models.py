@@ -140,7 +140,6 @@ class PitAPitstop(models.Model):
 
 class PitLogEntry(models.Model):
     pitassistant = models.ForeignKey('events.PitAssistant')
+    pitapitstop = models.ForeignKey("PitAPitstop", null=True, blank=True)
     ingameseconds_created = models.IntegerField()
     text = models.CharField(max_length=1024, default='', blank=True)
-
-

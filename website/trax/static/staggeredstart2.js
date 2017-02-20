@@ -183,6 +183,8 @@ $(window).load(function() {
   $("#startraceform").submit(function(event) {
 
       /* stop form from submitting normally */
+    $("#submitstartraceform").attr('disabled', 'disabled');
+    $("#submitstartraceform").text('Please wait...');
     event.preventDefault();
 
       /* get some values from elements on the page: */
