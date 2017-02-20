@@ -83,10 +83,10 @@
         <th class="text-right">{% trans "length km" %}</th>
         </thead>
         <tbody>
-        {% for foo in tracks %}
+        {% for track in tracks %}
           <tr>
-            <td>{{ foo.get_platform_display }}</td>
-            <td><a href="{{ foo.get_absolute_url }}">{{ foo.title }}</a>
+            <td>{{ track.get_platform_display }}</td>
+            <td><a href="{{ track.get_absolute_url }}">{{ track.title }}</a>
               {% if track.video %}
                 <span class="glyphicon glyphicon-film"></span>
               {% endif %}
@@ -94,9 +94,9 @@
                 <span class="glyphicon glyphicon-picture"></span>
               {% endif %}
             </td>
-            <td>{{ foo.author }}</td>
-            <td class="text-right">{{ foo.num_players }}</td>
-            <td class="text-right">{{ foo.route_length }}</td>
+            <td>{{ track.author }}</td>
+            <td class="text-right">{{ track.num_players }}</td>
+            <td class="text-right">{{ track.route_length }}</td>
           </tr>
         {% endfor %}
 
