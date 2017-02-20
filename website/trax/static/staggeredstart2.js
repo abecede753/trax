@@ -13,10 +13,6 @@ function audio_loaded() {
   $("#testsoundbtn").show();
 }
 
-//var audio = new Audio();
-//audio.addEventListener("canplaythrough", audio_loaded, false);
-//audio.src = bell_url;
-
 function launchApp(l) {
   LOG("AUDIO JQUERY LOADED???");
 }
@@ -41,10 +37,6 @@ function enlist_car(btn) {
     });
 }
 
-function greenlight(pk) {
-  LOG("imgracer" + pk + " is now green?");
-//    $("#imgracer" + pk).attr("src", "/static/green_light.png");
-}
 function usergreenlight() {
   bellsound.play();
   $("body")

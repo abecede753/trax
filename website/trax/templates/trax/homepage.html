@@ -86,7 +86,14 @@
         {% for foo in tracks %}
           <tr>
             <td>{{ foo.get_platform_display }}</td>
-            <td><a href="{{ foo.get_absolute_url }}">{{ foo.title }}</a></td>
+            <td><a href="{{ foo.get_absolute_url }}">{{ foo.title }}</a>
+              {% if track.video %}
+                <span class="glyphicon glyphicon-film"></span>
+              {% endif %}
+              {% if track.image %}
+                <span class="glyphicon glyphicon-picture"></span>
+              {% endif %}
+            </td>
             <td>{{ foo.author }}</td>
             <td class="text-right">{{ foo.num_players }}</td>
             <td class="text-right">{{ foo.route_length }}</td>
