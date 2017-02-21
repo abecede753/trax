@@ -33,20 +33,11 @@ class Homepage(TemplateView):
         return context
 
     def get_top_laps(self, num_items=5):
-        l = Laptime.objects.filter(
-            vehicle__classes__name__in=('Sport', 'Super', 'Muscke')).order_by(
-            'millis_per_km')
-        tracks = {}
-        for x in l:
-            for cl in x.vehicle.classes.all():
-                current_time = x.millis
-                key = (x.track.pk, cl.pk)
-                if (not tracks.get(key)) or (
-                    current_time < tracks.get(key).millis):
-                    tracks[key] = x
-        ordered = OrderedDict(
-            sorted(tracks.items(), key=lambda t: t[1].millis_per_km))
-        return list(tracks.values())[:num_items]
+        l = Laptime.objects.filter(link__isnull=False).exclude(link='')\
+            .select_related("vehicle")\
+            .extra(select={'quickness': 'millis_per_km*1.0/cc_millis_per_km'})\
+            .order_by('quickness')[:10]
+        return l
 
 
 
