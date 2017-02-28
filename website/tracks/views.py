@@ -70,8 +70,8 @@ def laptime_add(request, lap_pk):
                 'I did not understand your laptime input. Please use the format MM:SS.milli')
             return HttpResponseRedirect(reverse('track_detail', args=(t.pk,)))
 
-        l.millis = millis
-        l.millis_per_km = millis / t.route_length_km
+        l.millis = round(millis)
+        l.millis_per_km = round(millis / t.route_length_km)
         l.comment = request.POST.get('comment', '')
         l.link = request.POST.get('anylink', '')
         yy,mm,dd = request.POST.get('recorded').split('-')
