@@ -1,5 +1,6 @@
 import random
 import datetime
+import os
 
 from django.conf import settings
 from django.contrib import messages
@@ -17,7 +18,7 @@ from django.views.generic import CreateView, DetailView
 from trax.choices import RACE_STATES
 from tracks.models import Laptime
 from vehicles.models import Vehicle
-from .models import StaggeredStartRace, SSRParticipation
+from .models import StaggeredStartRace, SSRParticipation, PitAssistant
 from .utils import get_user_car_list
 
 
@@ -240,3 +241,34 @@ class StaggeredStartRaceStatus(DetailView):
     def get_players(self):
         s = self.get_object()
         return s.ssrparticipation_set.all()[0].player.username
+
+
+class PitACreateForm(forms.ModelForm):
+    class Meta:
+        model = PitAssistant
+        fields = ['title', 'description', 'pitstop_seconds']
+
+@method_decorator(login_required, name='dispatch')
+class PitAssistantCreator(CreateView):
+    model = PitAssistant
+    form_class = PitACreateForm
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        form.instance.save()
+        self.init_filesystem()
+        return super().form_valid(form)
+
+    def init_filesystem(self):
+        dirname = os.abspath(
+            os.path.join(
+                settings.STATIC_ROOT, 'pitassistant',
+                '{0}'.format(self.pk)
+            ))
+        os.makedirs(dirname, mode=0o755, exist_ok=True)
+
+
+@method_decorator(login_required, name='dispatch')
+class PitAssistantDetail(DetailView):
+    model = PitAssistant
+

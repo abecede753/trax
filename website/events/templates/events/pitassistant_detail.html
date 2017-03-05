@@ -1,0 +1,39 @@
+{% extends "events/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load compress %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block title %}{{ object.track }} {% endblock %}
+{% block content %}
+
+  <h1>{{ object.title }} <small> (owner: {{ object.owner }})</small></h1>
+
+  <div id="loading" class="row text-center">
+    <img src="/static/infinity.gif"><br>
+    <small>Loading...</small>
+    <img src="/static/green_light.png" class="hide" alt=""/>
+    <img src="/static/red_light.png" class="hide" alt=""/>
+  </div>
+  {% include "events/pita_planning.html" %}
+  {% include "events/pita_initializing.html" %}
+  {% include "events/pita_running.html" %}
+  {% include "events/pita_finished.html" %}
+{% endblock %}
+
+{% block trax_extra_script %}
+  <script>
+  var EVENT = {
+    "event_status":"{{ object.status }}",
+    "json_root":"{{ object.json_root }}",
+    "is_owner":{% if request.user.pk == object.owner.pk %}true{% else %}false{% endif %},
+    "my_pk":"{{ request.user.pk }}"
+  }
+  </script>
+  {% compress js %}
+    <script src="/static/mespeak/mespeak.js"></script>
+    <script src="{% static 'serverdate2.js' %}"></script>
+    <script src="{% static 'pitassistant.js' %}"></script>
+  {% endcompress %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "events/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load compress %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block title %}{{ object.track }} {% endblock %}
+{% block content %}
+
+
+  <h1>Create a new PitAssistant for an event</h1>
+  <form action="." method="post">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  <button type="submit">Create this now!</button>
+  </form>
+
+{% endblock %}
+{% block trax_extra_script %}
+  {% compress js %}
+    <script src="/static/mespeak/mespeak.js"></script>
+    <script src="{% static 'serverdate2.js' %}"></script>
+    <script src="{% static 'staggeredstart2.js' %}"></script>
+  {% endcompress %}
+{% endblock %}

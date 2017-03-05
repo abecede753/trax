@@ -41,3 +41,19 @@ class _Rs:
 
 
 RACE_STATES = _Rs()
+
+class _Ple:
+    pitstop="p"
+    comment="c"
+    yellowflag="y"
+    greenflag="g"
+
+    def __init__(self):
+        self.choices = (
+            (self.pitstop, _('pitstop')),
+            (self.comment, _('comment')),
+            (self.yellowflag, _('yellow flag')),
+            (self.greenflag, _('green flag')),
+        )
+
+PITLOGENTRIES = _Ple()

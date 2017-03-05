@@ -1,7 +1,8 @@
 from django.conf.urls import url
 from randomizer import views
 from .views import StaggeredStartRaceCreator, StaggeredStartRaceDetail, \
-    participants_list, enlist, StaggeredStartRaceStatus, check_for_newer_ssr
+    participants_list, enlist, StaggeredStartRaceStatus, check_for_newer_ssr, \
+    PitAssistantCreator, PitAssistantDetail
 
 urlpatterns = [
     url(r'^s/add/$', StaggeredStartRaceCreator.as_view(),
@@ -20,4 +21,8 @@ urlpatterns = [
     url(r'^s/(?P<pk>\d+)/check_for_newer/$',
         check_for_newer_ssr,
         name='check_for_newer_ssr'),
+    url(r'^p/add/$', PitAssistantCreator.as_view(),
+        name='pita_add'),
+    url(r'^p/(?P<pk>\d+)/$', PitAssistantDetail.as_view(),
+        name='pita_detail'),
 ]

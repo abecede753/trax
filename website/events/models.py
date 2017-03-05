@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 # from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from trax.choices import PLATFORM_CHOICES, RACE_STATES, SSR_ALGORITHMS
+from trax.choices import RACE_STATES, SSR_ALGORITHMS, PITLOGENTRIES
 
 #class StaggeredPlaylist(models.Model):
 #    title = models.CharField(max_length=256)
@@ -109,7 +109,6 @@ class SSRParticipation(models.Model):
 
     @property
     def start_in_millis(self):
-        # tdobj = self.start_timestamp - now()
         tdobj = self.start_timestamp - datetime.datetime.now(
             tz=self.start_timestamp.tzinfo)
         return int(tdobj.total_seconds() * 1000)
@@ -117,14 +116,23 @@ class SSRParticipation(models.Model):
 
 class PitAssistant(models.Model):
     title = models.CharField(max_length=256)
-    description = models.TextField(default='')
+    description = models.TextField(default='', blank=True)
     created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=RACE_STATES.choices,
                               default=RACE_STATES.planning)
-    num_pitstops = models.PositiveSmallIntegerField(default=1)
-    duration_seconds = models.PositiveSmallIntegerField(default=30)
+    pitstop_seconds = models.PositiveSmallIntegerField(default=30)
     start_timestamp = models.DateTimeField(null=True)
-    ingame_start_at_seconds = models.PositiveIntegerField(null=True)
+    owner = models.ForeignKey("players.Player", null=True)
+
+    def get_absolute_url(self):
+        return reverse_lazy('pita_detail',
+                            kwargs={'pk': self.pk})
+
+    @property
+    def json_root(self):
+        return os.path.join(
+            settings.STATIC_URL, 'pitassistant',
+            '{0}/'.format(self.pk))
 
 
 class PitAParticipation(models.Model):
@@ -132,14 +140,10 @@ class PitAParticipation(models.Model):
     pitassistant = models.ForeignKey('events.PitAssistant')
 
 
-class PitAPitstop(models.Model):
-    pitaparticipation = models.ForeignKey('events.PitAParticipation')
-    start_timestamp = models.DateTimeField(null=True, default=None)
-    end_timestamp = models.DateTimeField(null=True, default=None)
-
-
 class PitLogEntry(models.Model):
     pitassistant = models.ForeignKey('events.PitAssistant')
-    pitapitstop = models.ForeignKey("PitAPitstop", null=True, blank=True)
     ingameseconds_created = models.IntegerField()
     text = models.CharField(max_length=1024, default='', blank=True)
+    entrytype = models.CharField(max_length=1, choices=PITLOGENTRIES.choices,
+                                 default=PITLOGENTRIES.pitstop)
+    for_player = models.ForeignKey("players.Player", null=True)
