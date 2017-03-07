@@ -1,0 +1,28 @@
+{% extends "tracks/track_base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load bootstrap3 %}
+{% load embed_video_tags %}{% load i18n %}
+{% load trax_extras %}
+
+{% block title %}{{ obj.title }}{% endblock %}
+{% block content %}
+
+  <div class="row">
+  <div class="col-md-12">
+    <h1>
+      TEPCOTT Qualification Track <small>{{ obj.title }}</small>
+    </h1>
+    <p>Enter your fastest lap times in a sports car to start in one of the top divisions!
+    For further details see the <a href="http://nodo.freeforums.net/thread/10213" target="_blank" class="btn btn-info">
+        <span class="glyphicon glyphicon-road"></span> event forum page</a></p>
+  </div>
+
+  </div>
+  <div class="row">
+    <div class="col-md-8 ">
+      xxxxxtable
+    </div>
+    <div class="col-md-4">{% include "tracks/add_laptime_form.html" %}</div>
+  </div>
+{% endblock %}

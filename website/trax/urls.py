@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 
 from . import views
+from tracks import views as tracks_views
 
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
     url(r'^robots.txt$', TemplateView.as_view(template_name='trax/imprint.html'),
                       name="DEVELOPMENTrobots.txt"),
     url(r'^miniutil/now$', views.timestamp_dev, name="DEVELOPMENTnow"),
+#    url(r'^epsilon/$', tracks_views.epsilon_detail, name="epsilon_detail"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

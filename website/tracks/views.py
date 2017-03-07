@@ -178,3 +178,23 @@ def laptime_delete(request, lap_pk):
         raise Http404
     laptime.delete()
     return JsonResponse({'data':'ok'})
+
+
+def epsilon_detail(request):
+    t = Track.objects.get(pk=117)
+    todaystring = datetime.date.today().strftime('%Y-%m-%d')
+    ssrform = SSRCreateForm(initial={'track': t})
+
+    if not t.creator:
+        creator = None
+    else:
+        creator = t.creator.username
+    can_edit = (request.user.username == creator) or \
+               request.user.is_staff
+    return render(
+        request, 'tracks/epsilon_detail.html',
+        context={'obj': t,
+                 'form': LaptimeAddForm(initial={'recorded': todaystring}),
+                 'can_edit': can_edit,
+                 'ssrform': ssrform})
+

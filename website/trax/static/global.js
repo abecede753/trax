@@ -67,6 +67,7 @@ $(document).ready(function() {
   /* tracks table */
   laptimetable = $('#laptimetable').DataTable( {
     ajax: "laptimes.json",
+    order: [[ 2, "asc" ]],
     columns: [
       { className:      "details-control text-center",
         orderable:      false,

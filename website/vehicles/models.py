@@ -16,7 +16,7 @@ class VehicleClass(models.Model):
 class Vehicle(models.Model):
     name = models.CharField(max_length=256)
     classes = models.ManyToManyField("vehicles.VehicleClass")
-    cc_laptime_millis = models.IntegerField(null=True)
+    cc_laptime_millis = models.IntegerField(null=True, blank=True)
     cc_millis_per_km = models.IntegerField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
