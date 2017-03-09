@@ -14,8 +14,6 @@ PLATFORM_CHOICES = (
     ('pc', _('PC')),
     ('ps4', _('PS 4')),
     ('xb1', _('XBox One')),
-    ('ps3', _('PS 3')),
-    ('xb3', _('XBox 360')),
 )
 
 SSR_ALGORITHMS = (

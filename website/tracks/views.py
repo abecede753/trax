@@ -1,4 +1,5 @@
 import datetime
+from collections import OrderedDict
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -81,7 +82,9 @@ def laptime_add(request, lap_pk):
         l.save()
         messages.add_message(request, messages.SUCCESS,
                              "Okay, your laptime was saved.")
-    return HttpResponseRedirect(reverse('track_detail', args=(t.pk,)))
+    redir = request.environ.get("HTTP_REFERER",
+                                reverse('track_detail', args=(t.pk,)))
+    return HttpResponseRedirect(redir)
 
 
 class TrackList(ListView):
@@ -183,18 +186,37 @@ def laptime_delete(request, lap_pk):
 def epsilon_detail(request):
     t = Track.objects.get(pk=117)
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
-    ssrform = SSRCreateForm(initial={'track': t})
 
     if not t.creator:
         creator = None
     else:
         creator = t.creator.username
-    can_edit = (request.user.username == creator) or \
-               request.user.is_staff
+
+    ls = Laptime.objects.filter(
+        track__id=117, link__isnull=False).exclude(
+        link='').order_by('millis')
+    players = {}
+    for l in ls:
+        if players.get(l.player.username):
+            players[l.player.username].append(l)
+        else:
+            players[l.player.username] = [l, ]
+    od = list(OrderedDict(sorted(players.items(), key=lambda t: t[1][0].millis)).items())
+
+    divisions = []
+    for x in (0, 15, 30, 45):
+        if len(od) >= x:
+            divisions.append(od[x:x + 15])
+        else:
+            divisions.append([])
+    if len(od) > 60:
+        divisions.append(od[60:])
+    else:
+        divisions.append([])
+
     return render(
         request, 'tracks/epsilon_detail.html',
         context={'obj': t,
                  'form': LaptimeAddForm(initial={'recorded': todaystring}),
-                 'can_edit': can_edit,
-                 'ssrform': ssrform})
+                 'divisions': divisions})
 

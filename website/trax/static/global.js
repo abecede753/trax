@@ -168,9 +168,25 @@ $(document).ready(function() {
     $('button[type=submit]', this).attr('disabled', 'disabled');
   });
 
+  show_platforms();
+
+
 
 });
 
+function show_platforms() {
+  var currents = Cookies.get('traxpf');
+  for (let pf of ['pc', 'xb1', 'ps4']) {
+    if (currents.indexOf(pf) != -1) { $('#platform_' + pf).css('opacity', '1.0'); }
+  }
+}
+function toggle_platform(p) {
+  var currents = Cookies.get('traxpf');
+  Cookies.set('traxpf', 'pc', { expires: 365 });
+// Cookies.get('name'); // => 'value'
+// Cookies.remove('name');
+
+}
 
 function convert_from_laptime_to_cc_millis() {
   "use strict";

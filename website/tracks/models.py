@@ -1,5 +1,6 @@
 from easy_thumbnails.fields import ThumbnailerImageField
-
+# from threadlocals.threadlocals import get_current_request
+from threadlocals.threadlocals import get_current_request
 from trax.choices import GAME_MODES, ROUTE_TYPES, PLATFORM_CHOICES
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -9,7 +10,30 @@ from embed_video.fields import EmbedVideoField
 from trax.utils import get_object_by_string
 
 
+class TrackQueryset(models.query.QuerySet):
+    def my(self):
+        request = get_current_request()
+        if request and request.user.is_authenticated():
+            return self.filter(creator=request.user)
+        return self.all()
+
+
+class TrackManager(models.Manager):
+    def get_queryset(self):
+        qs = TrackQueryset(self.model, using=self._db)
+        request = get_current_request()
+        if request:
+            platforms = request.COOKIES.get('traxpf', 'pc ps4 xb1')
+            qs = qs.filter(platform__in=platforms.split())
+        return qs
+
+    def my(self):
+        return self.get_queryset().my()
+
+
 class Track(models.Model):
+    objects = TrackManager()
+
     title = models.CharField(unique=True, max_length=256)
     description = models.TextField(blank=True, default='')
     author = models.CharField(max_length=64, default='', null=False)

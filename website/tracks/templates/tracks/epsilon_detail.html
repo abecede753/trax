@@ -1,6 +1,7 @@
 {% extends "tracks/track_base.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load widget_tweaks %}
 {% load bootstrap3 %}
 {% load embed_video_tags %}{% load i18n %}
 {% load trax_extras %}
@@ -8,21 +9,73 @@
 {% block title %}{{ obj.title }}{% endblock %}
 {% block content %}
 
-  <div class="row">
-  <div class="col-md-12">
-    <h1>
-      TEPCOTT Qualification Track <small>{{ obj.title }}</small>
-    </h1>
-    <p>Enter your fastest lap times in a sports car to start in one of the top divisions!
-    For further details see the <a href="http://nodo.freeforums.net/thread/10213" target="_blank" class="btn btn-info">
-        <span class="glyphicon glyphicon-road"></span> event forum page</a></p>
+  <div id="epsilonaddlaptime" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-hidden="true">&times;</button>
+        </div>
+        {% include "tracks/add_laptime_form.html" %}
+      </div>
+    </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h1>
+        TEPCOTT Qualification <small>{{ obj.title }}</small>
+
+        <small class="pull-right">
+          <a href="#epsilonaddlaptime" role="button" class="btn btn-default" data-toggle="modal">
+            <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+            Enter a lap time…</a>
+
+          <a href="{{ obj.get_absolute_url }}" class="btn btn-default">
+            Detailed track info</a>
+
+          <a href="http://nodo.freeforums.net/thread/10213" target="_blank" class="btn btn-default">
+            <span class="glyphicon glyphicon-link"></span> Visit the NoDo forum page</a>
+        </small>
+      </h1>
+      <p>Here are the current standings of who is in which division according to their current fastest lap times.
+        Submit as many lap times as you like; only your fastest one counts.
+      </p>
+
+    </div>
 
   </div>
   <div class="row">
-    <div class="col-md-8 ">
-      xxxxxtable
-    </div>
-    <div class="col-md-4">{% include "tracks/add_laptime_form.html" %}</div>
+    {% for division in divisions %}
+      <div class="col-md-6">
+        {% if forloop.counter < 5 %}
+          <h2>Division {{ forloop.counter }}</h2>
+        {% else %}
+          <h2>Waiting list</h2>
+        {% endif %}
+
+        <table class="table table-bordered table-condensed table-striped">
+          <thead><th>#</th><th>Name</th><th>Laptime</th></thead>
+          <tbody>
+
+          {% for p,ls in division %}
+            <tr>
+              <td class="text-right">{{ forloop.counter }}</td>
+              <td>{{ p }}</td>
+
+              <td>
+                {% for l in ls %}
+                  {% if forloop.first %}
+                    {{ l.duration }} <a href="{{ l.link }}" target="_blank"><span class="glyphicon glyphicon-link"></span></a> - {{ l.vehicle.name }}
+                  {% else %}{% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+    {% endfor %}
   </div>
 {% endblock %}
