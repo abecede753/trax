@@ -184,6 +184,7 @@ def laptime_delete(request, lap_pk):
 
 
 def epsilon_detail(request):
+    exclude_usernames = ['benimi', ]
     t = Track.objects.get(pk=117)
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
 
@@ -197,6 +198,8 @@ def epsilon_detail(request):
         link='').order_by('millis')
     players = {}
     for l in ls:
+        if l.player.username in exclude_usernames:
+            continue
         if players.get(l.player.username):
             players[l.player.username].append(l)
         else:
