@@ -2,6 +2,12 @@ var laptimetable;
 var vehicletable;
 var vehiclelaptimetable;
 
+function seconds_to_duration(number) {
+  var date = new Date(null);
+  date.setSeconds(number);
+  return date.toISOString().substr(11,8);
+}
+
 function format_laptimestableinfo ( d ) {
   // `d` is the original data object for the row
   var strg = '';
@@ -171,6 +177,9 @@ $(document).ready(function() {
   show_platforms();
 
   $(".platform-icon").click(function() { toggle_platform(this); });
+  $("#id_laps").keyup( function() {
+    $("#estimated_typical_racetime").html("about " + seconds_to_duration(document.getElementById("estimated_typical_racetime").dataset.onelap * this.value));
+  })
 
 
 });

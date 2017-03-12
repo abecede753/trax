@@ -32,12 +32,18 @@ def track_detail(request, pk):
         creator = t.creator.username
     can_edit = (request.user.username == creator) or \
                request.user.is_staff
+    m, s = divmod(t.typical_laptime * 5, 60)
+    h, m = divmod(m, 60)
+    five_laps_duration = "%02d:%02d:%02d" % (h, m, s)
+
+
     return render(
         request, 'tracks/track_detail.html',
         context={'obj': t,
                  'form': LaptimeAddForm(initial={'recorded': todaystring}),
                  'can_edit': can_edit,
-                 'ssrform': ssrform})
+                 'ssrform': ssrform,
+                 'five_laps_duration': five_laps_duration})
 
 
 class LaptimeAddForm(forms.ModelForm):
