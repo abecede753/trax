@@ -61,8 +61,14 @@ class StaggeredStartRace(models.Model):
         current_index = -1
         already_seen_a_vehicle = False
         racetime = 0
+        qset = self.ssrparticipation_set.all()
 
-        for s in self.ssrparticipation_set.all().order_by('-estimated_laptime'):
+        # in case some players did not choose a car,
+        # we need to ignore them when racing starts
+        if self.status == RACE_STATES.running:
+            qset = qset.exclude(estimated_laptime__isnull=True)
+
+        for s in qset.order_by('-estimated_laptime'):
             current_index += 1
             estimated_laptime = 0
             if s.estimated_laptime:

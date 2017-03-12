@@ -50,6 +50,7 @@ function teststart() {
   setTimeout(function () { meSpeak.speak("4", {variant:"f5"}); }, 1100);
   setTimeout(function () { meSpeak.speak("3", {variant:"f5"}); }, 2100);
   setTimeout(function () { meSpeak.speak("2", {variant:"f5"}); }, 3100);
+  setTimeout(function () { meSpeak.speak("1", {variant:"f5"}); }, 4100);
   setTimeout(function () {
     usergreenlight();
   }, 5100);
@@ -120,7 +121,7 @@ function start_race(data) {
         setTimeout(function () { meSpeak.speak("4", {variant:"f5", wordgap:0}); }, start_in_millis - 4000);
         setTimeout(function () { meSpeak.speak("3", {variant:"f5", wordgap:0}); }, start_in_millis - 3000);
         setTimeout(function () { meSpeak.speak("2", {variant:"f5", wordgap:0}); }, start_in_millis - 2000);
-        // setTimeout(function () { meSpeak.speak("1", {variant:"f5", wordgap:0}); }, start_in_millis - 1000);
+        setTimeout(function () { meSpeak.speak("1", {variant:"f5", wordgap:0}); }, start_in_millis - 1000);
       }
       if (start_in_millis > 400) { setTimeout( function() { usergreenlight(); }, start_in_millis ); }
     }

@@ -176,6 +176,10 @@ $(document).ready(function() {
 
 function show_platforms() {
   var currents = Cookies.get('traxpf');
+  if (currents === undefined) {
+    Cookies.set('traxpf', 'pc xb1 ps4');
+    currents = 'pc xb1 ps4';
+  }
   for (let pf of ['pc', 'xb1', 'ps4']) {
     if (currents.indexOf(pf) != -1) { $('#platform_' + pf).css('opacity', '1.0'); }
   }
