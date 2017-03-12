@@ -124,6 +124,9 @@ class Laptime(models.Model):
     link = models.URLField(null=True)
     pc_60fps = models.BooleanField(default=False)
 
+    class Meta:
+        ordering=['-pk', ]
+
     def __str__(self):
         return '{0} {1}'.format(self.player.username,
                                 self.vehicle.name)
