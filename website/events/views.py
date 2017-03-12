@@ -129,7 +129,7 @@ class StaggeredStartRaceDetail(DetailView):
 
     def calculate_players_start_timestamps(self):
         parts = list(self.object.ssrparticipation_set.all().order_by(
-            '-estimated_laptime'))
+            '-estimated_laptime').exclude(estimated_laptime__isnull=True))
         for p in parts:
             p.estimated_net_millis = p.estimated_laptime * self.object.laps
         total_millis = parts[0].estimated_net_millis
@@ -159,10 +159,10 @@ class StaggeredStartRaceDetail(DetailView):
 
 def participants_list(request, pk=None):
     ssr = get_object_or_404(StaggeredStartRace, pk=pk)
-    if request.user.pk not in ssr.ssrparticipation_set.all().values_list('player__id', flat=True):
-        print("usernot in")
-    else:
-        print("userIN")
+#     if request.user.pk not in ssr.ssrparticipation_set.all().values_list('player__id', flat=True):
+#         print("usernot in")
+#     else:
+#         print("userIN")
     result = []
     for lt in ssr.ssrparticipation_set.all():
         vehicle = str(lt.vehicle)
@@ -256,14 +256,15 @@ class PitAssistantCreator(CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         form.instance.save()
-        self.init_filesystem()
+        self.init_filesystem(form.instance)
         return super().form_valid(form)
 
-    def init_filesystem(self):
-        dirname = os.abspath(
+    def init_filesystem(self, instance):
+
+        dirname = os.path.abspath(
             os.path.join(
-                settings.STATIC_ROOT, 'pitassistant',
-                '{0}'.format(self.pk)
+                settings.MEDIA_ROOT, 'pitassistant',
+                '{0}'.format(instance.pk)
             ))
         os.makedirs(dirname, mode=0o755, exist_ok=True)
 
