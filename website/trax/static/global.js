@@ -170,26 +170,39 @@ $(document).ready(function() {
 
   show_platforms();
 
+  $(".platform-icon").click(function() { toggle_platform(this); });
 
 
 });
 
 function show_platforms() {
   var currents = Cookies.get('traxpf');
-  if (currents === undefined) {
+  if ((currents === undefined) || (currents === '') ){
     Cookies.set('traxpf', 'pc xb1 ps4');
     currents = 'pc xb1 ps4';
   }
   for (let pf of ['pc', 'xb1', 'ps4']) {
-    if (currents.indexOf(pf) != -1) { $('#platform_' + pf).css('opacity', '1.0'); }
+    if (currents.indexOf(pf) != -1) {
+      $('#platform_' + pf).css('opacity', '0.7');
+    } else {
+      $('#platform_' + pf).css('opacity', '0.2');
+    }
   }
 }
 function toggle_platform(p) {
+  pf = p.dataset.togglepf;
   var currents = Cookies.get('traxpf');
-  Cookies.set('traxpf', 'pc', { expires: 365 });
-// Cookies.get('name'); // => 'value'
-// Cookies.remove('name');
-
+  if (currents === undefined) {
+    currents = "pc xb1 ps4";
+  }
+  currents = currents.split(" ");
+  if (currents.indexOf(pf) == -1) {
+    currents.push(pf); }
+  else {
+    currents.splice(currents.indexOf(pf), 1);
+  }
+  Cookies.set("traxpf", currents.join(" "), {expires:365});
+  document.location.reload();
 }
 
 function convert_from_laptime_to_cc_millis() {

@@ -1,5 +1,4 @@
 from easy_thumbnails.fields import ThumbnailerImageField
-# from threadlocals.threadlocals import get_current_request
 from threadlocals.threadlocals import get_current_request
 from trax.choices import GAME_MODES, ROUTE_TYPES, PLATFORM_CHOICES
 from django.db import models
@@ -24,6 +23,7 @@ class TrackManager(models.Manager):
         request = get_current_request()
         if request:
             platforms = request.COOKIES.get('traxpf', 'pc ps4 xb1')
+            platforms = platforms.replace("%20", " ")
             qs = qs.filter(platform__in=platforms.split())
         return qs
 
