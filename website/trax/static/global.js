@@ -141,7 +141,7 @@ $(document).ready(function() {
   /* player laptime table */
   playerlaptimetable = $('#playerlaptimetable').DataTable( {
     // ajax: "laptimes.json",
-    order: [[ 2, "asc" ]],
+    order: [[ 2, "desc" ]],
     lengthMenu: [[50, 100, 10000], [50, 100, 'all']],
   } );
 
