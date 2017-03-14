@@ -19,13 +19,15 @@
     <![endif]-->
   {% block bootstrap3_extra_head %}
     <link rel="stylesheet" type="text/css"
-          href="{% static "global.css" %}" />
-    <link rel="stylesheet" type="text/css"
           href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+    {% compress css %}
+    <link rel="stylesheet" type="text/css"
+          href="{% static "global.css" %}" />
     <link rel="stylesheet" type="text/css"
           href="{% static "bootstrap-combobox.css" %}" />
     <link rel="stylesheet" type="text/css"
           href="{% static "bootstrap-dialog.css" %}" />
+    {% endcompress %}
     <link rel="apple-touch-icon" sizes="57x57" href="{% static "/fav2/apple-icon-57x57.png" %}">
     <link rel="apple-touch-icon" sizes="60x60" href="{% static "/fav2/apple-icon-60x60.png" %}">
     <link rel="apple-touch-icon" sizes="72x72" href="{% static "/fav2/apple-icon-72x72.png" %}">
