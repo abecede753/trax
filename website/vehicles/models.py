@@ -63,3 +63,9 @@ class Vehicle(models.Model):
 
     def get_absolute_url(self):
         return reverse('vehicle_detail', args=[str(self.pk)])
+
+    @property
+    def cc_laptime(self):
+        secs, millis = divmod(self.cc_laptime_millis, 1000)
+        mins, secs = divmod(secs, 60)
+        return "{0:02d}:{1:02d}.{2:03d}".format(mins, secs, millis)
