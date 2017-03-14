@@ -121,7 +121,7 @@ NOCAPTCHA = True
 
 #COMPRESS_ENABLED = True
 #COMPRESS_OFFLINE = True
-#COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSCompressorFilter',]
+COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSCompressorFilter',]
 #COMPRESS_OUTPUT_DIR = 'C'
 
 STATICFILES_FINDERS = [
