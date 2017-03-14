@@ -1,11 +1,16 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, ModelMultipleChoiceField, \
+    CheckboxSelectMultiple
 
 from easy_thumbnails.widgets import ImageClearableFileInput
 from events.models import StaggeredStartRace
+from vehicles.models import VehicleClass
 from .models import Track, Laptime
 
 
 class TrackForm(ModelForm):
+    car_classes = ModelMultipleChoiceField(widget=CheckboxSelectMultiple,
+                                           required=True, queryset=VehicleClass.objects.all(),
+                                           )
     class Meta:
         model = Track
         fields = [

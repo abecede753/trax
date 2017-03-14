@@ -59,3 +59,19 @@ h1>small, h2>small, h3>small, .h1>small, .h2>small, .h3>small
 .platform-icon {
     opacity:0.2;
 }
+
+/* track edit */
+#id_car_classes, #id_car_classes li {
+    list-style-type:none;
+    border:none;
+    padding:0;
+}
+#id_car_classes li label {
+    display:inline;
+    font-weight:normal;
+}
+#id_car_classes li label input {
+    display:inline;
+    width:auto;
+    height:auto;
+}
