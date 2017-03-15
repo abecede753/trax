@@ -19,12 +19,15 @@ class TrackQueryset(models.query.QuerySet):
 
 class TrackManager(models.Manager):
     def get_queryset(self):
+        default_platforms = 'pc ps4 xb1'
         qs = TrackQueryset(self.model, using=self._db)
         request = get_current_request()
         if request:
-            platforms = request.COOKIES.get('traxpf', 'pc ps4 xb1')
-            platforms = platforms.replace("%20", " ")
-            qs = qs.filter(platform__in=platforms.split())
+            platforms = request.COOKIES.get('traxpf', default_platforms)
+            platforms = platforms.replace("%20", " ").split()
+            if not platforms:
+                platforms = default_platforms.split()
+            qs = qs.filter(platform__in=platforms)
         return qs
 
     def my(self):

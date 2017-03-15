@@ -191,7 +191,10 @@ def laptime_delete(request, lap_pk):
 
 def epsilon_detail(request):
     exclude_usernames = ['benimi', ]
-    t = Track.objects.get(pk=117)
+    try:
+        t = Track.objects.get(pk=117)
+    except:
+        return render(request, 'trax/only_for_pc.html')
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
 
     if not t.creator:
