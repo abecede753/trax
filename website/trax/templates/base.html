@@ -74,9 +74,18 @@
           <li class="{% block menu_racelist_active %}{% endblock %}"><a href="{% url "randomracelist" %}">Random grid generator</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><img style="cursor:pointer;" class="button navbar-brand platform-icon" id="platform_pc" data-togglepf="pc" src="{% static 'platforms/pc_24x24.png' %}" srcset="{% static 'platforms/pc_48x48.png' %} 2x"></li>
-          <li><img style="cursor:pointer;" class="button navbar-brand platform-icon" id="platform_xb1" data-togglepf="xb1" src="{% static 'platforms/xbox_24x24.png' %}" srcset="{% static 'platforms/xbox_48x48.png' %} 2x"></li>
-          <li><img style="cursor:pointer;" class="button navbar-brand platform-icon" id="platform_ps4" data-togglepf="ps4" src="{% static 'platforms/ps4_24x24.png' %}" srcset="{% static 'platforms/ps4_48x48.png' %} 2x"></li>
+          <li><img
+              title="Click to toggle the display of content for PC"
+              style="cursor:pointer;" class="button navbar-brand platform-icon"
+              id="platform_pc" data-togglepf="pc" src="{% static 'platforms/pc_24x24.png' %}" srcset="{% static 'platforms/pc_48x48.png' %} 2x"></li>
+          <li><img
+              title="Click to toggle the display of content for XBox One"
+              style="cursor:pointer;" class="button navbar-brand platform-icon"
+              id="platform_xb1" data-togglepf="xb1" src="{% static 'platforms/xbox_24x24.png' %}" srcset="{% static 'platforms/xbox_48x48.png' %} 2x"></li>
+          <li><img
+              title="Click to toggle the display of content for Playstation 4"
+              style="cursor:pointer;" class="button navbar-brand platform-icon"
+              id="platform_ps4" data-togglepf="ps4" src="{% static 'platforms/ps4_24x24.png' %}" srcset="{% static 'platforms/ps4_48x48.png' %} 2x"></li>
           <li><a href="{% url "imprint" %}">
             <span class="glyphicon glyphicon-info-sign"></span>
           </a></li>

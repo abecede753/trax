@@ -22,7 +22,10 @@ from .forms import TrackForm, SSRCreateForm
 
 
 def track_detail(request, pk):
-    t = Track.objects.get(pk=pk)
+    try:
+        t = Track.objects.get(pk=pk)
+    except:
+        return render(request, 'trax/not_on_this_platform.html')
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
     ssrform = SSRCreateForm(initial={'track': t})
 
@@ -194,7 +197,7 @@ def epsilon_detail(request):
     try:
         t = Track.objects.get(pk=117)
     except:
-        return render(request, 'trax/only_for_pc.html')
+        return render(request, 'trax/not_on_this_platform.html')
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
 
     if not t.creator:
