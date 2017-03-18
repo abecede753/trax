@@ -24,7 +24,7 @@
   <div class="row">
     <div class="col-md-12">
       <h1>
-        Grotti F1 2016 Qualification <small>{{ obj.title }}</small>
+        Grotti F1 2017 Qualification <small>{{ obj.title }}</small>
 
         <small class="pull-right">
           <a href="#epsilonaddlaptime" role="button" class="btn btn-default" data-toggle="modal">
@@ -34,12 +34,19 @@
           <a href="{{ obj.get_absolute_url }}" class="btn btn-default">
             Detailed track info</a>
 
-          <a href="http://nodo.freeforums.net/" target="_blank" class="btn btn-default">
-            <span class="glyphicon glyphicon-link"></span>XXX Visit the NoDo forum page</a>
+          <a href="http://nodo.freeforums.net/thread/10389" target="_blank" class="btn btn-default">
+            <span class="glyphicon glyphicon-link"></span>Visit the NoDo forum page</a>
         </small>
       </h1>
-      <p>XXX TODO CHANGEME. Lorem ipsum dolor sit amet etc.
-        Submit as many lap times as you like; only your fastest one counts.
+      <p>
+        Welcome participants! The Grotti F1 2017 World Championship will start into its next season.
+        Here you can follow the current fastest laptime submissions around this years qualifying track.
+        The top 22 drivers will be allowed to join the event as fulltime drivers.
+        Other drivers will be placed in the reserve driver list.
+        Submit as many lap times as you like; only your fastest one counts!
+        Further requirements can be checked in the
+        <a href="http://nodo.freeforums.net/thread/10389" target="_blank">main thread</a>
+        under "Sign Up".
       </p>
 
     </div>
@@ -49,9 +56,9 @@
     {% for division in divisions %}
       <div class="col-md-6">
         {% if forloop.counter < 2 %}
-          <h2>Accepted XXX</h2>
+          <h2>F1 2017 Fulltime Drivers</h2>
         {% else %}
-          <h2>Waiting list XXX</h2>
+          <h2>F1 2017 Reserve Drivers</h2>
         {% endif %}
 
         <table class="table table-bordered table-condensed table-striped">

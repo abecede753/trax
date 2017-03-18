@@ -236,7 +236,7 @@ def epsilon_detail(request):
                  'divisions': divisions})
 
 
-def grotti16_detail(request):
+def grotti17_detail(request):
     exclude_usernames = []
     tables = ( ('Accepted',  22),
                ('Waiting list', 100),
@@ -256,7 +256,7 @@ def grotti16_detail(request):
         track=t,
         link__isnull=False).exclude(
         link='').order_by('millis')
-    ls = Laptime.objects.all().order_by('millis')  # XXX DEBUG
+    # ls = Laptime.objects.all().order_by('millis')  # XXX DEBUG
     players = {}
     for l in ls:
         if l.player.username in exclude_usernames:
@@ -277,7 +277,7 @@ def grotti16_detail(request):
             last_pos += x
 
     return render(
-        request, 'tracks/grotti16_detail.html',
+        request, 'tracks/grotti17_detail.html',
         context={'obj': t,
                  'form': LaptimeAddForm(initial={'recorded': todaystring}),
                  'divisions': divisions})
