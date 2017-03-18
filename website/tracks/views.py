@@ -235,3 +235,49 @@ def epsilon_detail(request):
                  'form': LaptimeAddForm(initial={'recorded': todaystring}),
                  'divisions': divisions})
 
+
+def grotti16_detail(request):
+    exclude_usernames = []
+    tables = ( ('Accepted',  22),
+               ('Waiting list', 100),
+             )
+    try:
+        t = Track.objects.get(pk=131)
+    except:
+        return render(request, 'trax/not_on_this_platform.html')
+    todaystring = datetime.date.today().strftime('%Y-%m-%d')
+
+    if not t.creator:
+        creator = None
+    else:
+        creator = t.creator.username
+
+    ls = Laptime.objects.filter(
+        track=t,
+        link__isnull=False).exclude(
+        link='').order_by('millis')
+    ls = Laptime.objects.all().order_by('millis')  # XXX DEBUG
+    players = {}
+    for l in ls:
+        if l.player.username in exclude_usernames:
+            continue
+        if players.get(l.player.username):
+            players[l.player.username].append(l)
+        else:
+            players[l.player.username] = [l, ]
+    od = list(OrderedDict(sorted(players.items(), key=lambda t: t[1][0].millis)).items())
+    from pprint import pprint
+    pprint([x[0] for x in od])
+
+    divisions = []
+    last_pos = 0
+    for title, x in tables:
+        if len(od) >= x:
+            divisions.append(od[last_pos:last_pos + x])
+            last_pos += x
+
+    return render(
+        request, 'tracks/grotti16_detail.html',
+        context={'obj': t,
+                 'form': LaptimeAddForm(initial={'recorded': todaystring}),
+                 'divisions': divisions})

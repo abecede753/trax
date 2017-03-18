@@ -1,0 +1,81 @@
+{% extends "tracks/track_base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load widget_tweaks %}
+{% load bootstrap3 %}
+{% load embed_video_tags %}{% load i18n %}
+{% load trax_extras %}
+
+{% block title %}{{ obj.title }}{% endblock %}
+{% block content %}
+
+  <div id="epsilonaddlaptime" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-hidden="true">&times;</button>
+        </div>
+        {% include "tracks/add_laptime_form.html" %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h1>
+        Grotti F1 2016 Qualification <small>{{ obj.title }}</small>
+
+        <small class="pull-right">
+          <a href="#epsilonaddlaptime" role="button" class="btn btn-default" data-toggle="modal">
+            <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+            Enter a lap time…</a>
+
+          <a href="{{ obj.get_absolute_url }}" class="btn btn-default">
+            Detailed track info</a>
+
+          <a href="http://nodo.freeforums.net/" target="_blank" class="btn btn-default">
+            <span class="glyphicon glyphicon-link"></span>XXX Visit the NoDo forum page</a>
+        </small>
+      </h1>
+      <p>XXX TODO CHANGEME. Lorem ipsum dolor sit amet etc.
+        Submit as many lap times as you like; only your fastest one counts.
+      </p>
+
+    </div>
+
+  </div>
+  <div class="row">
+    {% for division in divisions %}
+      <div class="col-md-6">
+        {% if forloop.counter < 2 %}
+          <h2>Accepted XXX</h2>
+        {% else %}
+          <h2>Waiting list XXX</h2>
+        {% endif %}
+
+        <table class="table table-bordered table-condensed table-striped">
+          <thead><th>#</th><th>Name</th><th>Laptime</th></thead>
+          <tbody>
+
+          {% for p,ls in division %}
+            <tr>
+              <td class="text-right">{{ forloop.counter }}</td>
+              <td>{{ p }}</td>
+
+              <td>
+                {% for l in ls %}
+                  {% if forloop.first %}
+                    {{ l.duration }} <a href="{{ l.link }}" target="_blank"><span class="glyphicon glyphicon-link"></span></a> - {{ l.vehicle.name }}
+                  {% else %}{% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

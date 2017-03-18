@@ -27,4 +27,5 @@ urlpatterns = [
                       name="DEVELOPMENTrobots.txt"),
     url(r'^miniutil/now$', views.timestamp_dev, name="DEVELOPMENTnow"),
     url(r'^epsilon/$', tracks_views.epsilon_detail, name="epsilon_detail"),
+    url(r'^grotti16/$', tracks_views.grotti16_detail, name="grotti16_detail"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
