@@ -266,13 +266,11 @@ def grotti17_detail(request):
         else:
             players[l.player.username] = [l, ]
     od = list(OrderedDict(sorted(players.items(), key=lambda t: t[1][0].millis)).items())
-    from pprint import pprint
-    pprint([x[0] for x in od])
 
     divisions = []
     last_pos = 0
     for title, x in tables:
-        if len(od) >= x:
+        if len(od) >= last_pos:
             divisions.append(od[last_pos:last_pos + x])
             last_pos += x
 
