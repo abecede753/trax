@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from django.views.decorators.gzip import gzip_page
 from django.views.generic import ListView
@@ -252,8 +253,10 @@ def grotti17_detail(request):
     else:
         creator = t.creator.username
 
+    startdate = timezone.datetime(2017,3,18)
     ls = Laptime.objects.filter(
         track=t,
+        created__gt=startdate,
         link__isnull=False).exclude(
         link='').order_by('millis')
     # ls = Laptime.objects.all().order_by('millis')  # XXX DEBUG
