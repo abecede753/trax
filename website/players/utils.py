@@ -8,7 +8,7 @@ def update_player_racing_stats(player, commit=True):
 
     laptimes = list(Laptime.objects.filter(
         player=player).select_related(
-        'vehicle').order_by('-recorded', '-created'))[:8]
+        'vehicle').order_by('-recorded', '-created'))[:15]
     if not laptimes:
         player.defaultspeedmultiplier = 1.0
     else:
