@@ -24,7 +24,7 @@ def update_player_racing_stats(player, commit=True):
         clean_multipliers = remove_outliers(allmultipliers)
 
         # if someone is way too slow, make him "faster"
-        player.defaultspeedmultiplier = min(1.1, (sum(clean_multipliers)
+        player.defaultspeedmultiplier = min(1.06, (sum(clean_multipliers)
                                          / len(clean_multipliers)))
     if commit:
         player.save()
