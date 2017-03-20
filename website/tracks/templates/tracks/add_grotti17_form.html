@@ -1,0 +1,62 @@
+{% load i18n %}{% load widget_tweaks %}
+<div class="panel panel-default">
+  <div class="panel-heading"><h3 class="pricedown" style="margin-top:0px;margin-bottom:0px;">Add your own lap time here</h3></div>
+
+  {% if request.user.is_authenticated %}
+
+    <form action="{% url "laptime_add" obj.pk %}" method="POST">
+      <div class="panel-body">
+        {% csrf_token %}
+        <label>Vehicle</label><input type="hidden" name="vehicle" value="451"> <input class="form-control" disabled value="X80 Proto">
+        <div>
+          <label for="seconds">
+            {% trans "lap time" %}
+          </label>
+          <input name="seconds"
+                 required
+                 pattern="^\d{1,2}:\d{1,2}\.\d\d?\d?$"
+                 id="seconds"
+                 title="e.g. '1:03.123'"
+                 alt="alttext"
+                 type="text">(MM:SS.milli)
+        </div>
+        <div>
+          <label for="recorded">
+            {% trans "recorded" %}
+          </label>
+          <input name="recorded"
+                 value="{{ form.recorded.value }}"
+                 required
+                 pattern="^\d{4}-\d{1,2}-\d{1,2}$"
+                 id="recorded"
+                 title="e.g. '2016-12-24'"
+                 type="text">(YYYY-MM-DD)
+        </div>
+        <div>
+          <label for="id_comment">
+            {% trans "comment" %}<small> (optional)</small>
+          </label>{% render_field form.comment rows="2" class="form-control"%}
+        </div>
+        <div>
+          <label for="id_anylink">
+            Mandatory link to prove your lap time
+          </label>{% render_field form.anylink class="form-control"%}
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-primary" type="submit">Add this lap time</button>
+      </div>
+    </form>
+
+  {% else %}
+
+    <div style="padding:1em">
+      <span class="glyphicon glyphicon-info-sign" style="font-size:18px;" aria-hidden="true"></span>
+      You need to log in first. Click "Login/Register" on top of this page.
+    </div>
+    <div class="panel-footer">
+      &nbsp;
+    </div>
+
+  {% endif %}
+</div>
