@@ -256,6 +256,7 @@ def grotti17_detail(request):
     startdate = timezone.datetime(2017,3,18)
     ls = Laptime.objects.filter(
         track=t,
+        vehicle_id=451,
         created__gt=startdate,
         link__isnull=False).exclude(
         link='').order_by('millis')
