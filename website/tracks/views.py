@@ -254,10 +254,12 @@ def grotti17_detail(request):
         creator = t.creator.username
 
     startdate = timezone.datetime(2017,3,18)
+    enddate = timezone.datetime(2017,3,26,18,0,0)
     ls = Laptime.objects.filter(
         track=t,
         vehicle_id=451,
         created__gt=startdate,
+        created__lt=enddate,
         link__isnull=False).exclude(
         link='').order_by('millis')
     # ls = Laptime.objects.all().order_by('millis')  # XXX DEBUG
@@ -282,4 +284,5 @@ def grotti17_detail(request):
         request, 'tracks/grotti17_detail.html',
         context={'obj': t,
                  'form': LaptimeAddForm(initial={'recorded': todaystring}),
+                 'entry_possible': timezone.datetime.now() < enddate,
                  'divisions': divisions})

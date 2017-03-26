@@ -27,9 +27,11 @@
         Grotti F1 2017 Qualification <small>{{ obj.title }}</small>
 
         <small class="pull-right">
-          <a href="#epsilonaddlaptime" role="button" class="btn btn-default" data-toggle="modal">
-            <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
-            Enter a lap time…</a>
+          {% if entry_possible %}
+            <a href="#epsilonaddlaptime" role="button" class="btn btn-default" data-toggle="modal">
+              <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+              Enter a lap time…</a>
+          {% endif %}
 
           <a href="{{ obj.get_absolute_url }}" class="btn btn-default">
             Detailed track info</a>
@@ -40,6 +42,10 @@
       </h1>
       <p>
         Welcome participants! The Grotti F1 2017 World Championship will start into its next season.
+      </p>
+      <p>
+        {% if entry_possible %}
+
         Here you can follow the current fastest laptime submissions around this years qualifying track.
         The top 22 drivers will be allowed to join the event as fulltime drivers.
         Other drivers will be placed in the reserve driver list.
@@ -47,6 +53,13 @@
         Further requirements can be checked in the
         <a href="http://nodo.freeforums.net/thread/10389" target="_blank">main thread</a>
         under "Sign Up".
+        {% else %}
+          Here you see the current fastest laptime submissions around this years qualifying track.
+          The top 22 drivers are allowed to join the event as fulltime drivers.
+          Other drivers have been placed in the reserve driver list.
+          <br/>
+          <b>Submissions are closed now.</b>
+        {% endif %}
       </p>
 
     </div>

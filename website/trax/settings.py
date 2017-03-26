@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'events',
     'compressor',
     'easy_thumbnails',
+    'ballot4',
 
 ]
 
