@@ -194,7 +194,7 @@ def laptime_delete(request, lap_pk):
 
 
 def epsilon_detail(request):
-    exclude_usernames = ['benimi', ]
+    exclude_usernames = ['benimi', 'yoloswagypsen']
     try:
         t = Track.objects.get(pk=117)
     except:
