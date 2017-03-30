@@ -200,14 +200,12 @@ def epsilon_detail(request):
     except:
         return render(request, 'trax/not_on_this_platform.html')
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
-
-    if not t.creator:
-        creator = None
-    else:
-        creator = t.creator.username
+    enddate = timezone.datetime(2017, 3, 30, 18, 0, 0)
 
     ls = Laptime.objects.filter(
-        track__id=117, link__isnull=False).exclude(
+        track=t,
+        created__lt=enddate,
+        link__isnull=False).exclude(
         link='').order_by('millis')
     players = {}
     for l in ls:
@@ -248,13 +246,8 @@ def grotti17_detail(request):
         return render(request, 'trax/not_on_this_platform.html')
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
 
-    if not t.creator:
-        creator = None
-    else:
-        creator = t.creator.username
-
-    startdate = timezone.datetime(2017,3,18)
-    enddate = timezone.datetime(2017,3,26,18,0,0)
+    startdate = timezone.datetime(2017, 3, 18)
+    enddate = timezone.datetime(2017, 3, 26, 18, 0, 0)
     ls = Laptime.objects.filter(
         track=t,
         vehicle_id=451,
