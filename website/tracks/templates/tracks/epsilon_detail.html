@@ -27,9 +27,11 @@
         TEPCOTT Qualification <small>{{ obj.title }}</small>
 
         <small class="pull-right">
+          {% if entry_possible %}
           <a href="#epsilonaddlaptime" role="button" class="btn btn-default" data-toggle="modal">
             <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
             Enter a lap time…</a>
+          {% endif %}
 
           <a href="{{ obj.get_absolute_url }}" class="btn btn-default">
             Detailed track info</a>
@@ -38,9 +40,18 @@
             <span class="glyphicon glyphicon-link"></span> Visit the NoDo forum page</a>
         </small>
       </h1>
-      <p>Here are the current standings of who is in which division according to their current fastest lap times.
-        Submit as many lap times as you like; only your fastest one counts.
-      </p>
+      {% if entry_possible %}
+        Here you can follow the current fastest laptime submissions around the qualifying track.
+        The top 60 drivers will be allocated to their divisiona according to their fastest lap time.
+        Other drivers will be placed in the waiting list.
+        Submit as many lap times as you like; only your fastest one counts!
+      {% else %}
+        Here you see the fastest laptime submissions around the qualifying.
+        The top 60 drivers have been allocated to their divisiona according to their fastest lap time.
+        Other drivers have been placed in the waiting list.
+        <br/>
+        <b>Qualifications are closed now.</b>
+      {% endif %}
 
     </div>
 

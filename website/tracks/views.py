@@ -232,6 +232,7 @@ def epsilon_detail(request):
         request, 'tracks/epsilon_detail.html',
         context={'obj': t,
                  'form': LaptimeAddForm(initial={'recorded': todaystring}),
+                 'entry_possible': timezone.datetime.now() < enddate,
                  'divisions': divisions})
 
 
