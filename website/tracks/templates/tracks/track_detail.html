@@ -93,6 +93,7 @@
         {% endfor %}
         </dd>
         <dt>{% trans "elevation changes" %}</dt><dd>{{ obj.elevation_changes }}</dd>
+        <dt>{% trans "maintainer" %}</dt><dd>{{ obj.creator }}</dd>
       </dl>
     </div>
     <div class="col-md-4">{% include "tracks/add_laptime_form.html" %}</div>
