@@ -33,7 +33,8 @@ class VehicleCreate(ModelFormWidgetMixin, CreateView):
 @method_decorator(is_staff_required, name='dispatch')
 class VehicleUpdate(ModelFormWidgetMixin, UpdateView):
     model = Vehicle
-    fields = ["name", "cc_laptime_millis", "description", "classes"]
+    fields = ["name", "cc_laptime_millis", "description", "classes",
+              "cc_millis_per_km"]
     widgets = {"classes": CheckboxSelectMultiple }
     success_url = reverse_lazy('vehicle_list')
 

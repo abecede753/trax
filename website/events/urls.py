@@ -1,8 +1,7 @@
 from django.conf.urls import url
-from randomizer import views
-from .views import StaggeredStartRaceCreator, StaggeredStartRaceDetail, \
-    participants_list, enlist, StaggeredStartRaceStatus, check_for_newer_ssr, \
-    PitAssistantCreator, PitAssistantDetail
+from .ssr_views import StaggeredStartRaceCreator, StaggeredStartRaceDetail, \
+    participants_list, enlist, StaggeredStartRaceStatus, check_for_newer_ssr
+from .pitassistant_views import PitAssistantCreator, PitAssistantDetail
 
 urlpatterns = [
     url(r'^s/add/$', StaggeredStartRaceCreator.as_view(),

@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>jQuery cmGauge Demo</title>
+		<link rel="stylesheet" href="css/cmGauge.css">
+		<style>
+body { background-color:#333;}
+.container { margin:150px auto;}
+h1 { color:#fff; margin-bottom:30px;}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>jQuery cmGauge Demo</h1>
+			<div id="gauge1" class="gauge gauge-big gauge-green"><div class="gauge-arrow" data-percentage="40" style="transform: rotate(0deg);"></div></div>
+			<div id="gauge2" class="gauge gauge-big gauge-green"><div class="gauge-arrow" data-percentage="40" style="transform: rotate(0deg);"></div></div>
+			<div id="gauge3" class="gauge gauge-big gauge-green"><div class="gauge-arrow" data-percentage="40" style="transform: rotate(0deg);"></div></div>
+			<div id="gauge4" class="gauge gauge-big gauge-green"><div class="gauge-arrow" data-percentage="40" style="transform: rotate(0deg);"></div></div>
+
+			<div style="margin-top: 30px;">
+				<input id="gaugevalue" value="20">
+				<button class="btn btn-primary">Update The Gauge</button>
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script src="js/cmGauge.js"></script>
+		<script type="text/javascript">
+var V = [[-1, +3, +1, -3], [-3, +3, -1, +1], [+1, -1, +3, -3], [-3, +3, -1, +1], [+1, +3, -3, -1], [-3, +3, -1, +1], [-1, +3, -3, +1], [-3, -1, +1, +3],
+[-1, -3, +3, +1], [-1, +1, -3, +3], [-3, -1, +3, +1], [-3, +3, +1, -1], [+1, +3, -1, -3], [-3, -1, +3, +1], [+1, +3, -1, -3], [-3, +3, -1, +1],
+[-1, +3, +1, -3], [+3, +1, -1, -3], [-1, +3, +1, -3], [+1, +3, -1, -3], [-3, +3, +1, -1], [-1, +1, +3, -3], [-3, +1, +3, -1], [-1, +1, +3, -3],
+[-1, +3, +1, -3], [+1, +3, -3, -1], [+1, +3, -1, -3], [+3, +1, -1, -3], [-1, -3, +3, +1], [-3, -1, +3, +1], [-1, +3, +1, -3], [-3, +3, -1, +1],
+[-1, -3, +3, +1], [-3, +3, +1, -1], [+3, +1, -3, -1], [+3, -3, -1, +1], [+3, -1, +1, -3], [+1, +3, -1, -3]];
+var current_index = 0;
+var mi = 0;
+var ma = 100;
+v0 = 0;
+v1 = 0;
+v2 = 0;
+v3 = 0;
+
+function normalize(cu) {
+    return (cu-mi) * 100/(ma-mi); }
+
+function update_graphs() {
+	v0 += V[current_index][0];
+	v1 += V[current_index][1];
+	v2 += V[current_index][2];
+	v3 += V[current_index][3];
+	$('#gauge1 .gauge-arrow').trigger('updateGauge', normalize(v0));
+	$('#gauge2 .gauge-arrow').trigger('updateGauge', normalize(v1));
+	$('#gauge3 .gauge-arrow').trigger('updateGauge', normalize(v2));
+	$('#gauge4 .gauge-arrow').trigger('updateGauge', normalize(v3));
+	console.log(current_index, V[current_index][0], V[current_index][1], V[current_index][2], V[current_index][3]);
+	current_index += 1;
+	if (current_index < V.length) {
+		window.setTimeout( "update_graphs()", 200);
+	} else {
+		console.log("done");
+	}
+}
+
+$(function () {
+	// find out min and max values
+	var t1 = 0; var t2 = 0; var t3 = 0; var t4 = 0;
+	for (var x of V) { t1 += x[0]; t2 += x[1]; t3 += x[2]; t4 += x[3]; }
+	mi = Math.min(t1, t2, t3, t4);
+	ma = Math.max(t1, t2, t3, t4);
+
+	// initialize gauges
+	$('#gauge1 .gauge-arrow').cmGauge();
+	$('#gauge2 .gauge-arrow').cmGauge();
+	$('#gauge3 .gauge-arrow').cmGauge();
+	$('#gauge4 .gauge-arrow').cmGauge();
+	$('#gauge1 .gauge-arrow').trigger('updateGauge', 50);
+	$('#gauge2 .gauge-arrow').trigger('updateGauge', 50);
+	$('#gauge3 .gauge-arrow').trigger('updateGauge', 50);
+	$('#gauge4 .gauge-arrow').trigger('updateGauge', 50);
+
+	// let the magic happen
+	window.setTimeout( "update_graphs()", 200);
+});
+		</script>
+	</body>
+</html>
