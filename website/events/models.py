@@ -153,3 +153,13 @@ class PitLogEntry(models.Model):
     entrytype = models.CharField(max_length=1, choices=PITLOGENTRIES.choices,
                                  default=PITLOGENTRIES.pitstop)
     for_player = models.ForeignKey("players.Player", null=True)
+
+
+class Hotlapping(models.Model):
+    title = models.CharField(max_length=256)
+    description = models.TextField(default='', blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey("players.Player", null=True)
+    track = models.ForeignKey("tracks.Track")
+    vehicles = models.ManyToManyField(to="vehicles.Vehicle",
+                                      related_name="vehicles", )

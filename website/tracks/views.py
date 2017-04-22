@@ -236,22 +236,22 @@ def epsilon_detail(request):
                  'divisions': divisions})
 
 
-def grotti17_detail(request):
+def unaffordable_detail(request):
     exclude_usernames = []
-    tables = ( ('Accepted',  22),
+    tables = ( ('Accepted',  28),
                ('Waiting list', 100),
              )
     try:
-        t = Track.objects.get(pk=131)
+        t = Track.objects.get(pk=183)
     except:
         return render(request, 'trax/not_on_this_platform.html')
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
 
-    startdate = timezone.datetime(2017, 3, 18)
-    enddate = timezone.datetime(2017, 3, 26, 18, 0, 0)
+    startdate = timezone.datetime(2017, 4, 22)
+    enddate = timezone.datetime(2017, 4, 29, 22, 0, 0)
     ls = Laptime.objects.filter(
         track=t,
-        vehicle_id=451,
+        vehicle_id__in=(447, 444, 509, 511),
         created__gt=startdate,
         created__lt=enddate,
         link__isnull=False).exclude(
@@ -275,7 +275,7 @@ def grotti17_detail(request):
             last_pos += x
 
     return render(
-        request, 'tracks/grotti17_detail.html',
+        request, 'tracks/unaffordable_detail.html',
         context={'obj': t,
                  'form': LaptimeAddForm(initial={'recorded': todaystring}),
                  'entry_possible': timezone.datetime.now() < enddate,

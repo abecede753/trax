@@ -1,0 +1,99 @@
+{% extends "tracks/track_base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load widget_tweaks %}
+{% load bootstrap3 %}
+{% load embed_video_tags %}{% load i18n %}
+{% load trax_extras %}
+
+{% block title %}{{ obj.title }}{% endblock %}
+{% block content %}
+
+  <div id="epsilonaddlaptime" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-hidden="true">&times;</button>
+        </div>
+        {% include "tracks/add_unaffordable_form.html" %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h1>
+        The Ridiculously Unaffordable Supercar event <small>{{ obj.title }}</small>
+
+        <small class="pull-right">
+          {% if entry_possible %}
+            <a href="#epsilonaddlaptime" role="button" class="btn btn-default" data-toggle="modal">
+              <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+              Enter a lap time…</a>
+          {% endif %}
+
+          <a href="{{ obj.get_absolute_url }}" class="btn btn-default">
+            Detailed track info</a>
+
+          <a href="http://nodo.freeforums.net/thread/10740" target="_blank" class="btn btn-default">
+            <span class="glyphicon glyphicon-link"></span>Visit the NoDo forum page</a>
+        </small>
+      </h1>
+      <p>
+        Welcome participants! The Ridiculously Unaffordable Supercar event will start on July 1st.
+      </p>
+      <p>
+        {% if entry_possible %}
+
+        Here you can follow the current fastest laptime submissions around the qualifying track.
+          These laptimes define your position on the starting grid.
+        Submit as many lap times as you like; only your fastest one counts!
+        Further requirements can be checked in the
+        <a href="http://nodo.freeforums.net/thread/10740" target="_blank">main thread</a>
+        under "Sign Up".
+        {% else %}
+          Here you see the fastest laptime submissions around the qualifying track.
+          These laptimes define the position of the drivers on the starting grid.
+          <br/>
+          <b>Submissions are closed now.</b>
+        {% endif %}
+      </p>
+
+    </div>
+
+  </div>
+  <div class="row">
+    {% for division in divisions %}
+      <div class="col-md-6">
+        {% if forloop.counter < 2 %}
+          <h2>28 lap times for the starting grid</h2>
+        {% else %}
+          <h2>Slower lap times</h2>
+        {% endif %}
+
+        <table class="table table-bordered table-condensed table-striped">
+          <thead><th>#</th><th>Name</th><th>Laptime</th></thead>
+          <tbody>
+
+          {% for p,ls in division %}
+            <tr>
+              <td class="text-right">{{ forloop.counter }}</td>
+              <td>{{ p }}</td>
+
+              <td>
+                {% for l in ls %}
+                  {% if forloop.first %}
+                    {{ l.duration }} <a href="{{ l.link }}" target="_blank"><span class="glyphicon glyphicon-link"></span></a> - {{ l.vehicle.name }}
+                  {% else %}{% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,3 +1,5 @@
+
+
 .gauge {
     position: relative;
     display: inline-block;
@@ -11,7 +13,7 @@
 }
 
 .gauge.gauge-big {
-    font-size: 117px;
+    font-size: 180px;
 }
 
 .gauge.gauge-small {
@@ -38,6 +40,10 @@
     border-radius: 100%;
     clip: rect(auto, auto, 1em, auto);
 }
+.gauge:after {
+    content: attr(data-percentage) '';
+    font-size: 20%;
+}
 
 .gauge .gauge-arrow {
     height: 1em;
@@ -52,6 +58,7 @@
     -moz-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: all 0.5s;
+    opacity:0.8;
 }
 
 .gauge .gauge-arrow, .gauge .gauge-arrow:before {
