@@ -248,7 +248,7 @@ def unaffordable_detail(request):
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
 
     startdate = timezone.datetime(2017, 4, 22)
-    enddate = timezone.datetime(2017, 4, 29, 22, 0, 0)
+    enddate = timezone.datetime(2017, 6, 29, 22, 0, 0)
     ls = Laptime.objects.filter(
         track=t,
         vehicle_id__in=(447, 444, 509, 511),
