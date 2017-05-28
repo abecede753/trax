@@ -1,11 +1,13 @@
 appdirs==1.4.3
 appnope==0.1.0
+argh==0.26.2
 attrs==16.3.0
 Automat==0.5.0
 backports-abc==0.5
 bleach==1.5.0
 blinker==1.4
 cffi==1.9.1
+colorama==0.3.9
 constantly==15.1.0
 cryptography==1.7.2
 csscompressor==0.9.4
@@ -19,7 +21,10 @@ django-datatables-view==1.14.0
 django-embed-video==1.1.0
 django-extensions==1.7.7
 django-recaptcha==1.2.1
+django-tinymce==2.6.0
 django-widget-tweaks==1.4.1
+django-wysiwyg==0.8.0
+docopt==0.6.2
 easy-thumbnails==2.3
 ecdsa==0.13
 entrypoints==0.2.2
@@ -53,6 +58,7 @@ packaging==16.8
 pandas==0.19.2
 pandocfilters==1.4.1
 paramiko==2.1.2
+pathtools==0.1.2
 patsy==0.4.1
 pexpect==4.2.1
 pickleshare==0.7.4
@@ -68,9 +74,12 @@ pycrypto==2.6.1
 Pygments==2.2.0
 pyparsing==2.2.0
 pytest==3.0.6
+pytest-django==3.1.2
+pytest-watch==4.1.0
 python-dateutil==2.6.0
 python-Levenshtein==0.12.0
 pytz==2016.10
+PyYAML==3.12
 pyzmq==16.0.2
 qtconsole==4.2.1
 rcssmin==1.0.6
@@ -94,6 +103,7 @@ ts3==1.0.5
 Twisted==17.1.0
 uWSGI==2.0.14
 w3lib==1.17.0
+watchdog==0.8.3
 wcwidth==0.1.7
 webencodings==0.5
 widgetsnbextension==2.0.0
