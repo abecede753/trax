@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 
+import bleach
 from django.conf import settings
 from django.db import models
 from django.urls import reverse_lazy
@@ -163,3 +164,21 @@ class Hotlapping(models.Model):
     track = models.ForeignKey("tracks.Track")
     vehicles = models.ManyToManyField(to="vehicles.Vehicle",
                                       related_name="vehicles", )
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    closing_text = models.TextField(default='', blank=True)
+    divisions_text = models.TextField(default='10:Top Ten\n18:Regular players\n50:Reserves')
+    entries = models.ManyToManyField("tracks.Laptime",
+                                     through="HotlappingLaptime",
+                                     through_fields=('hotlapping', 'laptime')
+                                     )
+
+    def get_absolute_url(self):
+        return reverse_lazy('hl_detail',
+                            kwargs={'pk': self.pk})
+
+
+class HotlappingLaptime(models.Model):
+    approved = models.BooleanField(default=False)
+    hotlapping = models.ForeignKey("events.Hotlapping", on_delete=models.CASCADE)
+    laptime = models.ForeignKey("tracks.Laptime", on_delete=models.CASCADE)

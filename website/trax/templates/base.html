@@ -21,12 +21,18 @@
     <link rel="stylesheet" type="text/css"
           href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
     {% compress css %}
+      <link rel="stylesheet" type="text/css"
+            href="{% static "bootstrap-multiselect/dist/css/bootstrap-multiselect.css" %}" />
+      <link rel="stylesheet" type="text/css"
+            href="{% static "bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" %}" />
     <link rel="stylesheet" type="text/css"
           href="{% static "global.css" %}" />
     <link rel="stylesheet" type="text/css"
           href="{% static "bootstrap-combobox.css" %}" />
     <link rel="stylesheet" type="text/css"
           href="{% static "bootstrap-dialog.css" %}" />
+      <link rel="stylesheet" type="text/css"
+            href="{% static "xbbcode/xbbcode.css" %}" />
     {% endcompress %}
     <link rel="apple-touch-icon" sizes="57x57" href="{% static "/fav2/apple-icon-57x57.png" %}">
     <link rel="apple-touch-icon" sizes="60x60" href="{% static "/fav2/apple-icon-60x60.png" %}">
@@ -48,6 +54,7 @@
     <meta name="msapplication-TileImage" content="{% static "/fav2/ms-icon-144x144.png" %}">
     <meta name="theme-color" content="#ffffff">
   {% endblock %}
+  {% block trax_extra_head %}{% endblock %}
 </head>
 <body>
 {% block bootstrap3_content %}
@@ -128,6 +135,7 @@
   {% compress js %}
     <script src="{% static 'jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap.min.js' %}"></script>
+    <script src="{% static 'moment.min.js' %}"></script>
     <script src="{% static 'jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'dataTables.bootstrap.min.js' %}"></script>
     <script src="{% static 'bootstrap-select.min.js' %}"></script>
@@ -135,6 +143,10 @@
     <script src="{% static 'bootstrap-combobox.js' %}"></script>
     <script src="{% static 'bootstrap-dialog.js' %}"></script>
     <script src="{% static 'js.cookie.js' %}"></script>
+    <script src="{% static 'bootstrap-multiselect/dist/js/bootstrap-multiselect.js' %}"></script>
+    <script src="{% static 'bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{%  static 'xbbcode/xbbcode.js' %}"></script>
+
     <script src="{% static 'global.js' %}"></script>
   {% endcompress %}
   {% block trax_extra_script %}{% endblock %}

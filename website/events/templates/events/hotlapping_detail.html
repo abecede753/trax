@@ -1,0 +1,80 @@
+{% extends "events/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load compress %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+{% load trax_extras %}
+
+{% block title %}Hotlapping "{{ object.title }}" {% endblock %}
+{% block content %}
+
+  <div id="addhllaptime" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-hidden="true">&times;</button>
+        </div>
+        {% include "events/add_hl_laptime_form.html" %}
+      </div>
+    </div>
+  </div>
+
+
+  <h1>{{ object.title }}
+
+    <small class="pull-right">
+      {% if entry_possible %}
+        <a href="#addhllaptime" role="button" class="btn btn-default" data-toggle="modal">
+          <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+          Enter a lap time…</a>
+      {% endif %}
+
+      <a href="{{ object.track.get_absolute_url }}" class="btn btn-default">
+        Detailed track info</a>
+    </small>
+  </h1>
+
+  <p>{{ object.description | urlizetrunc:25 | url_target_blank | linebreaksbr }}</p>
+  {% if entry_possible %}{% else %}
+    <p>The event is over. No more lap times can be entered.</p>
+  {% endif %}
+
+  <div class="row">
+    {% for division in divisions %}
+      <div class="col-md-6">
+      <h2>{{ division.0 }}</h2>
+        <table class="table table-bordered table-condensed table-striped">
+          <thead>
+          <th>#</th>
+          <th>Name</th>
+          <th>Vehicle</th>
+          <th><span class="glyphicon glyphicon-link"></span></th>
+          <th>Date</th>
+          <th>Lap time</th>
+          </thead>
+          <tbody>
+            {% for obj in division.1 %}
+              <tr>
+                <td>{{ obj.place|default:'—' }}</td>
+              <td>{{ obj.laptime.player|default:'–' }}</td>
+                <td>{{ obj.laptime.vehicle.name|default:'–' }}</td>
+              <td>
+                {% if obj.laptime.link %}
+                  <a href="{{ obj.laptime.link }}" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
+                  {% else %}
+                  —
+                {% endif %}
+                <td>{{ obj.laptime.created|date:"Y-m-d"|default:'–' }}</td>
+              <td>{{ obj.laptime.duration|default:'–' }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}
+

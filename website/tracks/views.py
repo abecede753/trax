@@ -81,7 +81,6 @@ def laptime_add(request, lap_pk):
                 'I did not understand your laptime input. Please use the format MM:SS.milli')
             return HttpResponseRedirect(reverse('track_detail', args=(t.pk,)))
 
-        # MAYBE TODO: change millis and millis_per_km to a float field?
         l.millis = round(millis)
         l.millis_per_km = round(millis / t.route_length_km)
         l.comment = request.POST.get('comment', '')
@@ -256,7 +255,6 @@ def unaffordable_detail(request):
         created__lt=enddate,
         link__isnull=False).exclude(
         link='').order_by('millis')
-    # ls = Laptime.objects.all().order_by('millis')  # XXX DEBUG
     players = {}
     for l in ls:
         if l.player.username in exclude_usernames:

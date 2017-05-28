@@ -2,6 +2,7 @@ from django.conf.urls import url
 from .ssr_views import StaggeredStartRaceCreator, StaggeredStartRaceDetail, \
     participants_list, enlist, StaggeredStartRaceStatus, check_for_newer_ssr
 from .pitassistant_views import PitAssistantCreator, PitAssistantDetail
+from .hotlap_views import HlCreator, HlEditor, HlDetail, hllaptime_add
 
 urlpatterns = [
     url(r'^s/add/$', StaggeredStartRaceCreator.as_view(),
@@ -24,4 +25,15 @@ urlpatterns = [
         name='pita_add'),
     url(r'^p/(?P<pk>\d+)/$', PitAssistantDetail.as_view(),
         name='pita_detail'),
+    url(r'^hl/add/$', HlCreator.as_view(),
+        name='hl_add'),
+    url(r'^hl/(?P<pk>\d+)/edit/$',
+        HlEditor.as_view(),
+        name='hl_edit'),
+    url(r'^hl/(?P<hl_pk>\d+)/add/$',
+        hllaptime_add,
+        name='hl_laptime_add'),
+    url(r'^hl/(?P<pk>\d+)/$',
+        HlDetail.as_view(),
+        name='hl_detail'),
 ]

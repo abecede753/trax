@@ -37,8 +37,12 @@ INSTALLED_APPS = [
     'compressor',
     'easy_thumbnails',
     'ballot4',
-
+    'tinymce',
+    'django_wysiwyg',
 ]
+
+DJANGO_WYSIWYG_FLAVOR = "tinymce"
+
 
 MIDDLEWARE = [
     'threadlocals.middleware.ThreadLocalMiddleware',

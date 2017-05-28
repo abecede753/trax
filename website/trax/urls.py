@@ -30,4 +30,5 @@ urlpatterns = [
 #    url(r'^grotti17/$', tracks_views.grotti17_detail, name="grotti17_detail"),
     url(r'^unaffordable/$', tracks_views.unaffordable_detail,
         name="unaffordable_detail"),
+    url(r'^tinymce/', include('tinymce.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

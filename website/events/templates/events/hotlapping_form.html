@@ -1,0 +1,74 @@
+{% extends "events/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+
+
+{% block title %}Race creator{% endblock %}
+{% block content %}
+
+  <h1>Create a Hotlapping event</h1>
+
+    <div class="row" >
+      <form action="." method="post" >
+      <div class="col-md-6">
+        {% csrf_token %}
+        Title of your event
+        {% render_field form.title class="form-control" %}
+
+        Enter a description.
+        <small>(Any "http"-links you enter will be converted to clickable links)</small>
+        {% render_field form.description class="form-control" %}
+
+        Structure
+        {% render_field form.divisions_text class="form-control" %}
+      </div>
+      <div class="col-md-6">
+        Track:
+        {% render_field form.track class="combobox form-control" %}
+        Vehicles:
+        {% render_field form.vehicles class="form-control" %}
+        <hr>
+        Start date:
+        {% render_field form.start_date class="form-control" %}
+        End date:
+        {% render_field form.end_date class="form-control" %}
+      </div>
+        <div class="col-md-12 text-center">
+          <button type="submit" class="btn btn-primary">Okay!</button>
+        </div>
+      </form>
+    </div>
+
+{% endblock %}
+
+
+{% block trax_extra_script %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#id_vehicles').multiselect({
+        maxHeight: 300,
+        includeSelectAllOption: true,
+        enableFiltering: true,
+        enableClickableOptGroups: true,
+        numberDisplayed:6,
+        enableCaseInsensitiveFiltering: true
+      });
+
+      $('#id_start_date').datetimepicker({
+        format:'YYYY-MM-DD HH:mm'
+      });
+      $('#id_end_date').datetimepicker({
+        format:'YYYY-MM-DD HH:mm'
+      });
+      $("#id_start_date").on("dp.change", function (e) {
+        $('#id_end_date').data("DateTimePicker").minDate(e.date);
+      });
+      $("#id_end_date").on("dp.change", function (e) {
+        $('#id_start_date').data("DateTimePicker").maxDate(e.date);
+      });
+    });
+
+  </script>
+
+{% endblock %}
