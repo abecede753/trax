@@ -33,10 +33,21 @@ class Homepage(TemplateView):
         return context
 
     def get_top_laps(self, num_items=5):
-        l = Laptime.objects.filter(link__isnull=False).exclude(link='')\
+        all_laptimes = Laptime.objects.filter(
+            link__isnull=False).exclude(link='')\
             .select_related("vehicle")\
             .extra(select={'quickness': 'millis_per_km*1.0/cc_millis_per_km'})\
-            .order_by('quickness')[:10]
+            .order_by('quickness')
+        l = []
+        track_pks_loaded = []
+        num_tracks_found = 0
+        for laptime in all_laptimes:
+            if laptime.track.pk not in track_pks_loaded:
+                track_pks_loaded.append(laptime.track.pk)
+                num_tracks_found += 1
+                l.append(laptime)
+            if num_tracks_found > 10:
+                break
         return l
 
 
