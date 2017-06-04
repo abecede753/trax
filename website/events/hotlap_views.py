@@ -1,10 +1,11 @@
+import csv
 import datetime
 from collections import OrderedDict
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django import forms
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
@@ -24,12 +25,23 @@ class HlCreator(CreateView):
     fields = ['title', 'description', 'track', 'vehicles', 'start_date',
               'end_date', 'divisions_text']
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super(HlCreator, self).form_valid(form)
+
+
 
 @method_decorator(login_required, name='dispatch')
 class HlEditor(UpdateView):
     model = Hotlapping
     fields = ['title', 'description', 'track', 'vehicles', 'start_date',
               'end_date', 'divisions_text']
+
+    def dispatch(self, request, *args, **kwargs):
+        o = self.get_object()
+        if o.owner.pk != request.user.pk:
+            raise Http404
+        return super(HlEditor, self).dispatch(request, *args, **kwargs)
 
 
 class HlLaptimeAddForm(forms.ModelForm):
@@ -135,38 +147,26 @@ class HlDetail(DetailView):
         pass
 
 
-#    def create_tables(self, object):
-#        tables = []
-#        for line in o.divisions_text.splitlines():
-#            tables.append(line.split(':'))
-#        t = o.track
-#
-#        todaystring = datetime.date.today().strftime('%Y-%m-%d')
-#        ls = o.hotlappinglaptime_set.all().order_by('laptime__millis')
-#        import ipdb; ipdb.set_trace()
-#
-#
-#        players = {}
-#        for hl in ls:
-#            l = hl.laptime
-#            if players.get(l.player.username):
-#                players[l.player.username].append(l)
-#            else:
-#                players[l.player.username] = [l, ]
-#        od = list(OrderedDict(sorted(
-#            players.items(),key=lambda t: t[1][0].millis)).items())
-#
-#        divisions = []
-#        last_pos = 0
-#        for title, x in tables:
-#            if len(od) >= last_pos:
-#                divisions.append(od[last_pos:last_pos + x])
-#                last_pos += x
-#
-#        return render(
-#            request, 'tracks/unaffordable_detail.html',
-#            context={'obj': t,
-#                     'form': LaptimeAddForm(initial={'recorded': todaystring}),
-#                     'entry_possible': timezone.datetime.now() < o.end_date,
-#                     'divisions': divisions})
+def hl_download_csv(request, pk):
+    print (pk)
+    o = get_object_or_404(Hotlapping, pk=pk)
+    if o.owner.pk != request.user.pk:
+        raise Http404
 
+    laptimes = HlDetail().get_best_laptimes(o)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = \
+        'attachment; filename="{0}.csv"'.format(o.title)
+
+    writer = csv.writer(response)
+    writer.writerow(['User', 'Vehicle', 'Link', 'Date', 'Milliseconds', 'Laptime'])
+    for line in laptimes:
+        writer.writerow([line.player.username,
+                        line.vehicle.name,
+                        line.link,
+                        line.created.strftime("%Y-%m-%d %H:%M"),
+                        line.millis,
+                        line.duration])
+
+    return response

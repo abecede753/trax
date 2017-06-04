@@ -33,6 +33,14 @@
 
       <a href="{{ object.track.get_absolute_url }}" class="btn btn-default">
         Detailed track info</a>
+      {% if request.user == object.owner %}
+        <a href="{% url "hl_edit" object.pk %}" role="button" class="btn btn-default">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+          Edit event</a>
+        <a href="{% url "hl_download_csv" object.pk %}" role="button" class="btn btn-default">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+          CSV download</a>
+      {% endif %}
     </small>
   </h1>
 
