@@ -167,7 +167,7 @@ class Hotlapping(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     closing_text = models.TextField(default='', blank=True)
-    divisions_text = models.TextField(default='10:Top Ten\n18:Regular players\n50:Reserves')
+    divisions_text = models.TextField(default='10:Top Ten\n20:Rest of the starting grid\n999:Not fast enough')
     entries = models.ManyToManyField("tracks.Laptime",
                                      through="HotlappingLaptime",
                                      through_fields=('hotlapping', 'laptime')
