@@ -12,8 +12,8 @@
   <div class="hidden" id="json_url">{{ object.json_url }}</div>
 
 
-  <h1><small>{{ object.laps }} laps on </small>{{ object.track }} <small>[{{ object.track.platform }}] hosted by {{ object.host }}</small></h1>
-  <p><small>Algorithm for starting times: {{ object.get_algorithm_display }}</small></p>
+  <h1><small>{{ object.laps }} laps on </small>{{ object.track }} <small>[{{ object.track.platform }}] hosted by {{ object.host }}
+    | Algorithm: {{ object.get_algorithm_display }}</small></h1>
 
   <div id="loading" class="row text-center">
     <img src="/static/infinity.gif"><br>
@@ -25,6 +25,11 @@
 
   <div id="twocols" class="row" style="display:none">
     <div class="col-md-6">
+    {% if object.comment %}
+  <h3>Information for this race</h3>
+  {{ object.comment }}
+  <hr>
+{% endif %}
 
       {% if request.user.username == object.host.username %}
         {% include "events/host_detail_snippet.html" %}

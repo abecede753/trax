@@ -4,7 +4,11 @@ import numpy as np
 
 
 def update_player_racing_stats(player, commit=True):
-    # use only the most recent *n* races  TODO parametrize "8"
+    # select all different vehicle/track combinations, keeping only the
+    # fastest
+    # use only the most recent 70% of laptimes on different vehicle/track
+    # combinations.
+    # if there are less than 5 entries, use standard schema.
 
     laptimes = list(Laptime.objects.filter(
         player=player).select_related(
@@ -55,13 +59,14 @@ def is_outlier(points, thresh=3.5):
     if isinstance(points, list):
         points = np.array(points)
     if len(points.shape) == 1:
-        points = points[:,None]
+        points = points[:, None]
     median = np.median(points, axis=0)
     diff = np.sum((points - median)**2, axis=-1)
     diff = np.sqrt(diff)
     med_abs_deviation = np.median(diff)
     modified_z_score = 0.6745 * diff / med_abs_deviation
     return modified_z_score > thresh
+
 
 def remove_outliers(lst):
     """
