@@ -78,7 +78,16 @@
           <li class="{% block menu_tracks_active %}{% endblock %}"><a href="{% url "track_list" %}">Tracks</a></li>
           <li class="{% block menu_vehicles_active %}{% endblock %}"><a href="{% url "vehicle_list" %}">Vehicles</a></li>
           <li class="{% block menu_players_active %}{% endblock %}"><a href="{% url "player_list" %}">Players</a></li>
-          <li class="{% block menu_racelist_active %}{% endblock %}"><a href="{% url "randomracelist" %}">Random grid generator</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              Tools<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li class="{% block menu_racelist_active %}{% endblock %}">
+                <a href="{% url "randomracelist" %}">Random grid generator...</a></li>
+              <li class="{% block menu_hotlapcreator_active %}{% endblock %}">
+                <a href="{% url "hl_add" %}">Create a hotlapping event...</a></li>
+            </ul>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><img

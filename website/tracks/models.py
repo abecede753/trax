@@ -80,7 +80,11 @@ class Track(models.Model):
     reference_track = models.BooleanField(
         default=False, help_text=_("Is this a reference track for laptimes?"))
     image = ThumbnailerImageField(upload_to='trackimages', blank=True)
-
+    num_hairpins = models.SmallIntegerField(default=0)
+    num_slow_turns = models.SmallIntegerField(default=0)
+    num_fast_turns = models.SmallIntegerField(default=0)
+    num_slow_chicanes = models.SmallIntegerField(default=0)
+    num_fast_chicanes = models.SmallIntegerField(default=0)
 
     @property
     def terrains(self):

@@ -6,14 +6,14 @@
   "{{ form.instance.title }}"{% else %}Add a new track{% endif %}{% endblock %}
 {% block content %}
   <div class="row">
-  <div class="col-md-12">
-    <h1>
-    {% if form.instance.pk %}
-      Edit track "{{ form.instance.title }}"
-    {% else %}
-      Add a new track
-    {% endif %}
-  </h1></div></div>
+    <div class="col-md-12">
+      <h1>
+        {% if form.instance.pk %}
+          Edit track "{{ form.instance.title }}"
+        {% else %}
+          Add a new track
+        {% endif %}
+      </h1></div></div>
 
   {% if form.errors %}
     {{ form.errors }}
@@ -49,8 +49,8 @@
         </dl>
         <div class="row">
           <div class="col-md-12">
-          Surfaces (the values MUST have a sum of 100)
-            </div>
+            Surfaces (the values MUST have a sum of 100)
+          </div>
           <div class="col-md-2">Street
             {% render_field form.surface_street class="form-control" title="Typical streets in the city" %}
           </div>
@@ -82,6 +82,23 @@
           <dt><label for="id_elevation_changes">Elevation changes</label></dt>
           <dd>{% render_field form.elevation_changes class="form-control" %}
             {{ form.elevation_changes.help_text }}</dd>
+
+          <dt><label for="id_num_hairpins">Number of hairpin turns</label></dt>
+          <dd>{% render_field form.num_hairpins class="form-control" %}
+            {{ form.num_hairpins.help_text }}</dd>
+          <dt><label for="id_num_slow_turns">Number of low speed turns</label></dt>
+          <dd>{% render_field form.num_slow_turns class="form-control" %}
+            {{ form.num_slow_turns.help_text }}</dd>
+          <dt><label for="id_num_fast_turns">Number of high speed turns</label></dt>
+          <dd>{% render_field form.num_fast_turns class="form-control" %}
+            {{ form.num_fast_turns.help_text }}</dd>
+          <dt><label for="id_num_slow_chicanes">Number of slow speed chicanes</label></dt>
+          <dd>{% render_field form.num_slow_chicanes class="form-control" %}
+            {{ form.num_slow_chicanes.help_text }}</dd>
+          <dt><label for="id_num_fast_chicanes">Number of high speed chicanes</label></dt>
+          <dd>{% render_field form.num_fast_chicanes class="form-control" %}
+            {{ form.num_fast_chicanes.help_text }}</dd>
+
           <dt><label for="id_car_classes">Car classes</label></dt>
           <dd>{% render_field form.car_classes class="form-control" %}
             {{ form.car_classes.help_text }}</dd>
@@ -101,8 +118,8 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-        <button type="submit" class="btn btn-primary">Save</button>
-          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
       </div>
     </form>
   </div>

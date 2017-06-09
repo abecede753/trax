@@ -7,10 +7,14 @@
 {% block title %}Race creator{% endblock %}
 {% block content %}
 
-  <h1>Create a Hotlapping event</h1>
+  {% if form.instance.pk %}
+    <h1>Edit "{{ form.instance.title }}"</h1>
+  {% else %}
+    <h1>Create a Hotlapping event</h1>
+  {% endif %}
 
-    <div class="row" >
-      <form action="." method="post" >
+  <div class="row" >
+    <form action="." method="post" >
       <div class="col-md-6">
         {% csrf_token %}
         Title of your event
@@ -23,9 +27,9 @@
         Structure
         {% render_field form.divisions_text class="form-control" %}
         <p><small>Specify the number of players for each table, followed by a colon ":" and the title of the table.
-        <br>This field is <b>required</b>. If you just want one table, type "1000:Drivers" or something.
-        <br>Abe.Cede was too lazy to implement some nice validator. It's up to you to be smart enough to enter this
-        field correctly.</small></p>
+          <br>This field is <b>required</b>. If you just want one table, type "1000:Drivers" or something.
+          <br>Abe.Cede was too lazy to implement some nice validator. It's up to you to be smart enough to enter this
+          field correctly.</small></p>
       </div>
       <div class="col-md-6">
         Track:
@@ -38,11 +42,11 @@
         End date:
         {% render_field form.end_date class="form-control" %}
       </div>
-        <div class="col-md-12 text-center">
-          <button type="submit" class="btn btn-primary">Okay!</button>
-        </div>
-      </form>
-    </div>
+      <div class="col-md-12 text-center">
+        <button type="submit" class="btn btn-primary">Okay!</button>
+      </div>
+    </form>
+  </div>
 
 {% endblock %}
 

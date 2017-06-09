@@ -19,7 +19,8 @@ class TrackForm(ModelForm):
             'pit_lane', 'surface_street', 'surface_road',
             'surface_dirt', 'surface_flat', 'surface_stunt', 'surface_offroad',
             'elevation_changes', 'car_classes', 'platform',
-            'image',
+            'image', 'num_hairpins', 'num_slow_turns', 'num_fast_turns',
+            'num_slow_chicanes', 'num_fast_chicanes'
         ]
         widgets = {
             'image': ImageClearableFileInput(),
