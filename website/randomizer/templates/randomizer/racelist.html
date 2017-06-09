@@ -52,7 +52,7 @@
               <h2 class="no-vert-space">Race {{ forloop.counter }}:</h2>
             </div>
             <div class="panel-body">
-              {% for player in grid %}{{ player }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+              {% for player in grid %}{{ forloop.counter }}: {{ player }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
             </div>
           </div>
         </div>
