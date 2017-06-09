@@ -43,7 +43,7 @@
       {% endif %}
     </small>
   </h1>
-
+  <p><small>{{ object.start_date|date:"Y-m-d H:i" }} – {{ object.end_date|date:"Y-m-d H:i" }}</small></p>
   <p>{{ object.description | urlizetrunc:25 | url_target_blank | linebreaksbr }}</p>
   {% if entry_possible %}{% else %}
     <p>The event is over. No more lap times can be entered.</p>

@@ -172,6 +172,8 @@ class Hotlapping(models.Model):
                                      through="HotlappingLaptime",
                                      through_fields=('hotlapping', 'laptime')
                                      )
+    class Meta:
+        ordering = ('-end_date', 'pk')
 
     def get_absolute_url(self):
         return reverse_lazy('hl_detail',
