@@ -13,6 +13,12 @@ class VehicleClass(models.Model):
         return self.name
 
 
+class ActiveVehicleManager(models.Manager):
+    def get_queryset(self):
+        return super(ActiveVehicleManager, self).get_queryset() \
+            .filter(active=True)
+
+
 class Vehicle(models.Model):
     name = models.CharField(max_length=256)
     classes = models.ManyToManyField("vehicles.VehicleClass")
@@ -22,6 +28,10 @@ class Vehicle(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
     topspeed_kmh = models.FloatField(null=True, blank=True)
+    active = models.BooleanField(default=True)
+
+    objects = models.Manager()
+    active_objects = ActiveVehicleManager()
 
     class Meta:
         ordering=['name', ]
@@ -66,6 +76,9 @@ class Vehicle(models.Model):
 
     @property
     def cc_laptime(self):
+        if not self.cc_laptime_millis:
+            self.cc_laptime_millis = int(self.cc_millis_per_km * 2.59)
+            self.save()
         secs, millis = divmod(self.cc_laptime_millis, 1000)
         mins, secs = divmod(secs, 60)
         return "{0:02d}:{1:02d}.{2:03d}".format(mins, secs, millis)

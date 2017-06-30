@@ -53,6 +53,7 @@ def track_detail(request, pk):
 class LaptimeAddForm(forms.ModelForm):
     anylink = forms.URLField(required=False)
     humantime = forms.CharField()
+    vehicle = forms.ModelChoiceField(queryset=Vehicle.active_objects.all())
 
     class Meta:
         model = Laptime

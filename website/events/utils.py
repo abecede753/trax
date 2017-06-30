@@ -36,7 +36,7 @@ def get_user_car_list(user, vehicle_class):
     result = []
 
     # LATER: request.user.playervehiclespeed_set.all()...
-    for ccvehicle in Vehicle.objects.filter(
+    for ccvehicle in Vehicle.active_objects.filter(
         classes__in=[vehicle_class,],
             cc_millis_per_km__isnull=False):
         result.append(ccvehicle)

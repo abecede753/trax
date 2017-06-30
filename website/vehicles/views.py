@@ -14,7 +14,7 @@ class VehicleList(ListView):
 
     def get_queryset(self):
         through = Vehicle.classes.through
-        return through.objects.all()
+        return through.objects.filter(vehicle__active=True)
 
 
 class VehicleDetail(DetailView):
