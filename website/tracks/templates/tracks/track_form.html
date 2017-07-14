@@ -83,9 +83,12 @@
           <dd>{% render_field form.elevation_changes class="form-control" %}
             {{ form.elevation_changes.help_text }}</dd>
         </dl>
+        <hr>
         <dl>
           <dt>Characteristics</dt>
           <dd>Enter the number of turns/corners of the track below. (not mandatory, but very much appreciated)</dd>
+        </dl>
+        <dl class="dl-horizontal">
           <dt><label for="id_num_hairpins">hairpin turns</label></dt>
           <dd>{% render_field form.num_hairpins class="form-control" %}
             {{ form.num_hairpins.help_text }}</dd>
