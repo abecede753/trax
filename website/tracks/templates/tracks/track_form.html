@@ -82,7 +82,8 @@
           <dt><label for="id_elevation_changes">Elevation changes</label></dt>
           <dd>{% render_field form.elevation_changes class="form-control" %}
             {{ form.elevation_changes.help_text }}</dd>
-
+        </dl>
+        <dl>
           <dt>Characteristics</dt>
           <dd>Enter the number of turns/corners of the track below. (not mandatory, but very much appreciated)</dd>
           <dt><label for="id_num_hairpins">hairpin turns</label></dt>
@@ -102,8 +103,7 @@
             {{ form.num_fast_chicanes.help_text }}</dd>
         </dl>
         <hr>
-        <dl>
-
+        <dl class="dl-horizontal">
           <dt><label for="id_car_classes">Car classes</label></dt>
           <dd>{% render_field form.car_classes class="form-control" %}
             {{ form.car_classes.help_text }}</dd>
