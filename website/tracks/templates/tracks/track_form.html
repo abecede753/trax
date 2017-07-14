@@ -46,6 +46,15 @@
           <dt><label for="id_description">Description</label></dt>
           <dd>{% render_field form.description class="form-control" %}
             {{ form.description.help_text }}</dd>
+          <dt><label for="id_link">RSC Link</label></dt>
+          <dd>{% render_field form.link class="form-control" %}
+            {{ form.link.help_text }}</dd>
+          <dt><label for="id_video">Showcase video</label></dt>
+          <dd>{% render_field form.video class="form-control" %}
+            {{ form.video.help_text }}</dd>
+          <dt><hr><label for="id_image">Image</label></dt>
+          <dd><hr>{{ form.image }}
+            {{ form.image.help_text }}</dd>
         </dl>
         <div class="row">
           <div class="col-md-12">
@@ -113,15 +122,6 @@
           <dt><label for="id_pit_lane">Pit lane available?</label></dt>
           <dd>{% render_field form.pit_lane class="form-control" %}
             {{ form.pit_lane.help_text }}</dd>
-          <dt><label for="id_link">RSC Link</label></dt>
-          <dd>{% render_field form.link class="form-control" %}
-            {{ form.link.help_text }}</dd>
-          <dt><label for="id_video">Showcase video</label></dt>
-          <dd>{% render_field form.video class="form-control" %}
-            {{ form.video.help_text }}</dd>
-          <dt><hr><label for="id_image">Image</label></dt>
-          <dd><hr>{{ form.image }}
-            {{ form.image.help_text }}</dd>
         </dl>
       </div>
       <div class="row">
