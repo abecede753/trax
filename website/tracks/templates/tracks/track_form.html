@@ -23,7 +23,7 @@
   <div class="row">
     <form action="." method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="col-md-7">
+      <div class="col-md-6">
         <dl class="dl-horizontal">
           <dt><label for="id_title">Title</label></dt>
           <dd>{% render_field form.title class="form-control" %}
@@ -71,7 +71,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4 col-md-push-1">
+      <div class="col-md-6">
         <dl class="dl-horizontal">
           <dt><label for="id_author">Author</label></dt>
           <dd>{% render_field form.author class="form-control" %}

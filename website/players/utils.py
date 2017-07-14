@@ -6,8 +6,6 @@ import numpy as np
 def update_player_racing_stats(player, commit=True):
     # select all different vehicle/track combinations, keeping only the
     # fastest
-    # use only the most recent 70% of laptimes on different vehicle/track
-    # combinations.
     # if there are less than 5 entries, use standard schema.
 
     laptimes = list(Laptime.objects.filter(
