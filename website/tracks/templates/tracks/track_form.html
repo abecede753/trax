@@ -83,21 +83,26 @@
           <dd>{% render_field form.elevation_changes class="form-control" %}
             {{ form.elevation_changes.help_text }}</dd>
 
-          <dt><label for="id_num_hairpins">Number of hairpin turns</label></dt>
+          <dt>Characteristics</dt>
+          <dd>Enter the number of turns/corners of the track below. (not mandatory, but very much appreciated)</dd>
+          <dt><label for="id_num_hairpins">hairpin turns</label></dt>
           <dd>{% render_field form.num_hairpins class="form-control" %}
             {{ form.num_hairpins.help_text }}</dd>
-          <dt><label for="id_num_slow_turns">Number of low speed turns</label></dt>
+          <dt><label for="id_num_slow_turns">low speed turns</label></dt>
           <dd>{% render_field form.num_slow_turns class="form-control" %}
             {{ form.num_slow_turns.help_text }}</dd>
-          <dt><label for="id_num_fast_turns">Number of high speed turns</label></dt>
+          <dt><label for="id_num_fast_turns">high speed turns</label></dt>
           <dd>{% render_field form.num_fast_turns class="form-control" %}
             {{ form.num_fast_turns.help_text }}</dd>
-          <dt><label for="id_num_slow_chicanes">Number of slow speed chicanes</label></dt>
+          <dt><label for="id_num_slow_chicanes">slow speed chicanes</label></dt>
           <dd>{% render_field form.num_slow_chicanes class="form-control" %}
             {{ form.num_slow_chicanes.help_text }}</dd>
-          <dt><label for="id_num_fast_chicanes">Number of high speed chicanes</label></dt>
+          <dt><label for="id_num_fast_chicanes">high speed chicanes</label></dt>
           <dd>{% render_field form.num_fast_chicanes class="form-control" %}
             {{ form.num_fast_chicanes.help_text }}</dd>
+        </dl>
+        <hr>
+        <dl>
 
           <dt><label for="id_car_classes">Car classes</label></dt>
           <dd>{% render_field form.car_classes class="form-control" %}
