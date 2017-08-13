@@ -41,6 +41,10 @@
         {% render_field form.start_date class="form-control" %}
         End date:
         {% render_field form.end_date class="form-control" %}
+        <hr>
+        If you don't want to show start date and end date, enter some text here
+        which will be shown instead of the real time period.
+        {% render_field form.time_period_text class="form-control" %}
       </div>
       <div class="col-md-12 text-center">
         <button type="submit" class="btn btn-primary">Okay!</button>

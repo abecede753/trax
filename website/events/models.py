@@ -172,6 +172,9 @@ class Hotlapping(models.Model):
                                      through="HotlappingLaptime",
                                      through_fields=('hotlapping', 'laptime')
                                      )
+    time_period_text = models.CharField(default='', blank=True,
+                                        max_length=256)
+
     class Meta:
         ordering = ('-end_date', 'pk')
 

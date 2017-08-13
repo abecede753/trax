@@ -23,7 +23,7 @@ from vehicles.models import Vehicle
 class HlCreator(CreateView):
     model = Hotlapping
     fields = ['title', 'description', 'track', 'vehicles', 'start_date',
-              'end_date', 'divisions_text']
+              'end_date', 'divisions_text', 'time_period_text']
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -35,7 +35,7 @@ class HlCreator(CreateView):
 class HlEditor(UpdateView):
     model = Hotlapping
     fields = ['title', 'description', 'track', 'vehicles', 'start_date',
-              'end_date', 'divisions_text']
+              'end_date', 'divisions_text', 'time_period_text']
 
     def dispatch(self, request, *args, **kwargs):
         o = self.get_object()
