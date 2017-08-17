@@ -4,6 +4,7 @@ from random import shuffle
 
 _DATADIR = os.path.dirname(__file__)
 
+
 def create_grid(num_races, playerlist):
     if num_races < 2 or num_races > 35:
         raise NotImplementedError('racelist only from 2 to 34 races possible.')
@@ -23,6 +24,17 @@ def create_grid(num_races, playerlist):
     shuffle(grids)
     shuffle(playerlist)
     result = []
+
+    # TODO FIXME
+    # emergency hack! when only having 2 races, the matrices
+    # are wrong for e.g. 26 players. let's just
+    # invert the second grid and be done.
+    if len(grids) == 2:
+        result.append([playerlist[x] for x in grids[0]])
+        grids[0].reverse()
+        result.append([playerlist[x] for x in grids[0]])
+        return result
+
     for grid in grids:
-        result.append( [playerlist[x] for x in grid])
+        result.append([playerlist[x] for x in grid])
     return result
