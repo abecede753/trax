@@ -1,13 +1,11 @@
 import random
 import datetime
-import os
 
 from django.conf import settings
 from django.contrib import messages
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -18,7 +16,7 @@ from django.views.generic import CreateView, DetailView
 from trax.choices import RACE_STATES
 from tracks.models import Laptime
 from vehicles.models import Vehicle
-from .models import StaggeredStartRace, SSRParticipation, PitAssistant
+from .models import StaggeredStartRace, SSRParticipation
 from .utils import get_user_car_list
 
 
@@ -58,7 +56,6 @@ class StaggeredStartRaceDetail(DetailView):
         context['vehicle_list'] = get_user_car_list(
             user=self.request.user,
             vehicle_class=self.object.vehicle_class, )
-
         return context
 
     def get(self, *a, **k):
@@ -74,7 +71,7 @@ class StaggeredStartRaceDetail(DetailView):
             nowplus = random.randrange(0, 6)
             nowplus += int(self.request.GET.get('start_in_secs'))
             start_timestamp = datetime.datetime.now() + \
-                              datetime.timedelta(milliseconds=nowplus*1000)
+                              datetime.timedelta(milliseconds=nowplus * 1000)
             self.object = self.get_object()
             self.object.start_timestamp = start_timestamp
             self.object.status = RACE_STATES.running
@@ -85,13 +82,9 @@ class StaggeredStartRaceDetail(DetailView):
             except:
                 pass
             self.object.per_overtake_deficit_millis = overtake_deficit
-
             self.object.save()
-
-            #            self.race_km = self.object.track.route_length_km * self.object.laps
             self.calculate_players_start_timestamps()
             self.object.update_json()
-
         return super(StaggeredStartRaceDetail, self).get(*a, **k)
 
     def post(self, *a, **k):
@@ -122,9 +115,6 @@ class StaggeredStartRaceDetail(DetailView):
             return render(self.request,
                           'events/staggeredstartrace_wait_for_more.html',
                           )
-
-
-
         return super(StaggeredStartRaceDetail, self).get(*a, **k)
 
     def calculate_players_start_timestamps(self):
@@ -148,21 +138,8 @@ class StaggeredStartRaceDetail(DetailView):
             previous_racestart_dt = this_racestart_dt
 
 
-#        laptimes = list(self.object.laptime_set.all())
-#        for lt in laptimes:
-#            lt.eventcar = get_eventcar(
-#                user=lt.player, vehicle_pk=lt.vehicle.pk,
-#                race_km=self.race_km)
-#        result = sorted(laptimes, key=lambda x: x.eventcar.total_millis)
-#        return result
-
-
 def participants_list(request, pk=None):
     ssr = get_object_or_404(StaggeredStartRace, pk=pk)
-#     if request.user.pk not in ssr.ssrparticipation_set.all().values_list('player__id', flat=True):
-#         print("usernot in")
-#     else:
-#         print("userIN")
     result = []
     for lt in ssr.ssrparticipation_set.all():
         vehicle = str(lt.vehicle)
@@ -210,6 +187,7 @@ def announce(request, pk):
     ssr.update_json()
     return JsonResponse({'result': 'OK'})
 
+
 @login_required
 def check_for_newer_ssr(request, pk):
     ssr = get_object_or_404(StaggeredStartRace, pk=pk)
@@ -241,35 +219,3 @@ class StaggeredStartRaceStatus(DetailView):
     def get_players(self):
         s = self.get_object()
         return s.ssrparticipation_set.all()[0].player.username
-
-
-class PitACreateForm(forms.ModelForm):
-    class Meta:
-        model = PitAssistant
-        fields = ['title', 'description', 'pitstop_seconds']
-
-@method_decorator(login_required, name='dispatch')
-class PitAssistantCreator(CreateView):
-    model = PitAssistant
-    form_class = PitACreateForm
-
-    def form_valid(self, form):
-        form.instance.owner = self.request.user
-        form.instance.save()
-        self.init_filesystem(form.instance)
-        return super().form_valid(form)
-
-    def init_filesystem(self, instance):
-
-        dirname = os.path.abspath(
-            os.path.join(
-                settings.MEDIA_ROOT, 'pitassistant',
-                '{0}'.format(instance.pk)
-            ))
-        os.makedirs(dirname, mode=0o755, exist_ok=True)
-
-
-@method_decorator(login_required, name='dispatch')
-class PitAssistantDetail(DetailView):
-    model = PitAssistant
-
