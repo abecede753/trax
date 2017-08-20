@@ -81,7 +81,7 @@
     <div class="col-md-5">
       <form action="." method="post">
         {% csrf_token %}
-        <p>After the race please tell me your best lap time:
+        <p>After the race please tell me your best lap time:<br />
           <input name="personal_laptime"
                  required
                  pattern="^\d{1,2}:\d{1,2}\.\d\d?\d?$"
@@ -99,7 +99,7 @@
         {% csrf_token %}
         <p>Nah, better not. My laptime was abysmal.</p>
         <input name="personal_laptime" value="-1" type="hidden">
-        <button type="submit" class="btn btn-primary">Don't save.</button>
+        <button type="submit" class="btn">Don't save.</button>
       </form>
     </div>
   </div>
