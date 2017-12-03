@@ -1,6 +1,25 @@
+import base64
+from Crypto.Cipher import AES
+import datetime
+import numpy as np
+
 from tracks.models import Laptime
 
-import numpy as np
+AKEY = '8fwmn3tx8e..DS2y'
+IV = b'e\xdbg\xf1\xcfT"\xc8\x96\xb4\xe2jC\'\xc8\xd1'
+
+
+def encode(message):
+    message = '{0}|{1}'.format(datetime.datetime.now().isoformat,
+                               message)
+    obj = AES.new(AKEY, AES.MODE_CFB, IV)
+    return base64.urlsafe_b64encode(obj.encrypt(message.encode('utf-8')))
+
+
+def decode(cipher):
+    obj2 = AES.new(AKEY, AES.MODE_CFB, IV)
+    message = obj2.decrypt(base64.urlsafe_b64decode(cipher)).decode('utf-8')
+    return '|'.join(message.split('|')[1:])
 
 
 def update_player_racing_stats(player, commit=True):
@@ -27,7 +46,7 @@ def update_player_racing_stats(player, commit=True):
 
         # if someone is way too slow, make him "faster"
         player.defaultspeedmultiplier = min(1.06, (sum(clean_multipliers)
-                                         / len(clean_multipliers)))
+                                            / len(clean_multipliers)))
     if commit:
         player.save()
 

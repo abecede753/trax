@@ -16,7 +16,6 @@ from django.views.decorators.gzip import gzip_page
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 
-from players.models import Player
 from .models import Track, Laptime
 from vehicles.models import Vehicle
 from .forms import TrackForm, SSRCreateForm
@@ -25,7 +24,7 @@ from .forms import TrackForm, SSRCreateForm
 def track_detail(request, pk):
     try:
         t = Track.objects.get(pk=pk)
-    except:
+    except:  # noqa
         return render(request, 'trax/not_on_this_platform.html')
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
     ssrform = SSRCreateForm(initial={'track': t})
@@ -35,11 +34,10 @@ def track_detail(request, pk):
     else:
         creator = t.creator.username
     can_edit = (request.user.username == creator) or \
-               request.user.is_staff
+        request.user.is_staff
     m, s = divmod(t.typical_laptime * 5, 60)
     h, m = divmod(m, 60)
     five_laps_duration = "%02d:%02d:%02d" % (h, m, s)
-
 
     return render(
         request, 'tracks/track_detail.html',
@@ -58,6 +56,7 @@ class LaptimeAddForm(forms.ModelForm):
     class Meta:
         model = Laptime
         fields = ['vehicle', 'comment', 'recorded']
+
     def __init__(self, *a, **k):
         super(LaptimeAddForm, self).__init__(*a, **k)
         self.fields['vehicle'].empty_label = ''
@@ -68,7 +67,7 @@ def laptime_add(request, lap_pk):
     if request.method == 'POST':
         vehicle = get_object_or_404(Vehicle, pk=request.POST.get('vehicle'))
         t = Track.objects.get(pk=lap_pk)
-        l = Laptime()
+        l = Laptime()  # noqa
         l.track = t
         l.player = request.user
         l.vehicle = vehicle
@@ -76,17 +75,18 @@ def laptime_add(request, lap_pk):
             parts = request.POST.get('seconds')
             m, rest = parts.split(':')
             millis = 1000 * (int(m)*60 + float(rest))
-        except:
+        except:  # noqa
             messages.add_message(
                 request, messages.ERROR,
-                'I did not understand your laptime input. Please use the format MM:SS.milli')
+                'I did not understand your laptime input. Please use the '
+                'format MM:SS.milli')
             return HttpResponseRedirect(reverse('track_detail', args=(t.pk,)))
 
         l.millis = round(millis)
         l.millis_per_km = round(millis / t.route_length_km)
         l.comment = request.POST.get('comment', '')
         l.link = request.POST.get('anylink', '')
-        yy,mm,dd = request.POST.get('recorded').split('-')
+        yy, mm, dd = request.POST.get('recorded').split('-')
         l.recorded = datetime.date(int(yy), int(mm), int(dd))
         l.created = datetime.datetime.now()
         l.save()
@@ -103,7 +103,6 @@ class TrackList(ListView):
     def get_queryset(self):
         queryset = Track.objects.all().annotate(num_laptimes=Count('laptime'))
         return queryset
-
 
 
 @method_decorator(login_required, name='dispatch')
@@ -144,18 +143,20 @@ def laptime_json(request, track_pk):
         strclasses = ',' + ','.join([x.name for x in classes]) + ','
         data.append({
             # TODO this is a very ugly hack. pls improve
-            'vehicle':'<a href="/v/s/{0}/">{1}</a>'.format( laptime.vehicle.pk, laptime.vehicle),
+            'vehicle': '<a href="/v/s/{0}/">{1}</a>'.format(
+                laptime.vehicle.pk, laptime.vehicle),
             'classes': strclasses,
             'duration': {'display': laptime.duration,
                          'millis': '{:020}'.format(laptime.millis)},
-            'name':'<a href="/p/{0}/">{1}</a>'.format( laptime.player.pk, laptime.player),
+            'name': '<a href="/p/{0}/">{1}</a>'.format(
+                laptime.player.pk, laptime.player),
             'date': {'display': laptime.recorded.strftime('%Y-%m-%d'),
-                     'timestamp':laptime.recorded.strftime('%Y-%m-%d')},
+                     'timestamp': laptime.recorded.strftime('%Y-%m-%d')},
             'comment': laptime.comment,
             'link': laptime.link
         })
     return JsonResponse({'data': data},
-                        json_dumps_params={'separators':(',', ':')})
+                        json_dumps_params={'separators': (',', ':')})
 
 
 @cache_page(60 * 0.2)
@@ -172,7 +173,7 @@ def tracks_json(request):
             'title': t.title,
             'author': t.author,
             'platform': t.platform,
-            'laptime_count':t.laptime_count,
+            'laptime_count': t.laptime_count,
             'game_mode': t.game_mode,
             'route_type': t.route_type,
             'typical_laptime': t.typical_laptime,
@@ -181,7 +182,7 @@ def tracks_json(request):
             'route_length_km': t.route_length_km, })
 
     return JsonResponse({'data': data},
-                        json_dumps_params={'separators':(',', ':')})
+                        json_dumps_params={'separators': (',', ':')})
 
 
 @login_required
@@ -190,14 +191,14 @@ def laptime_delete(request, lap_pk):
     if request.user.pk != laptime.player.pk:
         raise Http404
     laptime.delete()
-    return JsonResponse({'data':'ok'})
+    return JsonResponse({'data': 'ok'})
 
 
 def epsilon_detail(request):
     exclude_usernames = ['benimi', 'sins', 'yoloswagypsen']
     try:
         t = Track.objects.get(pk=117)
-    except:
+    except:  # noqa
         return render(request, 'trax/not_on_this_platform.html')
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
     enddate = timezone.datetime(2017, 3, 30, 18, 0, 0)
@@ -215,7 +216,8 @@ def epsilon_detail(request):
             players[l.player.username].append(l)
         else:
             players[l.player.username] = [l, ]
-    od = list(OrderedDict(sorted(players.items(), key=lambda t: t[1][0].millis)).items())
+    od = list(OrderedDict(sorted(
+        players.items(), key=lambda t: t[1][0].millis)).items())
 
     divisions = []
     for x in (0, 15, 30, 45):
@@ -238,12 +240,11 @@ def epsilon_detail(request):
 
 def unaffordable_detail(request):
     exclude_usernames = []
-    tables = ( ('Accepted',  28),
-               ('Waiting list', 100),
-             )
+    tables = (('Accepted',  28),
+              ('Waiting list', 100),)
     try:
         t = Track.objects.get(pk=183)
-    except:
+    except:  # noqa
         return render(request, 'trax/not_on_this_platform.html')
     todaystring = datetime.date.today().strftime('%Y-%m-%d')
 
@@ -264,7 +265,8 @@ def unaffordable_detail(request):
             players[l.player.username].append(l)
         else:
             players[l.player.username] = [l, ]
-    od = list(OrderedDict(sorted(players.items(), key=lambda t: t[1][0].millis)).items())
+    od = list(OrderedDict(sorted(
+        players.items(), key=lambda t: t[1][0].millis)).items())
 
     divisions = []
     last_pos = 0
