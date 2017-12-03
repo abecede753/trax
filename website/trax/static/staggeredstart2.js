@@ -103,7 +103,7 @@ function start_race(data) {
       "style": "width:16px;height:16px",
       "id":"imgracer" + data[idx].pk
     }).appendTo(imgcol);
-    $("<td />", {"text": data[idx].username}).appendTo(row);
+    $("<td />", {"text": (idx + 1) + ": " + data[idx].username}).appendTo(row);
     $("<td />", {"text": data[idx].vehicle}).appendTo(row);
     $("<td />", {"text": entry.start_after_first}).appendTo(row);
     var start_in_millis = data[idx].timestamp - serverdatenow;
