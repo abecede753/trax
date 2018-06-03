@@ -174,6 +174,7 @@ class Hotlapping(models.Model):
                                      )
     time_period_text = models.CharField(default='', blank=True,
                                         max_length=256)
+    webhook_url = models.URLField(null=True)
 
     class Meta:
         ordering = ('-end_date', 'pk')

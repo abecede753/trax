@@ -45,6 +45,10 @@
         If you don't want to show start date and end date, enter some text here
         which will be shown instead of the real time period.
         {% render_field form.time_period_text class="form-control" %}
+        <hr>
+        If you have a webhook url (e.g. for your own Discord server), I can
+        post new verified laptimes having a video included with this url.
+        {% render_field form.webhook_url class="form-control" %}
       </div>
       <div class="col-md-12 text-center">
         <button type="submit" class="btn btn-primary">Okay!</button>

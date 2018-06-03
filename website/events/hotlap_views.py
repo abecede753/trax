@@ -2,6 +2,7 @@ import csv
 import datetime
 from collections import OrderedDict
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django import forms
@@ -13,6 +14,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic.edit import (CreateView, UpdateView)
 from django.views.generic import DetailView
 
+from trax import webhook
 from tracks.models import Track
 from .models import Hotlapping, HotlappingLaptime
 from tracks.models import Laptime
@@ -23,7 +25,8 @@ from vehicles.models import Vehicle
 class HlCreator(CreateView):
     model = Hotlapping
     fields = ['title', 'description', 'track', 'vehicles', 'start_date',
-              'end_date', 'divisions_text', 'time_period_text']
+              'end_date', 'divisions_text', 'time_period_text',
+              'webhook_url']
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -35,7 +38,8 @@ class HlCreator(CreateView):
 class HlEditor(UpdateView):
     model = Hotlapping
     fields = ['title', 'description', 'track', 'vehicles', 'start_date',
-              'end_date', 'divisions_text', 'time_period_text']
+              'end_date', 'divisions_text', 'time_period_text',
+              'webhook_url']
 
     def dispatch(self, request, *args, **kwargs):
         o = self.get_object()
@@ -54,6 +58,20 @@ class HlLaptimeAddForm(forms.ModelForm):
     def __init__(self, *a, **k):
         super(HlLaptimeAddForm, self).__init__(*a, **k)
         self.fields['vehicle'].empty_label = ''
+
+
+def post_webhook(lap, event):
+    embed = webhook.Webhook(event.webhook_url, color=123123)
+
+    embed.set_author(name='{lap.player.username} just posted a new lap time video!'.format(lap=lap),
+                     url=lap.link)
+    embed.add_field(name='Vehicle',value='{lap.vehicle.name}'.format(lap=lap))
+    embed.add_field(name='Lap time',value='{lap.duration}'.format(lap=lap))
+    embed.thumbnail = 'https://i.imgur.com/Q58L4AY.png'
+    embed.set_footer(text='Click on the checkered flag to see the full leaderboard.',
+                             ts=True)
+    embed.title_url = "{0}{1}".format(settings.SERVER_NAME, event.get_absolute_url())
+    embed.post()
 
 
 @login_required
@@ -88,6 +106,11 @@ def hllaptime_add(request, hl_pk):
                              "Okay, your laptime was saved.")
     redir = request.environ.get("HTTP_REFERER",
                                 reverse('hl_detail', args=(hl.pk,)))
+
+    # do we have a webhook url? then use it!
+    if hl.webhook_url and ('youtu' in l.link or 'twitch' in l.link):
+        post_webhook(l, hl)
+        
     return HttpResponseRedirect(redir)
 
 
