@@ -100,3 +100,6 @@ trax_local_db.odb
 **/website/trax/media/**
 **/website/trax/static/CACHE/**
 **/website/uwsgi.ini
+**/notebooks
+**/CACHE
+.R*

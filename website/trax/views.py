@@ -34,7 +34,7 @@ class Homepage(TemplateView):
 
     def get_top_laps(self, num_items=5):
         all_laptimes = Laptime.objects.filter(
-            link__isnull=False).exclude(link='')\
+            link__isnull=False, track__include_in_halloffame=True).exclude(link='')\
             .select_related("vehicle")\
             .extra(select={'quickness': 'millis_per_km*1.0/cc_millis_per_km'})\
             .order_by('quickness')

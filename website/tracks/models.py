@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 from easy_thumbnails.fields import ThumbnailerImageField
 from threadlocals.threadlocals import get_current_request
 from trax.choices import GAME_MODES, ROUTE_TYPES, PLATFORM_CHOICES
@@ -85,6 +86,7 @@ class Track(models.Model):
     num_fast_turns = models.SmallIntegerField(default=0)
     num_slow_chicanes = models.SmallIntegerField(default=0)
     num_fast_chicanes = models.SmallIntegerField(default=0)
+    include_in_halloffame = models.BooleanField(default=True)
 
     @property
     def terrains(self):
@@ -152,6 +154,18 @@ class Laptime(models.Model):
                 (1.0 / self.millis_per_km ) * 1000 * 3600
             )
         return '?'
+
+    @property
+    def linktype(self):
+        """returns "l" for generic link, "v" for videolink, "" if no link at all"""
+        hostname = urlparse(self.link).hostname
+        if not hostname:
+            return ""
+        for hostpart in VIDEOSITES:
+            if hostname.startswith(hostpart):
+                return "v"
+        return "l"
+
 
 
 
