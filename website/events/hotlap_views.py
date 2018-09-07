@@ -116,7 +116,10 @@ def hllaptime_add(request, hl_pk):
 
     # do we have a webhook url? then use it!
     if hl.webhook_url:
-        post_webhook(l, hl)
+        try:
+            post_webhook(l, hl)
+        except:
+            pass
         
     return HttpResponseRedirect(redir)
 
