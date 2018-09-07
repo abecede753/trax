@@ -69,7 +69,10 @@ def post_webhook(lap, event):
                      url=lap.link)
     embed.add_field(name='Vehicle',value='{lap.vehicle.name}'.format(lap=lap))
     embed.add_field(name='Lap time',value='{lap.duration}'.format(lap=lap))
-    embed.thumbnail = 'https://i.imgur.com/Q58L4AY.png'
+    if lap.linktype == 'film':
+        embed.thumbnail = 'https://i.imgur.com/Q58L4AY.png'
+    else:
+        embed.thumbnail = 'https://i.imgur.com/WB7qjKx.png'
     # embed.set_footer(text='Click on the checkered flag to see the full leaderboard.',
     #                         ts=True)
     embed.title_url = "{0}{1}".format(settings.SERVER_NAME, event.get_absolute_url())
@@ -110,7 +113,7 @@ def hllaptime_add(request, hl_pk):
                                 reverse('hl_detail', args=(hl.pk,)))
 
     # do we have a webhook url? then use it!
-    if hl.webhook_url and ('youtu' in l.link or 'twitch' in l.link):
+    if hl.webhook_url:
         post_webhook(l, hl)
         
     return HttpResponseRedirect(redir)

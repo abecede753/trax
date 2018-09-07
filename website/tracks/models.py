@@ -159,12 +159,13 @@ class Laptime(models.Model):
     def linktype(self):
         """returns "l" for generic link, "v" for videolink, "" if no link at all"""
         hostname = urlparse(self.link).hostname
+        VIDEOSITES = ('vimeo', 'youtu', 'dailymotio', 'twitch')
         if not hostname:
             return ""
         for hostpart in VIDEOSITES:
-            if hostname.startswith(hostpart):
-                return "v"
-        return "l"
+            if hostname.startswith(hostpart) or '.' + hostpart in hostname:
+                return "film"
+        return "link"
 
 
 

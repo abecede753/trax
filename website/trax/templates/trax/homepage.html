@@ -47,7 +47,8 @@
             <td>
               {% if lap.link %}
                 <a href="{{ lap.link }}"
-                 title="external link as proof" target="_blank"><span class="glyphicon glyphicon-link"></span></a>
+                 title="external link as proof" target="_blank"
+                 ><span class="glyphicon glyphicon-{{ lap.linktype }}"></span></a>
               {% endif %}
               <a href="{{ lap.track.get_absolute_url }}">{{ lap.track }}</a>
             </td>
