@@ -65,14 +65,16 @@ def post_webhook(lap, event):
 
     embed.set_title(title="Changes in the leaderboard",
                     url="{0}{1}".format(settings.SERVER_NAME, event.get_absolute_url()))
-    embed.set_author(name='{lap.player.username} has a new video (click here)'.format(lap=lap),
-                     url=lap.link)
+    if lap.linktype == 'film':
+        embed.thumbnail = 'https://i.imgur.com/WB7qjKx.png'
+        embed.set_author(name='{lap.player.username} has a new video (click here)'.format(lap=lap),
+                        url=lap.link)
+    else:
+        embed.thumbnail = 'https://i.imgur.com/e0gHKze.png'
+        embed.set_author(name='{lap.player.username} has a new laptime (click here)'.format(lap=lap),
+                        url=lap.link)
     embed.add_field(name='Vehicle',value='{lap.vehicle.name}'.format(lap=lap))
     embed.add_field(name='Lap time',value='{lap.duration}'.format(lap=lap))
-    if lap.linktype == 'film':
-        embed.thumbnail = 'https://i.imgur.com/Q58L4AY.png'
-    else:
-        embed.thumbnail = 'https://i.imgur.com/WB7qjKx.png'
     # embed.set_footer(text='Click on the checkered flag to see the full leaderboard.',
     #                         ts=True)
     embed.title_url = "{0}{1}".format(settings.SERVER_NAME, event.get_absolute_url())
