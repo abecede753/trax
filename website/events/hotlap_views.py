@@ -63,13 +63,15 @@ class HlLaptimeAddForm(forms.ModelForm):
 def post_webhook(lap, event):
     embed = webhook.Webhook(event.webhook_url, color=123123)
 
-    embed.set_author(name='{lap.player.username} just posted a new lap time video!'.format(lap=lap),
+    embed.set_title(title="Changes in the leaderboard",
+                    url="{0}{1}".format(settings.SERVER_NAME, event.get_absolute_url()))
+    embed.set_author(name='{lap.player.username} has a new video (click here)'.format(lap=lap),
                      url=lap.link)
     embed.add_field(name='Vehicle',value='{lap.vehicle.name}'.format(lap=lap))
     embed.add_field(name='Lap time',value='{lap.duration}'.format(lap=lap))
     embed.thumbnail = 'https://i.imgur.com/Q58L4AY.png'
-    embed.set_footer(text='Click on the checkered flag to see the full leaderboard.',
-                             ts=True)
+    # embed.set_footer(text='Click on the checkered flag to see the full leaderboard.',
+    #                         ts=True)
     embed.title_url = "{0}{1}".format(settings.SERVER_NAME, event.get_absolute_url())
     embed.post()
 
