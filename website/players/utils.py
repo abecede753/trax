@@ -25,7 +25,7 @@ def decode(cipher):
 def update_player_racing_stats(player, commit=True):
     # select all different vehicle/track combinations, keeping only the
     # fastest
-    # if there are less than 5 entries, use standard schema.
+    # if there are less than 8 entries, use standard schema.
 
     laptimes = list(Laptime.objects.filter(
         player=player).select_related(
